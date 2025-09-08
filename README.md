@@ -33,11 +33,19 @@ a project template for personal use.
 
 ## Getting Started
 
-### Prerequisites
-
 ### Installation
 
-### Execution
+```bash
+# activate venv
+python3 -m venv .venv
+source .venv/bin/activate
+# install dependencies
+pip install -r requirements.txt
+# run
+python3 main.py
+# [optional] test command if it's working
+curl http://127.0.0.1:8000
+```
 
 ## Usage
 
