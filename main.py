@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 import uvicorn
 
+from max_prof.max_prof import MaxProf
+
 app = FastAPI()
 
 @app.get("/")
@@ -9,4 +11,3 @@ def root():
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
-
