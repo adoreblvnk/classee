@@ -17,9 +17,7 @@
 - [About](#about)
 - [Demo](#demo)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Execution](#execution)
 - [Usage](#usage)
 - [Roadmap](#roadmap)
 - [Changelog](#changelog)
@@ -27,7 +25,7 @@
 
 ## About
 
-a project template for personal use.
+Dataset: https://www.kaggle.com/datasets/varpit94/tesla-stock-data-updated-till-28jun2021
 
 ## Demo
 
@@ -35,6 +33,7 @@ a project template for personal use.
 
 ### Installation
 
+Using pip:
 ```bash
 # activate venv
 python3 -m venv .venv
@@ -45,6 +44,11 @@ pip install -r requirements.txt
 python3 main.py
 # [optional] test command if it's working
 curl http://127.0.0.1:8000
+```
+
+Using uv:
+```bash
+uv run main.py
 ```
 
 ## Usage
