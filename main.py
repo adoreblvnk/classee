@@ -19,12 +19,8 @@ def root():
 
 @app.get("/max-profit")
 def get_max_profit():
-    """
-    Calculates the maximum profit for the TSLA stock data.
-    """
     try:
-        # calculate profit
-        return {"max_profit": MaxProf().maxProfit(DATASET.copy())}
+        return MaxProf().maxProfit(DATASET.copy())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
