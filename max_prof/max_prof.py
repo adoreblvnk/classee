@@ -1,5 +1,4 @@
-from typing import List
-
+import pandas as pd
 
 class MaxProf:
     """A class to calculate the maximum profit from a list of stock prices.
@@ -8,12 +7,12 @@ class MaxProf:
     obtained by buying and selling stocks multiple times.
     """
 
-    def maxProfit(self, prices: List[float]) -> float:
+    def maxProfit(self, df: pd.DataFrame) -> float:
         """
         calcs max prof from buying & selling stocks multiple times
 
         Args:
-            prices: A list of stock prices where prices[i] is the price on day i.
+            df: A pandas DataFrame containing stock prices where prices[i] is the price on day i.
 
         Returns:
             float: Max prof
@@ -22,6 +21,8 @@ class MaxProf:
         # performance benefit over greedy. If today's price is higher than
         # yesterday's, add the diff to profit.
         # O(n) time complexity, O(1) space complexity
+        # get adjusted close
+        prices = df["Adj Close"].tolist()
         profit = 0.0
         for i in range(1, len(prices)):
             if prices[i] > prices[i - 1]:

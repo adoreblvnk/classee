@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 from max_prof.max_prof import MaxProf
 from sma_return.sma_return import SMA_Return
+from up_down_runs.up_down_runs import analyze_up_down_runs
 
 # load dataset
 DATASET = pd.read_csv(Path(__file__).parent / "data" / "TSLA.csv")
@@ -22,18 +23,26 @@ def get_max_profit():
     Calculates the maximum profit for the TSLA stock data.
     """
     try:
-        # extract the closing prices
-        close_prices = DATASET["Close"].tolist()
         # calculate profit
-        return {"ticker": "TSLA", "max_profit": MaxProf().maxProfit(close_prices)}
+        return {"max_profit": MaxProf().maxProfit(DATASET.copy())}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/sma-return")
 def get_sma_returns():
     try:
-        data = SMA_Return.sma_return() # for now no user input yet
+        data = SMA_Return.sma_return(DATASET.copy())  # for now no user input yet
         return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/up-down-runs")
+def get_up_down_runs():
+    try:
+        data = analyze_up_down_runs(DATASET.copy())
+        return {"longest_up": data[0], "longest_down": data[1]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
