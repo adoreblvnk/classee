@@ -6,6 +6,7 @@ import pandas as pd
 from pathlib import Path
 from algo.max_prof import MaxProf
 from algo.sma_return import SMA_Return
+from algo.daily_return import Daily_Return
 from algo.up_down_runs import analyze_up_down_runs
 
 # load dataset
@@ -20,6 +21,8 @@ def root(request: Request, window_size: int = None):
     try:
         sma_return_data = SMA_Return.sma_return(DATASET.copy())
         up_down_runs_data = analyze_up_down_runs(DATASET.copy())
+        daily_return_data = Daily_Return.daily_return(DATASET.copy())
+        print(daily_return_data)
 
         current_window_size = window_size if window_size is not None else len(DATASET)
         max_profit = MaxProf().maxProfit(DATASET.copy(), current_window_size)
