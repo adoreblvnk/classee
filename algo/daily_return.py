@@ -14,7 +14,7 @@ class Daily_Return:
         mean=0
         for x in range(len(df['Daily_Return'])):
             mean=mean+df['Daily_Return'][x]
-            mean=mean/len(df['Daily_Return'])
+        mean=mean/len(df['Daily_Return'])
         
         std_div=0
         for x in range(len(df['Daily_Return'])):
@@ -40,14 +40,14 @@ class Daily_Return:
                 neg_day=neg_day+1
         win_rate=post_day/len(df)*100
         stats = {
-                'Mean Return (%)': round(mean,2),
-                'Std Deviation (%)': round(std_div,2),
-                'Max Gain (%)': round(max,2),
-                'Max Loss (%)': round(min,2),
+                'Mean Return (%)': float(round(mean,2)),
+                'Std Deviation (%)': float(round(std_div,2)),
+                'Max Gain (%)': float(round(max,2)),
+                'Max Loss (%)': float(round(min,2)),
                 'Positive Days': post_day,
                 'Negative Days': neg_day,
                 'Total Trading Days': len(df),
-                'Win Rate (%)': round(win_rate,2)
+                'Win Rate (%)': float(round(win_rate,2))
             }
         return {
                 "stats for daily_return": stats,
