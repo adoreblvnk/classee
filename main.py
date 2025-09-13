@@ -16,22 +16,28 @@ templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/", response_class=HTMLResponse)
-def root(request: Request):
+def root(request: Request, window_size: int = None):
     try:
-        max_profit = MaxProf().maxProfit(DATASET.copy())
         sma_return_data = SMA_Return.sma_return(DATASET.copy())
         up_down_runs_data = analyze_up_down_runs(DATASET.copy())
+
+        current_window_size = window_size if window_size is not None else len(DATASET)
+        max_profit = MaxProf().maxProfit(DATASET.copy(), current_window_size)
 
         return templates.TemplateResponse(
             "index.html",
             {
                 "request": request,
                 "title": "Stock Market Analysis",
-                "max_profit": max_profit,
                 "sma_return": sma_return_data,
                 "up_down_runs": {
                     "longest_up": up_down_runs_data[0],
                     "longest_down": up_down_runs_data[1],
+                },
+                "max_profit": {
+                    "max_profit": max_profit,
+                    "max_window_size": len(DATASET),  # for validation only
+                    "current_window_size": current_window_size,
                 },
             },
         )
