@@ -20,7 +20,7 @@ class MaxProf:
             window_size: num days in window, default to entire df
 
         returns:
-            dict with max_profit, best_window_start_date, best_window_end_date, trades
+            dict with max_profit, window dates, and chart data
 
         NOTE: uses sliding window algorithm with O(n) time complexity and O(n) space
         where n is number of days. space is O(n) due to storing daily profits.
@@ -30,18 +30,21 @@ class MaxProf:
             window_size = len(df)
             print(f"window size: {window_size}")
 
+        # convert to lists for faster access
+        prices = df["Adj Close"].tolist()
+        dates = df["Date"].tolist()
+
         # handle edge cases: window too small or df too small
         if window_size <= 1 or len(df) < window_size:
             return {
                 "max_profit": 0.0,
                 "best_window_start_date": None,
                 "best_window_end_date": None,
-                "trades": [],
+                "all_dates": dates,
+                "all_prices": prices,
+                "buy_points": [],
+                "sell_points": [],
             }
-
-        # convert to lists for faster access
-        prices = df["Adj Close"].tolist()
-        dates = df["Date"].tolist()
 
         # greedy algo: pre-compute daily profits (0 if price doesn't increase)
         # O(n) time, O(n) space
@@ -78,17 +81,19 @@ class MaxProf:
         best_start_date = dates[best_window_start_idx]
         best_end_date = dates[best_window_start_idx + window_size - 1]
 
-        # optional: to get the dates of trades
-        # reconstruct trades in best window
+        # reconstruct trade points for visualization in the best window
         # O(window_size) time, O(k) space where k is number of trades
-        trades = []
+        buy_points = []
+        sell_points = []
         for i in range(best_window_start_idx + 1, best_window_start_idx + window_size):
             if prices[i] > prices[i - 1]:
-                trades.append({"buy_date": dates[i - 1], "sell_date": dates[i]})
+                buy_points.append({"x": dates[i - 1], "y": prices[i - 1]})
+                sell_points.append({"x": dates[i], "y": prices[i]})
 
         return {
             "max_profit": max_profit,
             "best_window_start_date": best_start_date,
             "best_window_end_date": best_end_date,
-            "trades": trades,
+            "buy_points": buy_points,
+            "sell_points": sell_points,
         }
