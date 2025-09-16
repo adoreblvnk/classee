@@ -16,35 +16,40 @@
         <div class="mb-2">
           <p class="text-gray-600">Longest Up:</p>
           <p class="text-green-500">
-            {{ up_down_runs.longest_up.length }} days
-            ({{ up_down_runs.longest_up.start_date }} → {{ up_down_runs.longest_up.end_date }})
+            {{ up_down_runs.longest_up.length }} days ({{
+            up_down_runs.longest_up.start_date }} → {{
+            up_down_runs.longest_up.end_date }})
           </p>
         </div>
         <div>
           <p class="text-gray-600">Longest Down:</p>
           <p class="text-red-500">
-            {{ up_down_runs.longest_down.length }} days 
-            ({{ up_down_runs.longest_down.start_date }} → {{ up_down_runs.longest_down.end_date }})
+            {{ up_down_runs.longest_down.length }} days ({{
+            up_down_runs.longest_down.start_date }} → {{
+            up_down_runs.longest_down.end_date }})
           </p>
         </div>
         <div class="mb-2">
           <p class="text-gray-600">Median Up Run Length:</p>
-          <p class="text-blue-500">{{ up_down_runs.median_up_run_length }} days</p>
+          <p class="text-blue-500">
+            {{ up_down_runs.median_up_run_length }} days
+          </p>
         </div>
         <div class="mb-2">
           <p class="text-gray-600">Median Down Run Length:</p>
-          <p class="text-blue-500">{{ up_down_runs.median_down_run_length }} days</p>
+          <p class="text-blue-500">
+            {{ up_down_runs.median_down_run_length }} days
+          </p>
         </div>
         <div class="mb-2">
           <p class="text-gray-600">Total Runs:</p>
           <p class="text-gray-700">
-            {{ up_down_runs.total_upward_runs }} upward,
-            {{ up_down_runs.total_downward_runs }} downward
+            {{ up_down_runs.total_upward_runs }} upward, {{
+            up_down_runs.total_downward_runs }} downward
           </p>
-        </div> 
         </div>
       </div>
-  
+    </div>
 
     <!-- Max Profit Card -->
     <div class="bg-white shadow-md rounded-lg p-6">
@@ -72,6 +77,11 @@
         </div>
       </form>
 
+      <!-- max prof chart -->
+      <div class="relative h-96">
+        <canvas id="maxProfChart"></canvas>
+      </div>
+
       <!-- Display Max Profit Results -->
       <div class="mt-4 p-4 bg-gray-50 rounded">
         <pre class="text-sm text-gray-700 whitespace-pre-wrap">
@@ -81,4 +91,98 @@
     </div>
   </div>
 </div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById("maxProfChart").getContext("2d");
+
+    // full dataset
+    const allDates = {{ all_dates|tojson }};
+    const allPrices = {{ all_prices|tojson }};
+    
+    // data specific to the selected window
+    const buyPoints = {{ max_profit.max_profit.buy_points|tojson }};
+    const sellPoints = {{ max_profit.max_profit.sell_points|tojson }};
+    const bestWindowStartDate = {{ max_profit.max_profit.best_window_start_date|tojson }};
+    const bestWindowEndDate = {{ max_profit.max_profit.best_window_end_date|tojson }};
+
+    // default to full dataset
+    let chartDates = allDates;
+    let chartPrices = allPrices;
+
+    // if a specific window is selected, filter data for the chart
+    if (bestWindowStartDate && bestWindowEndDate) {
+      const startIndex = allDates.indexOf(bestWindowStartDate);
+      const endIndex = allDates.indexOf(bestWindowEndDate);
+
+      if (startIndex !== -1 && endIndex !== -1) {
+        // slice data to match the window for the main price line
+        chartDates = allDates.slice(startIndex, endIndex + 1);
+        chartPrices = allPrices.slice(startIndex, endIndex + 1);
+      }
+    }
+
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: chartDates,
+        datasets: [
+          {
+            label: "Closing Price",
+            data: chartPrices,
+            borderColor: "rgba(54, 162, 235, 0.5)",
+            borderWidth: 2,
+            pointRadius: 0, // hide points on the main line
+            tension: 0.1,
+          },
+          {
+            type: "scatter",
+            label: "Buy",
+            data: buyPoints,
+            backgroundColor: "green",
+            pointStyle: "triangle",
+            radius: 8,
+          },
+          {
+            type: "scatter",
+            label: "Sell",
+            data: sellPoints,
+            backgroundColor: "red",
+            pointStyle: "triangle",
+            rotation: 180,
+            radius: 8,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            ticks: {
+              maxTicksLimit: 10, // prevent cluttered labels on x-axis
+            },
+          },
+          y: {
+            beginAtZero: false,
+            ticks: {
+              callback: function (value, index, values) {
+                return "$" + value.toFixed(2);
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            mode: "index",
+            intersect: false,
+          },
+          legend: {
+            position: "top",
+          },
+        },
+      },
+    });
+  });
+</script>
 {% endblock %}

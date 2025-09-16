@@ -32,6 +32,8 @@ def root(request: Request, window_size: int = None):
             {
                 "request": request,
                 "title": "Stock Market Analysis",
+                "all_dates": DATASET["Date"].tolist(),
+                "all_prices": DATASET["Adj Close"].tolist(),
                 "sma_return": sma_return_data,
                 "up_down_runs": up_down_runs_data, 
                 "max_profit": {
