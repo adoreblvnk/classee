@@ -33,10 +33,7 @@ def root(request: Request, window_size: int = None):
                 "request": request,
                 "title": "Stock Market Analysis",
                 "sma_return": sma_return_data,
-                "up_down_runs": {
-                    "longest_up": up_down_runs_data[0],
-                    "longest_down": up_down_runs_data[1],
-                },
+                "up_down_runs": up_down_runs_data, 
                 "max_profit": {
                     "max_profit": max_profit,
                     "max_window_size": len(DATASET),  # for validation only

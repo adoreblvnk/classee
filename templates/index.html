@@ -15,14 +15,36 @@
       <div>
         <div class="mb-2">
           <p class="text-gray-600">Longest Up:</p>
-          <p class="text-green-500">{{ up_down_runs.longest_up }}</p>
+          <p class="text-green-500">
+            {{ up_down_runs.longest_up.length }} days
+            ({{ up_down_runs.longest_up.start_date }} → {{ up_down_runs.longest_up.end_date }})
+          </p>
         </div>
         <div>
           <p class="text-gray-600">Longest Down:</p>
-          <p class="text-red-500">{{ up_down_runs.longest_down }}</p>
+          <p class="text-red-500">
+            {{ up_down_runs.longest_down.length }} days 
+            ({{ up_down_runs.longest_down.start_date }} → {{ up_down_runs.longest_down.end_date }})
+          </p>
+        </div>
+        <div class="mb-2">
+          <p class="text-gray-600">Median Up Run Length:</p>
+          <p class="text-blue-500">{{ up_down_runs.median_up_run_length }} days</p>
+        </div>
+        <div class="mb-2">
+          <p class="text-gray-600">Median Down Run Length:</p>
+          <p class="text-blue-500">{{ up_down_runs.median_down_run_length }} days</p>
+        </div>
+        <div class="mb-2">
+          <p class="text-gray-600">Total Runs:</p>
+          <p class="text-gray-700">
+            {{ up_down_runs.total_upward_runs }} upward,
+            {{ up_down_runs.total_downward_runs }} downward
+          </p>
+        </div> 
         </div>
       </div>
-    </div>
+  
 
     <!-- Max Profit Card -->
     <div class="bg-white shadow-md rounded-lg p-6">
