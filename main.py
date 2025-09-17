@@ -22,7 +22,6 @@ def root(request: Request, window_size: int = None):
         sma_return_data = SMA_Return.sma_return(DATASET.copy())
         up_down_runs_data = analyze_up_down_runs(DATASET.copy())
         daily_return_data = Daily_Return.daily_return(DATASET.copy())
-        print(daily_return_data)
 
         current_window_size = window_size if window_size is not None else len(DATASET)
         max_profit = MaxProf().maxProfit(DATASET.copy(), current_window_size)
@@ -36,6 +35,7 @@ def root(request: Request, window_size: int = None):
                 "all_prices": DATASET["Adj Close"].tolist(),
                 "sma_return": sma_return_data,
                 "up_down_runs": up_down_runs_data, 
+                "daily_return": daily_return_data,
                 "max_profit": {
                     "max_profit": max_profit,
                     "max_window_size": len(DATASET),  # for validation only

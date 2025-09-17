@@ -3,6 +3,7 @@ import warnings
 warnings.filterwarnings('ignore')
 # load dataset
 class Daily_Return:
+    
     def daily_return(df):
         df = pd.DataFrame(df)
         for x in range(len(df['Close'])):
@@ -10,7 +11,7 @@ class Daily_Return:
                     df[['Daily_Return'][x]]=0;
                 else:
                     df['Daily_Return'][x]=(df['Close'][x]-df['Close'][x-1])/df['Close'][x-1]*100;
-        df=df[['Date', 'Close', 'Daily_Return']]
+        df=df[['Date','Close', 'Daily_Return']]
         mean=0
         for x in range(len(df['Daily_Return'])):
             mean=mean+df['Daily_Return'][x]
@@ -39,17 +40,14 @@ class Daily_Return:
             if df['Daily_Return'][x]<0:
                 neg_day=neg_day+1
         win_rate=post_day/len(df)*100
-        stats = {
-                'Mean Return (%)': float(round(mean,2)),
-                'Std Deviation (%)': float(round(std_div,2)),
-                'Max Gain (%)': float(round(max,2)),
-                'Max Loss (%)': float(round(min,2)),
-                'Positive Days': post_day,
-                'Negative Days': neg_day,
-                'Total Trading Days': len(df),
-                'Win Rate (%)': float(round(win_rate,2))
-            }
         return {
-                "stats for daily_return": stats,
-                "daily return": df,
+                'mean': float(round(mean,2)),
+                'std': float(round(std_div,2)),
+                'max': float(round(max,2)),
+                'min': float(round(min,2)),
+                'post_day': post_day,
+                'neg_day': neg_day,
+                'total_trading_days': len(df),
+                'win_rate': float(round(win_rate,2)),
+                "daily_return": df['Daily_Return'].tolist(),
             }

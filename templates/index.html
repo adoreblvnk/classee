@@ -50,6 +50,32 @@
         </div>
       </div>
     </div>
+    
+    <!-- Daily Return Card -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4">Daily Return</h2>
+      
+      <!-- Bar Chart Container -->
+      <div class="mt-6 mb-4 h-64 relative">
+        <canvas id="dailyReturnChart"></canvas>
+      </div>
+      
+      <div>
+        <div class="mb-2">
+          <p class="text-gray-600">Stats for daily return:</p>
+          <p class="text-black">
+            Mean Return (%): {{ daily_return.mean }}%,<br> 
+            Std Deviation (%): {{ daily_return.std }}%,<br>
+            Max Loss (%): {{ daily_return.min }}%,<br> 
+            Max Gain (%): {{ daily_return.max }}%,<br> 
+            Positive Days: {{ daily_return.post_day }} days,<br>
+            Negative Days: {{ daily_return.neg_day }} days,<br> 
+            Total Trading Days: {{ daily_return.total_trading_days }} days,<br>
+            Win Rate (%): {{ daily_return.win_rate }}%<br>
+          </p>
+        </div>
+      </div>
+    </div>
 
     <!-- Max Profit Card -->
     <div class="bg-white shadow-md rounded-lg p-6">
@@ -92,8 +118,10 @@
   </div>
 </div>
 {% endblock %} {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // Max Profit Chart
     const ctx = document.getElementById("maxProfChart").getContext("2d");
 
     // full dataset
@@ -103,8 +131,8 @@
     // data specific to the selected window
     const buyPoints = {{ max_profit.max_profit.buy_points|tojson }};
     const sellPoints = {{ max_profit.max_profit.sell_points|tojson }};
-    const bestWindowStartDate = {{ max_profit.max_profit.best_window_start_date|tojson }};
-    const bestWindowEndDate = {{ max_profit.max_profit.best_window_end_date|tojson }};
+    const bestWindowStartDate = "{{ max_profit.max_profit.best_window_start_date }}";
+    const bestWindowEndDate = "{{ max_profit.max_profit.best_window_end_date }}";
 
     // default to full dataset
     let chartDates = allDates;
@@ -166,7 +194,7 @@
           y: {
             beginAtZero: false,
             ticks: {
-              callback: function (value, index, values) {
+              callback: function (value) {
                 return "$" + value.toFixed(2);
               },
             },
@@ -182,6 +210,79 @@
           },
         },
       },
+    });
+
+    // Daily Return Chart
+    const dailyReturnCtx = document.getElementById('dailyReturnChart').getContext('2d');
+    
+    // Convert the DataFrame to a JSON-serializable format
+    const returns = {{daily_return.daily_return|tojson}};
+    const returnDates = {{all_dates|tojson}};
+    // Extract dates and returns
+    
+    // Create background colors based on positive/negative values
+    const backgroundColors = returns.map(value => 
+      value >= 0 ? 'rgba(75, 192, 192, 0.7)' : 'rgba(255, 99, 132, 0.7)'
+    );
+    
+    // Create border colors based on positive/negative values
+    const borderColors = returns.map(value => 
+      value >= 0 ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 99, 132, 1)'
+    );
+    
+    new Chart(dailyReturnCtx, {
+      type: 'bar',
+      data: {
+        labels: returnDates,
+        datasets: [{
+          label: 'Daily Return (%)',
+          data: returns,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Return (%)'
+            },
+            grid: {
+              color: 'rgba(0, 0, 0, 0.1)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Date'
+            },
+            grid: {
+              display: true
+            },
+            ticks: {
+              maxTicksLimit: 12, // Limit number of x-axis labels to prevent clutter
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Return: ${context.raw}%`;
+              }
+            }
+          }
+        }
+      }
     });
   });
 </script>
