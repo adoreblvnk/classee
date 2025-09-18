@@ -109,10 +109,16 @@
       </div>
 
       <!-- Display Max Profit Results -->
-      <div class="mt-4 p-4 bg-gray-50 rounded">
-        <pre class="text-sm text-gray-700 whitespace-pre-wrap">
-{{ max_profit.max_profit|tojson(indent=2) }}</pre
-        >
+      <div class="mb-2">
+        <p class="text-gray-600">
+          Max Profit: <span class="text-blue-500">{{ "%.2f"|format(max_profit.max_profit.max_profit) }}</span>
+        </p>
+        <p class="text-gray-600">
+          Best Window Start Date: <span class="text-blue-500">{{ max_profit.max_profit.best_window_start_date }}</span>
+        </p>
+        <p class="text-gray-600">
+          Best Window End Date: <span class="text-blue-500">{{ max_profit.max_profit.best_window_end_date }}</span>
+        </p>
       </div>
     </div>
   </div>
