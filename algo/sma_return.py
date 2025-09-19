@@ -4,7 +4,7 @@ from datetime import datetime
 
 class SMA_Return:
     #def sma_return(df, window_size=5):
-    def sma_return(df, start_date = None, end_date = None):
+    def sma_return(df, start_date = None, end_date = None, window_size=5):
         # date_input = input("Enter start date of window size: ")
 
         if start_date and end_date:
