@@ -3,8 +3,14 @@ from datetime import datetime
 
 
 class SMA_Return:
-    def sma_return(df, window_size=5):
+    #def sma_return(df, window_size=5):
+    def sma_return(df, start_date = None, end_date = None):
         # date_input = input("Enter start date of window size: ")
+
+        if start_date and end_date:
+            df = df[(df["Date"] >= start_date) & (df["Date"] <= end_date)]
+            # df = df[start_date:end_date]
+            
         date_input = "29-06-2010"  # hardcoded for now
         date = datetime.strptime(date_input, "%d-%m-%Y").date()
 
