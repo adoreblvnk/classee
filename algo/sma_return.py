@@ -80,7 +80,11 @@ class SMA_Return:
       plt.grid(True)
       plt.xticks(rotation=45)
       plt.tight_layout()
-      plt.savefig("chart/chart.png")
+      import os
+      os.makedirs("chart", exist_ok=True)
+      plt.savefig("chart/chart.png", dpi=150)
+      plt.close()
+
 
    def sma_return(self, start_date = None, end_date = None, window_size=None):
       default_window_size = 5 if window_size is None else window_size
