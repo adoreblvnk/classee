@@ -17,12 +17,17 @@ templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/", response_class=HTMLResponse)
-def root(request: Request, window_size: int = None, date_range_start: str = None, date_range_end: str = None):
+def root(request: Request, 
+         window_size: int = None, 
+         date_range_start: str = None, 
+         date_range_end: str = None, 
+         sma_window_size: int = None):
     try:
+        print(sma_window_size)  
         date_range_start = date_range_start.replace("/", "-") if date_range_start else None
         date_range_end = date_range_end.replace("/", "-") if date_range_end else None
-
-        sma_return_data = SMA_Return(DATASET.copy()).sma_return(date_range_start, date_range_end)
+      
+        sma_return_data = SMA_Return(DATASET.copy()).sma_return(date_range_start, date_range_end, sma_window_size)
         up_down_runs_data = analyze_up_down_runs(DATASET.copy())
         daily_return_data = Daily_Return.daily_return(DATASET.copy())
 

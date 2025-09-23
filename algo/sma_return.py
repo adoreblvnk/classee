@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 class SMA_Return:
    #def sma_return(df, window_size=5):
@@ -65,21 +66,37 @@ class SMA_Return:
       res = formatted.to_dict(orient="records")
 
       return res
-   
-   def sma_return(self, start_date = None, end_date = None, window_size=5):
-      self.window_size = window_size
+   # def plot_chart(self, sma_data):
+   #    df = pd.DataFrame(sma_data)
 
-      if start_date and end_date:
-         date_data = self.get_date_data(start_date, end_date)
-      elif start_date:
-         date_data = self.get_date_data(start_date)
-      elif end_date:
-         date_data = self.get_date_data(end_date)
-      else:
-         date_data = self.get_date_data()
+   #    plt.figure(figsize=(10,5))
+   #    plt.plot(df["Date"], df["Adj Close"], label="Adj Close", marker="o")
+   #    plt.plot(df["Date"], df["SMA"], label="SMA (window=5)", linestyle="--", color="orange")
 
+   #    plt.title("Stock Prices with 5-Day SMA")
+   #    plt.xlabel("Date")
+   #    plt.ylabel("Price")
+   #    plt.legend()
+   #    plt.grid(True)
+   #    plt.xticks(rotation=45)
+   #    plt.tight_layout()
+   #    plt.show()
+
+   def sma_return(self, start_date = None, end_date = None, window_size=None):
+      default_window_size = 5 if window_size is None else window_size
+      self.window_size = default_window_size
+
+      start_date = "01-03-2022" if start_date is None else start_date
+      end_date = "24-03-2022" if end_date is None else end_date
+
+      date_data = self.get_date_data(start_date, end_date)
       sma = self.calculate_sma(date_data)
       res = self.format_data(sma)
+      # self.plot_chart(sma)
       
-      return res
+      data_dict = {
+         "sma_data": res,
+         "sma_window": self.window_size
+      }
+      return data_dict
         
