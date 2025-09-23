@@ -3,6 +3,55 @@
   <h1 class="text-3xl font-bold text-center mb-8">Stock Market Analysis</h1>
 
   <div class="space-y-6">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.css">
+   
+   <!-- Date Range filtering -->
+   <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-4">Date Range Selector for SMA and Daily Returns</h2>
+
+      <!-- Window Size Form -->
+      <form method="get" class="mb-4">
+        <div class="flex items-center gap-2">
+          <label for="d-flex-range-picker" class="text-gray-700"></label>
+          <div class="d-flex-range-picker">
+            <p>Range Selector</p>
+            <input type="text" id="date_from" name="date_range_start" class="border rounded px-2 py-1 w-24 form-control form-control-sm">
+            <input type="text" id="date_to" name="date_range_end" class="border rounded px-2 py-1 w-24 form-control form-control-sm">
+            <input type="hidden" id="date_range" name="date_range">
+          </div>
+      
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/lightpick.min.js"></script>
+      <script>
+         var picker = new Lightpick({
+         field: document.getElementById('date_from'),
+         secondField: document.getElementById('date_to'),
+         singleDate: false,
+         minDate: moment('2010-06-29'),
+         maxDate: moment('2022-03-24'),
+         onSelect: function(start, end){
+            var date1 = '';
+            var date2 = '';
+            date1 += start ? start.format('DD-MM-YYYY') : null;
+            date2 += end ? end.format('DD-MM-YYYY') : null;
+
+         }
+         
+         
+      });
+
+     </script> 
+   </div>
+
     <!-- SMA Return Card -->
     <div class="bg-white shadow-md rounded-lg p-6">
       <h2 class="text-xl font-semibold mb-4">SMA Return</h2>

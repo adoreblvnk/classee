@@ -1,14 +1,14 @@
 import pandas as pd
 import numpy as np
 
-class HTMLFormatter:
-   def html_format():
-      pass
-
 class SMA_Return:
    #def sma_return(df, window_size=5):
    def __init__(self, df):
       self.df: pd.DataFrame = df
+
+   def date_formatter(self, date):
+      date_format = "%d-%m-%Y"
+      return pd.to_datetime(date.lstrip(), format=date_format)
 
    def calculate_sma(self, data: pd.DataFrame):
 
@@ -49,14 +49,11 @@ class SMA_Return:
 
       return data
 
-   def get_date_data(self, date_range = "07-03-2022, 18-03-2022"):
-      start_date, end_date = date_range.split(",")
-
-      date_format = "%d-%m-%Y"
+   def get_date_data(self, start_date = "01-03-2022", end_date = "24-03-2022"):
       # ensure all three date object is to be the same type
       self.df["Date"] = pd.to_datetime(self.df["Date"])
-      start_date = pd.to_datetime(start_date.lstrip(), format=date_format)
-      end_date = pd.to_datetime(end_date.lstrip(), format=date_format)
+      start_date = self.date_formatter(start_date)
+      end_date = self.date_formatter(end_date)
 
       date_range_filtering = (self.df["Date"] >= start_date) & (self.df["Date"] <= end_date)
       return self.df.loc[date_range_filtering].copy()
@@ -79,7 +76,16 @@ class SMA_Return:
    
    def sma_return(self, start_date = None, end_date = None, window_size=5):
       self.window_size = window_size
-      date_data = self.get_date_data()
+
+      if start_date and end_date:
+         date_data = self.get_date_data(start_date, end_date)
+      elif start_date:
+         date_data = self.get_date_data(start_date)
+      elif end_date:
+         date_data = self.get_date_data(end_date)
+      else:
+         date_data = self.get_date_data()
+
       sma = self.calculate_sma(date_data)
       res = self.format_data(sma)
       
