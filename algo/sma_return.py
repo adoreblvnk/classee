@@ -52,7 +52,7 @@ class SMA_Return:
 
       return data
 
-   def get_date_data(self, start_date = "01-03-2022", end_date = "24-03-2022"):
+   def get_date_data(self, start_date, end_date):
       # ensure all three date object is to be the same type
       self.df["Date"] = pd.to_datetime(self.df["Date"])
       start_date = self.date_formatter(start_date)
