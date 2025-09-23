@@ -26,15 +26,17 @@ class SMA_Return:
       # we're calculating until here
       end_date_index = len(date_range_data)
 
-      # start index = end index - window 
-      calculate_start_index = end_date_index - (end_date_index - window) # starts the index at desired window
+      # start index
+      calculate_start_index = window # starts the index n_window to calculate the historical sma
 
       sma_list = []
 
+      # we -1 because thats the first index that SMA can be calculated
+      # due to us needing n_window value inclusive of the date itself
       for i in range(calculate_start_index - 1, end_date_index):
          sma = 0
 
-         # j = calculate from the window until the date itself
+         # starting point of the rolling window, ending at i
          for j in range((i - window) + 1, i): 
             if sma == 0:
                sma += date_range_data[j] + date_range_data[j+1]
