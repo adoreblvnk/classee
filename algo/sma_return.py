@@ -27,7 +27,7 @@ class SMA_Return:
       end_date_index = len(date_range_data)
 
       # start index = end index - window 
-      calculate_start_index = end_date_index - window # starts the index at desired window
+      calculate_start_index = end_date_index - (end_date_index - window) # starts the index at desired window
 
       sma_list = []
 
