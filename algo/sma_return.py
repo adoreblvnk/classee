@@ -66,21 +66,21 @@ class SMA_Return:
       res = formatted.to_dict(orient="records")
 
       return res
-   # def plot_chart(self, sma_data):
-   #    df = pd.DataFrame(sma_data)
+   def plot_chart(self, sma_data):
+      df = pd.DataFrame(sma_data)
 
-   #    plt.figure(figsize=(10,5))
-   #    plt.plot(df["Date"], df["Adj Close"], label="Adj Close", marker="o")
-   #    plt.plot(df["Date"], df["SMA"], label="SMA (window=5)", linestyle="--", color="orange")
+      plt.figure(figsize=(10,5))
+      plt.plot(df["Date"], df["Adj Close"], label="Adj Close", marker="o")
+      plt.plot(df["Date"], df["SMA"], label="SMA (window=5)", linestyle="--", color="orange")
 
-   #    plt.title("Stock Prices with 5-Day SMA")
-   #    plt.xlabel("Date")
-   #    plt.ylabel("Price")
-   #    plt.legend()
-   #    plt.grid(True)
-   #    plt.xticks(rotation=45)
-   #    plt.tight_layout()
-   #    plt.show()
+      plt.title("Stock Prices with 5-Day SMA")
+      plt.xlabel("Date")
+      plt.ylabel("Price")
+      plt.legend()
+      plt.grid(True)
+      plt.xticks(rotation=45)
+      plt.tight_layout()
+      plt.savefig("chart/chart.png")
 
    def sma_return(self, start_date = None, end_date = None, window_size=None):
       default_window_size = 5 if window_size is None else window_size
@@ -92,11 +92,7 @@ class SMA_Return:
       date_data = self.get_date_data(start_date, end_date)
       sma = self.calculate_sma(date_data)
       res = self.format_data(sma)
-      # self.plot_chart(sma)
+      self.plot_chart(sma)
       
-      data_dict = {
-         "sma_data": res,
-         "sma_window": self.window_size
-      }
-      return data_dict
+      return res
         
