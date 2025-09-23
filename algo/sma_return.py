@@ -31,11 +31,11 @@ class SMA_Return:
 
       sma_list = []
 
-      for i in range(calculate_start_index, end_date_index):
+      for i in range(calculate_start_index - 1, end_date_index):
          sma = 0
 
          # j = calculate from the window until the date itself
-         for j in range(i - window, i): 
+         for j in range((i - window) + 1, i): 
             if sma == 0:
                sma += date_range_data[j] + date_range_data[j+1]
             elif j != i:
@@ -43,8 +43,8 @@ class SMA_Return:
             else:
                sma += date_range_data[i]
          sma_list.append(sma / window)
-         
-      for idx, i in enumerate(sma_list, calculate_start_index):
+         print(sma)
+      for idx, i in enumerate(sma_list, calculate_start_index - 1):
          data.loc[dates[idx], "SMA"] = i
 
       return data
