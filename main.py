@@ -19,7 +19,7 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/", response_class=HTMLResponse)
 def root(request: Request, window_size: int = None):
     try:
-        sma_return_data = SMA_Return.sma_return(DATASET.copy())
+        sma_return_data = SMA_Return(DATASET.copy()).sma_return()
         up_down_runs_data = analyze_up_down_runs(DATASET.copy())
         daily_return_data = Daily_Return.daily_return(DATASET.copy())
 
