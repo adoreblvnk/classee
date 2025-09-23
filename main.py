@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 import pandas as pd
 from pathlib import Path
@@ -14,6 +15,8 @@ DATASET = pd.read_csv(Path(__file__).parent / "data" / "TSLA.csv")
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+app.mount("/chart", StaticFiles(directory="chart"), name="chart")
+
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -23,7 +26,6 @@ def root(request: Request,
          date_range_end: str = None, 
          sma_window_size: int = None):
     try:
-        print(sma_window_size)  
         date_range_start = date_range_start.replace("/", "-") if date_range_start else None
         date_range_end = date_range_end.replace("/", "-") if date_range_end else None
       
@@ -41,7 +43,8 @@ def root(request: Request,
                 "title": "Stock Market Analysis",
                 "all_dates": DATASET["Date"].tolist(),
                 "all_prices": DATASET["Adj Close"].tolist(),
-                "sma_return": sma_return_data,
+                "sma_return": {"sma_return_data": sma_return_data,
+                               "img": "chart.png"},
                 "up_down_runs": up_down_runs_data, 
                 "daily_return": daily_return_data,
                 "max_profit": {

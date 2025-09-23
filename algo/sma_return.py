@@ -71,9 +71,9 @@ class SMA_Return:
 
       plt.figure(figsize=(10,5))
       plt.plot(df["Date"], df["Adj Close"], label="Adj Close", marker="o")
-      plt.plot(df["Date"], df["SMA"], label="SMA (window=5)", linestyle="--", color="orange")
+      plt.plot(df["Date"], df["SMA"], label=f"SMA (window={self.window_size})", linestyle="-", color="orange")
 
-      plt.title("Stock Prices with 5-Day SMA")
+      plt.title(f"Stock Prices with {self.window_size}-Day SMA")
       plt.xlabel("Date")
       plt.ylabel("Price")
       plt.legend()

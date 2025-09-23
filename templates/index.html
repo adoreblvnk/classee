@@ -56,30 +56,9 @@
 
      </script> 
       <h2 class="text-xl font-semibold mb-4">SMA Return</h2>
-      <div class="img-div"><img src="../chart/chart.png"></div>
+      <div class="img-div"><img src="{{ url_for('chart', path=sma_return['img']) }}"></div>
       
-      <!-- <div class="overflow-x-auto">
-         <table class="min-w-full border border-gray-300 rounded-lg table-auto">
-           <thead class="bg-gray-100">
-             <tr>
-               <th class="px-3 py-2 border">Date</th>
-               <th class="px-3 py-2 border">Adj Close</th>
-               <th class="px-3 py-2 border">SMA</th>
-             </tr>
-           </thead>
-           <tbody>
-             {% for r in sma_return %}
-             <tr class="odd:bg-white even:bg-gray-50">
-               <td class="px-3 py-2 border text-center">{{ r.Date }}</td>
-               <td class="px-3 py-2 border text-center">{{ '%.2f'|format(r['Adj Close']) }}</td>
-               <td class="px-3 py-2 border text-center">
-                 {{ '' if r.SMA is none else '%.2f'|format(r.SMA) }}
-               </td>
-             </tr>
-             {% endfor %}
-           </tbody>
-         </table>
-       </div> -->
+      
     </div>
 
     <!-- Up/Down Runs Card -->
