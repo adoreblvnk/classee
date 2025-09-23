@@ -8,7 +8,6 @@ from algo.max_prof import MaxProf
 from algo.sma_return import SMA_Return
 from algo.daily_return import Daily_Return
 from algo.up_down_runs import analyze_up_down_runs
-import datetime
 
 # load dataset
 DATASET = pd.read_csv(Path(__file__).parent / "data" / "TSLA.csv")

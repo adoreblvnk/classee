@@ -61,16 +61,6 @@ class SMA_Return:
    def format_data(self, sma: pd.DataFrame):
       formatted = sma[["Date", "Adj Close", "SMA"]]
       res = formatted.to_dict(orient="records")
-      # formatted_data_df = pd.DataFrame(res)
-      # html_table = formatted_data_df.to_html(index=False, border=2)
-
-      # return f"""
-      #          <html>
-      #             <body>
-      #                   {html_table}
-      #             </body>
-      #          </html>
-      #          """
 
       return res
    
