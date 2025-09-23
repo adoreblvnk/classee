@@ -43,7 +43,7 @@ class SMA_Return:
             else:
                sma += date_range_data[i]
          sma_list.append(sma / window)
-         print(sma)
+         # print(sma)
       for idx, i in enumerate(sma_list, calculate_start_index - 1):
          data.loc[dates[idx], "SMA"] = i
 
