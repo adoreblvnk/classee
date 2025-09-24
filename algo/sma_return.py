@@ -7,6 +7,10 @@ class SMA_Return:
    def __init__(self, df):
       self.df: pd.DataFrame = df
 
+   def make_chart():
+      import os
+      os.makedirs("chart", exist_ok=True)
+
    def date_formatter(self, date):
       date_format = "%d-%m-%Y"
       return pd.to_datetime(date.lstrip(), format=date_format)
@@ -80,8 +84,6 @@ class SMA_Return:
       plt.grid(True)
       plt.xticks(rotation=45)
       plt.tight_layout()
-      import os
-      os.makedirs("chart", exist_ok=True)
       plt.savefig("chart/chart.png", dpi=150)
       plt.close()
 

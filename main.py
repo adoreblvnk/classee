@@ -12,6 +12,7 @@ from algo.up_down_runs import analyze_up_down_runs
 
 # load dataset
 DATASET = pd.read_csv(Path(__file__).parent / "data" / "TSLA.csv")
+SMA_Return.make_chart()
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
