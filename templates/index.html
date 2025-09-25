@@ -3,7 +3,7 @@
   <h1 class="text-3xl font-bold text-center mb-8">Stock Market Analysis</h1>
 
   <div class="space-y-6">
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr-net.npm/lightpick@1.6.2/css/lightpick.css">
    
     <!-- SMA Return Card -->
     <div class="bg-white shadow-md rounded-lg p-6">
@@ -171,6 +171,36 @@
         <p class="text-gray-600">
           Best Window End Date: <span class="text-blue-500">{{ max_profit.max_profit.best_window_end_date }}</span>
         </p>
+      </div>
+
+      <!-- Explanation -->
+      <div class="mt-6 border-t pt-4">
+        <h3 class="text-lg font-semibold mb-2">Explanation for Max Profit</h3>
+        <div class="prose max-w-none text-gray-800 space-y-3">
+          <p>
+            this section finds the most profitable period for trading based on a "window size" you provide. here's how to read the output:
+          </p>
+          
+          <div>
+            <h4 class="font-semibold">reading the chart:</h4>
+            <ul class="list-disc list-inside ml-4">
+              <li>the <span class="text-blue-500 font-semibold">blue line</span> shows the stock's closing price.</li>
+              <li><span class="text-green-500 font-semibold">green triangles (▲)</span> mark a "buy" day. this happens if the next day's price is higher.</li>
+              <li><span class="text-red-500 font-semibold">red triangles (▼)</span> mark a "sell" day, capturing the profit from the previous day's price increase.</li>
+              <li>the chart is zoomed in to show only the single <span class="font-semibold">most profitable window</span> found in the entire dataset for the size you selected.</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold">understanding the values:</h4>
+            <ul class="list-disc list-inside ml-4">
+              <li><strong>window size:</strong> this is the number of trading days we analyze at a time. our code slides a window of this size across the entire stock history to find the best one.</li>
+              <li><strong>max profit:</strong> this is the total profit from all the buy (▲) and sell (▼) trades <span class="font-semibold">added together</span>, but only for the trades that occurred within the "best window" shown on the chart.</li>
+              <li><strong>best window dates:</strong> these are the start and end dates of that single most profitable period.</li>
+            </ul>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
