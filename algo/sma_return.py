@@ -2,103 +2,114 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class SMA_Return:
-   #def sma_return(df, window_size=5):
-   def __init__(self, df):
-      self.df: pd.DataFrame = df
+    # def sma_return(df, window_size=5):
+    def __init__(self, df):
+        self.df: pd.DataFrame = df
 
-   def make_chart():
-      import os
-      os.makedirs("chart", exist_ok=True)
+    def make_chart(self):
+        import os
 
-   def date_formatter(self, date):
-      date_format = "%d-%m-%Y"
-      return pd.to_datetime(date.lstrip(), format=date_format)
+        os.makedirs("chart", exist_ok=True)
 
-   def calculate_sma(self, data: pd.DataFrame):
+    def date_formatter(self, date):
+        date_format = "%d-%m-%Y"
+        return pd.to_datetime(date.lstrip(), format=date_format)
 
-      # calculate SMA for each date
-      # formula = sum of the inclusive date and the previous n dates where n = window - 1
+    def calculate_sma(self, data: pd.DataFrame):
 
-      date_range_data = data["Adj Close"].tolist()
-      window = self.window_size
-      dates = data.index.tolist()
+        # calculate SMA for each date
+        # formula = sum of the inclusive date and the previous n dates where n = window - 1
 
-      # set all to NaN
-      data["SMA"] = np.nan
+        date_range_data = data["Adj Close"].tolist()
+        window = self.window_size
+        dates = data.index.tolist()
 
-      # get latest index
-      # we're calculating until here
-      end_date_index = len(date_range_data)
+        # set all to NaN
+        data["SMA"] = np.nan
 
-      # start index
-      calculate_start_index = window # starts the index n_window to calculate the historical sma
+        # get latest index
+        # we're calculating until here
+        end_date_index = len(date_range_data)
 
-      sma_list = []
+        # start index
+        calculate_start_index = (
+            window  # starts the index n_window to calculate the historical sma
+        )
 
-      # we -1 because thats the first index that SMA can be calculated
-      # due to us needing n_window value inclusive of the date itself
-      for i in range(calculate_start_index - 1, end_date_index):
-         sma = 0
+        sma_list = []
 
-         # starting point of the rolling window, ending at i
-         for j in range((i - window) + 1, i): 
-            if sma == 0:
-               sma += date_range_data[j] + date_range_data[j+1]
-            elif j != i:
-               sma += date_range_data[j+1]
-            else:
-               sma += date_range_data[i]
-         sma_list.append(sma / window)
-         # print(sma)
-      for idx, i in enumerate(sma_list, calculate_start_index - 1):
-         data.loc[dates[idx], "SMA"] = i
+        # we -1 because thats the first index that SMA can be calculated
+        # due to us needing n_window value inclusive of the date itself
+        for i in range(calculate_start_index - 1, end_date_index):
+            sma = 0
 
-      return data
+            # starting point of the rolling window, ending at i
+            for j in range((i - window) + 1, i):
+                if sma == 0:
+                    sma += date_range_data[j] + date_range_data[j + 1]
+                elif j != i:
+                    sma += date_range_data[j + 1]
+                else:
+                    sma += date_range_data[i]
+            sma_list.append(sma / window)
+            # print(sma)
+        for idx, i in enumerate(sma_list, calculate_start_index - 1):
+            data.loc[dates[idx], "SMA"] = i
 
-   def get_date_data(self, start_date, end_date):
-      # ensure all three date object is to be the same type
-      self.df["Date"] = pd.to_datetime(self.df["Date"])
-      start_date = self.date_formatter(start_date)
-      end_date = self.date_formatter(end_date)
+        return data
 
-      date_range_filtering = (self.df["Date"] >= start_date) & (self.df["Date"] <= end_date)
-      return self.df.loc[date_range_filtering].copy()
+    def get_date_data(self, start_date, end_date):
+        # ensure all three date object is to be the same type
+        self.df["Date"] = pd.to_datetime(self.df["Date"])
+        start_date = self.date_formatter(start_date)
+        end_date = self.date_formatter(end_date)
 
-   def format_data(self, sma: pd.DataFrame):
-      formatted = sma[["Date", "Adj Close", "SMA"]]
-      res = formatted.to_dict(orient="records")
+        date_range_filtering = (self.df["Date"] >= start_date) & (
+            self.df["Date"] <= end_date
+        )
+        return self.df.loc[date_range_filtering].copy()
 
-      return res
-   def plot_chart(self, sma_data):
-      df = pd.DataFrame(sma_data)
+    def format_data(self, sma: pd.DataFrame):
+        formatted = sma[["Date", "Adj Close", "SMA"]]
+        res = formatted.to_dict(orient="records")
 
-      plt.figure(figsize=(10,5))
-      plt.plot(df["Date"], df["Adj Close"], label="Adj Close", marker="o")
-      plt.plot(df["Date"], df["SMA"], label=f"SMA (window={self.window_size})", linestyle="-", color="orange")
+        return res
 
-      plt.title(f"Stock Prices with {self.window_size}-Day SMA")
-      plt.xlabel("Date")
-      plt.ylabel("Price")
-      plt.legend()
-      plt.grid(True)
-      plt.xticks(rotation=45)
-      plt.tight_layout()
-      plt.savefig("chart/chart.png", dpi=150)
-      plt.close()
+    def plot_chart(self, sma_data):
+        df = pd.DataFrame(sma_data)
 
+        plt.figure(figsize=(10, 5))
+        plt.plot(df["Date"], df["Adj Close"], label="Adj Close", marker="o")
+        plt.plot(
+            df["Date"],
+            df["SMA"],
+            label=f"SMA (window={self.window_size})",
+            linestyle="-",
+            color="orange",
+        )
 
-   def sma_return(self, start_date = None, end_date = None, window_size=None):
-      default_window_size = 5 if window_size is None else window_size
-      self.window_size = default_window_size
+        plt.title(f"Stock Prices with {self.window_size}-Day SMA")
+        plt.xlabel("Date")
+        plt.ylabel("Price")
+        plt.legend()
+        plt.grid(True)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig("chart/chart.png", dpi=150)
+        plt.close()
 
-      start_date = "01-03-2022" if start_date is None else start_date
-      end_date = "24-03-2022" if end_date is None else end_date
+    def sma_return(self, start_date=None, end_date=None, window_size=None):
+        default_window_size = 5 if window_size is None else window_size
+        self.window_size = default_window_size
 
-      date_data = self.get_date_data(start_date, end_date)
-      sma = self.calculate_sma(date_data)
-      res = self.format_data(sma)
-      self.plot_chart(sma)
-      
-      return res
-        
+        start_date = "01-03-2022" if start_date is None else start_date
+        end_date = "24-03-2022" if end_date is None else end_date
+
+        date_data = self.get_date_data(start_date, end_date)
+        sma = self.calculate_sma(date_data)
+        res = self.format_data(sma)
+        self.plot_chart(sma)
+
+        return res
