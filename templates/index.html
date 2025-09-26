@@ -83,7 +83,13 @@
       </script>
       <h2 class="text-xl font-semibold mb-4">SMA Return</h2>
       <div class="img-div">
-        <img src="{{ url_for('chart', path=sma_return['img']) }}" />
+        {% if sma_return['img'] %}
+            <img src="{{ url_for('chart', path=sma_return['img']) }}" alt="SMA chart" />
+        {% else %}
+            <p class="text-red-600">
+                {{ sma_return.get('error') }}
+            </p>
+        {% endif %}
       </div>
     </div>
 

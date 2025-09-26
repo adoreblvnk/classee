@@ -8,7 +8,7 @@ class SMA_Return:
     def __init__(self, df):
         self.df: pd.DataFrame = df
 
-    def make_chart(self):
+    def make_chart_dir(self):
         import os
 
         os.makedirs("chart", exist_ok=True)
@@ -22,11 +22,9 @@ class SMA_Return:
         window = self.window_size
         dates = data.index.tolist()
         date_len = len(dates)
-
+        
         if window < 0 or window > date_len:
-            raise ValueError(
-                f"Window size should be > 0 and lesser or equals to {len(dates)}"
-            )
+            return f"Window size should be > 0 and <= {len(dates)}"
         
         prices = data["Adj Close"].to_numpy()
         dates = data.index
@@ -49,8 +47,7 @@ class SMA_Return:
         for i in range(window, date_len):
             run_data += prices[i] - prices[i - window]
             data.loc[dates[i], 'SMA'] = run_data / window
-            
-        print(data)
+        
         return data
 
     def get_date_data(self, start_date, end_date):
@@ -64,11 +61,11 @@ class SMA_Return:
         )
         return self.df.loc[date_range_filtering].copy()
 
-    def format_data(self, sma: pd.DataFrame):
-        formatted = sma[["Date", "Adj Close", "SMA"]]
-        res = formatted.to_dict(orient="records")
+    # def format_data(self, sma: pd.DataFrame):
+    #     formatted = sma[["Date", "Adj Close", "SMA"]]
+    #     res = formatted.to_dict(orient="records")
 
-        return res
+    #     return res
 
     def plot_chart(self, sma_data):
         df = pd.DataFrame(sma_data)
@@ -102,7 +99,12 @@ class SMA_Return:
 
         date_data = self.get_date_data(start_date, end_date)
         sma = self.calculate_sma(date_data)
-        res = self.format_data(sma)
-        self.plot_chart(sma)
+        # res = self.format_data(sma)
+        
+        if type(sma) == pd.DataFrame:
+            self.plot_chart(sma)
+            return {"img": "chart.png"}
+        
+        else: return {"error": sma}
 
-        return res
+        
