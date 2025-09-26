@@ -22,10 +22,10 @@ class SMA_Return:
         window = self.window_size
         dates = data.index.tolist()
         date_len = len(dates)
-        
+
         if window < 0 or window > date_len:
             return f"Window size should be > 0 and <= {len(dates)}"
-        
+
         prices = data["Adj Close"].to_numpy()
         dates = data.index
 
@@ -34,20 +34,20 @@ class SMA_Return:
 
         # get first_run price
         run_data = 0
-    
+
         # sum of first run of previous n window
         for i in prices[:window]:
             run_data += i
-        
+
         # lookup the first date according to window, average it and set the SMA accordingingly
-        data.loc[dates[window-1], 'SMA'] = run_data / window
+        data.loc[dates[window - 1], "SMA"] = run_data / window
 
         # start from second window since we had already calculated the first window
         # formula = subsequent_runs + current window - previous window
         for i in range(window, date_len):
             run_data += prices[i] - prices[i - window]
-            data.loc[dates[i], 'SMA'] = run_data / window
-        
+            data.loc[dates[i], "SMA"] = run_data / window
+
         return data
 
     def get_date_data(self, start_date, end_date):
@@ -100,11 +100,10 @@ class SMA_Return:
         date_data = self.get_date_data(start_date, end_date)
         sma = self.calculate_sma(date_data)
         # res = self.format_data(sma)
-        
+
         if type(sma) == pd.DataFrame:
             self.plot_chart(sma)
             return {"img": "chart.png"}
-        
-        else: return {"error": sma}
 
-        
+        else:
+            return {"error": sma}
