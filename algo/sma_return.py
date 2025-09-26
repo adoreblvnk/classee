@@ -20,14 +20,13 @@ class SMA_Return:
     def calculate_sma(self, data: pd.DataFrame):
 
         window = self.window_size
-        dates = data.index.tolist()
+        dates = data.index
         date_len = len(dates)
 
         if window < 0 or window > date_len:
             return f"Window size should be > 0 and <= {len(dates)}"
 
         prices = data["Adj Close"].to_numpy()
-        dates = data.index
 
         # set all to NaN
         data["SMA"] = np.nan
