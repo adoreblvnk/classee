@@ -3,28 +3,58 @@
   <h1 class="text-3xl font-bold text-center mb-8">Stock Market Analysis</h1>
 
   <div class="space-y-6">
-   <link rel="stylesheet" href="https://cdn.jsdelivr-net.npm/lightpick@1.6.2/css/lightpick.css">
-   
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.css"
+    />
+
     <!-- SMA Return Card -->
     <div class="bg-white shadow-md rounded-lg p-6">
       <h2 class="text-xl font-semibold mb-4">Date Range Selector for SMA</h2>
 
-      <!-- Window Size Form -->
+      <!-- Corrected Window Size Form -->
       <form method="get" class="mb-4">
-        <div class="flex items-center gap-2">
-          <label for="d-flex-range-picker" class="text-gray-700"></label>
-          <div class="d-flex-range-picker">
-            <p>Range Selector</p>
-            <input type="text" id="date_from" name="date_range_start" class="border rounded px-2 py-1 w-24 form-control form-control-sm">
-            <input type="text" id="date_to" name="date_range_end" class="border rounded px-2 py-1 w-24 form-control form-control-sm">
+        <div class="flex items-end gap-4">
+          <!-- Date Range Selector -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Range Selector</label
+            >
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                id="date_from"
+                name="date_range_start"
+                class="border rounded px-2 py-1 w-28 form-control form-control-sm"
+              />
+              <span>to</span>
+              <input
+                type="text"
+                id="date_to"
+                name="date_range_end"
+                class="border rounded px-2 py-1 w-28 form-control form-control-sm"
+              />
+            </div>
           </div>
 
-          <label for="d-flex-window-picker" class="text-gray-700"></label>
-          <div class="d-flex-window-picker">
-            <p>Window Period of SMA</p>
-            <input type="number" min="2" value="2" id="sma_window_size" name="sma_window_size" class="border rounded px-2 py-1 w-24 form-control form-control-sm">
+          <!-- Window Period Selector -->
+          <div>
+            <label
+              for="sma_window_size"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Window Period of SMA</label
+            >
+            <input
+              type="number"
+              min="2"
+              value="2"
+              id="sma_window_size"
+              name="sma_window_size"
+              class="border rounded px-2 py-1 w-24 form-control form-control-sm"
+            />
           </div>
-          
+
+          <!-- Submit Button -->
           <button
             type="submit"
             class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
@@ -37,28 +67,24 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/lightpick.min.js"></script>
       <script>
-         var picker = new Lightpick({
-         field: document.getElementById('date_from'),
-         secondField: document.getElementById('date_to'),
-         singleDate: false,
-         minDate: moment('2010-06-29'),
-         maxDate: moment('2022-03-24'),
-         onSelect: function(start, end){
-            var date1 = '';
-            var date2 = '';
-            date1 += start ? start.format('DD-MM-YYYY') : null;
-            date2 += end ? end.format('DD-MM-YYYY') : null;
-
-         }
-         
-         
-      });
-
-     </script> 
+        var picker = new Lightpick({
+          field: document.getElementById("date_from"),
+          secondField: document.getElementById("date_to"),
+          singleDate: false,
+          minDate: moment("2010-06-29"),
+          maxDate: moment("2022-03-24"),
+          onSelect: function (start, end) {
+            var date1 = "";
+            var date2 = "";
+            date1 += start ? start.format("DD-MM-YYYY") : null;
+            date2 += end ? end.format("DD-MM-YYYY") : null;
+          },
+        });
+      </script>
       <h2 class="text-xl font-semibold mb-4">SMA Return</h2>
-      <div class="img-div"><img src="{{ url_for('chart', path=sma_return['img']) }}"></div>
-      
-      
+      <div class="img-div">
+        <img src="{{ url_for('chart', path=sma_return['img']) }}" />
+      </div>
     </div>
 
     <!-- Up/Down Runs Card -->
@@ -102,28 +128,28 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Daily Return Card -->
     <div class="bg-white shadow-md rounded-lg p-6">
       <h2 class="text-xl font-semibold mb-4">Daily Return</h2>
-      
+
       <!-- Bar Chart Container -->
       <div class="mt-6 mb-4 h-64 relative">
         <canvas id="dailyReturnChart"></canvas>
       </div>
-      
+
       <div>
         <div class="mb-2">
           <p class="text-gray-600">Stats for daily return:</p>
           <p class="text-black">
-            Mean Return (%): {{ daily_return.mean }}%,<br> 
-            Std Deviation (%): {{ daily_return.std }}%,<br>
-            Max Loss (%): {{ daily_return.min }}%,<br> 
-            Max Gain (%): {{ daily_return.max }}%,<br> 
-            Positive Days: {{ daily_return.post_day }} days,<br>
-            Negative Days: {{ daily_return.neg_day }} days,<br> 
-            Total Trading Days: {{ daily_return.total_trading_days }} days,<br>
-            Win Rate (%): {{ daily_return.win_rate }}%<br>
+            Mean Return (%): {{ daily_return.mean }}%,<br />
+            Std Deviation (%): {{ daily_return.std }}%,<br />
+            Max Loss (%): {{ daily_return.min }}%,<br />
+            Max Gain (%): {{ daily_return.max }}%,<br />
+            Positive Days: {{ daily_return.post_day }} days,<br />
+            Negative Days: {{ daily_return.neg_day }} days,<br />
+            Total Trading Days: {{ daily_return.total_trading_days }} days,<br />
+            Win Rate (%): {{ daily_return.win_rate }}%<br />
           </p>
         </div>
       </div>
@@ -163,13 +189,22 @@
       <!-- Display Max Profit Results -->
       <div class="mb-2">
         <p class="text-gray-600">
-          Max Profit: <span class="text-blue-500">{{ "%.2f"|format(max_profit.max_profit.max_profit) }}</span>
+          Max Profit:
+          <span class="text-blue-500">{{
+            "%.2f"|format(max_profit.max_profit.max_profit)
+          }}</span>
         </p>
         <p class="text-gray-600">
-          Best Window Start Date: <span class="text-blue-500">{{ max_profit.max_profit.best_window_start_date }}</span>
+          Best Window Start Date:
+          <span class="text-blue-500">{{
+            max_profit.max_profit.best_window_start_date
+          }}</span>
         </p>
         <p class="text-gray-600">
-          Best Window End Date: <span class="text-blue-500">{{ max_profit.max_profit.best_window_end_date }}</span>
+          Best Window End Date:
+          <span class="text-blue-500">{{
+            max_profit.max_profit.best_window_end_date
+          }}</span>
         </p>
       </div>
 
@@ -178,28 +213,61 @@
         <h3 class="text-lg font-semibold mb-2">Explanation for Max Profit</h3>
         <div class="prose max-w-none text-gray-800 space-y-3">
           <p>
-            this section finds the most profitable period for trading based on a "window size" you provide. here's how to read the output:
+            this section finds the most profitable period for trading based on a
+            "window size" you provide. here's how to read the output:
           </p>
-          
+
           <div>
             <h4 class="font-semibold">reading the chart:</h4>
             <ul class="list-disc list-inside ml-4">
-              <li>the <span class="text-blue-500 font-semibold">blue line</span> shows the stock's closing price.</li>
-              <li><span class="text-green-500 font-semibold">green triangles (▲)</span> mark a "buy" day. this happens if the next day's price is higher.</li>
-              <li><span class="text-red-500 font-semibold">red triangles (▼)</span> mark a "sell" day, capturing the profit from the previous day's price increase.</li>
-              <li>the chart is zoomed in to show only the single <span class="font-semibold">most profitable window</span> found in the entire dataset for the size you selected.</li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 class="font-semibold">understanding the values:</h4>
-            <ul class="list-disc list-inside ml-4">
-              <li><strong>window size:</strong> this is the number of trading days we analyze at a time. our code slides a window of this size across the entire stock history to find the best one.</li>
-              <li><strong>max profit:</strong> this is the total profit from all the buy (▲) and sell (▼) trades <span class="font-semibold">added together</span>, but only for the trades that occurred within the "best window" shown on the chart.</li>
-              <li><strong>best window dates:</strong> these are the start and end dates of that single most profitable period.</li>
+              <li>
+                the
+                <span class="text-blue-500 font-semibold">blue line</span> shows
+                the stock's closing price.
+              </li>
+              <li>
+                <span class="text-green-500 font-semibold"
+                  >green triangles (▲)</span
+                >
+                mark a "buy" day. this happens if the next day's price is
+                higher.
+              </li>
+              <li>
+                <span class="text-red-500 font-semibold"
+                  >red triangles (▼)</span
+                >
+                mark a "sell" day, capturing the profit from the previous day's
+                price increase.
+              </li>
+              <li>
+                the chart is zoomed in to show only the single
+                <span class="font-semibold">most profitable window</span> found
+                in the entire dataset for the size you selected.
+              </li>
             </ul>
           </div>
 
+          <div>
+            <h4 class="font-semibold">understanding the values:</h4>
+            <ul class="list-disc list-inside ml-4">
+              <li>
+                <strong>window size:</strong> this is the number of trading days
+                we analyze at a time. our code slides a window of this size
+                across the entire stock history to find the best one.
+              </li>
+              <li>
+                <strong>max profit:</strong> this is the total profit from all
+                the buy (▲) and sell (▼) trades
+                <span class="font-semibold">added together</span>, but only for
+                the trades that occurred within the "best window" shown on the
+                chart.
+              </li>
+              <li>
+                <strong>best window dates:</strong> these are the start and end
+                dates of that single most profitable period.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -215,12 +283,14 @@
     // full dataset
     const allDates = {{ all_dates|tojson }};
     const allPrices = {{ all_prices|tojson }};
-    
+
     // data specific to the selected window
     const buyPoints = {{ max_profit.max_profit.buy_points|tojson }};
     const sellPoints = {{ max_profit.max_profit.sell_points|tojson }};
-    const bestWindowStartDate = "{{ max_profit.max_profit.best_window_start_date }}";
-    const bestWindowEndDate = "{{ max_profit.max_profit.best_window_end_date }}";
+    const bestWindowStartDate =
+      "{{ max_profit.max_profit.best_window_start_date }}";
+    const bestWindowEndDate =
+      "{{ max_profit.max_profit.best_window_end_date }}";
 
     // default to full dataset
     let chartDates = allDates;
@@ -301,34 +371,38 @@
     });
 
     // Daily Return Chart
-    const dailyReturnCtx = document.getElementById('dailyReturnChart').getContext('2d');
-    
+    const dailyReturnCtx = document
+      .getElementById("dailyReturnChart")
+      .getContext("2d");
+
     // Convert the DataFrame to a JSON-serializable format
     const returns = {{daily_return.daily_return|tojson}};
     const returnDates = {{all_dates|tojson}};
     // Extract dates and returns
-    
+
     // Create background colors based on positive/negative values
-    const backgroundColors = returns.map(value => 
-      value >= 0 ? 'rgba(75, 192, 192, 0.7)' : 'rgba(255, 99, 132, 0.7)'
+    const backgroundColors = returns.map((value) =>
+      value >= 0 ? "rgba(75, 192, 192, 0.7)" : "rgba(255, 99, 132, 0.7)"
     );
-    
+
     // Create border colors based on positive/negative values
-    const borderColors = returns.map(value => 
-      value >= 0 ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 99, 132, 1)'
+    const borderColors = returns.map((value) =>
+      value >= 0 ? "rgba(75, 192, 192, 1)" : "rgba(255, 99, 132, 1)"
     );
-    
+
     new Chart(dailyReturnCtx, {
-      type: 'bar',
+      type: "bar",
       data: {
         labels: returnDates,
-        datasets: [{
-          label: 'Daily Return (%)',
-          data: returns,
-          backgroundColor: backgroundColors,
-          borderColor: borderColors,
-          borderWidth: 1
-        }]
+        datasets: [
+          {
+            label: "Daily Return (%)",
+            data: returns,
+            backgroundColor: backgroundColors,
+            borderColor: borderColors,
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -338,39 +412,39 @@
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Return (%)'
+              text: "Return (%)",
             },
             grid: {
-              color: 'rgba(0, 0, 0, 0.1)'
-            }
+              color: "rgba(0, 0, 0, 0.1)",
+            },
           },
           x: {
             title: {
               display: true,
-              text: 'Date'
+              text: "Date",
             },
             grid: {
-              display: true
+              display: true,
             },
             ticks: {
               maxTicksLimit: 12, // Limit number of x-axis labels to prevent clutter
-            }
-          }
+            },
+          },
         },
         plugins: {
           legend: {
             display: true,
-            position: 'top'
+            position: "top",
           },
           tooltip: {
             callbacks: {
-              label: function(context) {
+              label: function (context) {
                 return `Return: ${context.raw}%`;
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
     });
   });
 </script>
