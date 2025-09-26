@@ -19,45 +19,38 @@ class SMA_Return:
 
     def calculate_sma(self, data: pd.DataFrame):
 
-        # calculate SMA for each date
-        # formula = sum of the inclusive date and the previous n dates where n = window - 1
-
-        date_range_data = data["Adj Close"].tolist()
         window = self.window_size
         dates = data.index.tolist()
+        date_len = len(dates)
+
+        if window < 0 or window > date_len:
+            raise ValueError(
+                f"Window size should be > 0 and lesser or equals to {len(dates)}"
+            )
+        
+        prices = data["Adj Close"].to_numpy()
+        dates = data.index
 
         # set all to NaN
         data["SMA"] = np.nan
 
-        # get latest index
-        # we're calculating until here
-        end_date_index = len(date_range_data)
+        # get first_run price
+        run_data = 0
+    
+        # sum of first run of previous n window
+        for i in prices[:window]:
+            run_data += i
+        
+        # lookup the first date according to window, average it and set the SMA accordingingly
+        data.loc[dates[window-1], 'SMA'] = run_data / window
 
-        # start index
-        calculate_start_index = (
-            window  # starts the index n_window to calculate the historical sma
-        )
-
-        sma_list = []
-
-        # we -1 because thats the first index that SMA can be calculated
-        # due to us needing n_window value inclusive of the date itself
-        for i in range(calculate_start_index - 1, end_date_index):
-            sma = 0
-
-            # starting point of the rolling window, ending at i
-            for j in range((i - window) + 1, i):
-                if sma == 0:
-                    sma += date_range_data[j] + date_range_data[j + 1]
-                elif j != i:
-                    sma += date_range_data[j + 1]
-                else:
-                    sma += date_range_data[i]
-            sma_list.append(sma / window)
-            # print(sma)
-        for idx, i in enumerate(sma_list, calculate_start_index - 1):
-            data.loc[dates[idx], "SMA"] = i
-
+        # start from second window since we had already calculated the first window
+        # formula = subsequent_runs + current window - previous window
+        for i in range(window, date_len):
+            run_data += prices[i] - prices[i - window]
+            data.loc[dates[i], 'SMA'] = run_data / window
+            
+        print(data)
         return data
 
     def get_date_data(self, start_date, end_date):
