@@ -6,8 +6,38 @@ warnings.filterwarnings("ignore")
 
 # load dataset
 class Daily_Return:
+    def validation(df):
+        if df is None or df.empty:
+            raise ValueError("DataFrame is empty or None")
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("Input must be a pandas DataFrame")
+        if "Date" not in df.columns or "Close" not in df.columns:
+            raise ValueError("DataFrame must contain 'Date' and 'Close' columns")
+        if df["Close"].isnull().any():
+            raise ValueError("'Close' column contains null values")
+        if not pd.api.types.is_numeric_dtype(df["Close"]):
+            raise TypeError("'Close' column must be numeric")
+        if len(df) < 2:
+            raise ValueError("DataFrame must contain at least two rows to calculate daily return")
+        return True
+    def test_validation(df):
+        df=pd.DataFrame(df)
+        df['Daily_Return'] = df['Close'].pct_change() * 100
+        df = df[["Date", "Close", "Daily_Return"]]
+        return {"mean": df['Daily_Return'].mean(),
+            "std": df['Daily_Return'].std(),
+            "max": df['Daily_Return'].max(),
+            "min": df['Daily_Return'].min(),
+            "post_day": (df['Daily_Return'] > 0).sum(),
+            "neg_day":(df['Daily_Return'] < 0).sum(),
+            "total_trading_days": len(df),
+            "win_rate":(df['Daily_Return'] > 0).sum() / len(df) * 100,
+            "daily_return": df["Daily_Return"].tolist(),
+        }
+
     def daily_return(df):
         try:
+            Daily_Return.validation(df)
             df = pd.DataFrame(df)
             if "Close" not in df.columns:
                 raise ValueError("DataFrame must contain 'Close' column")
@@ -88,3 +118,18 @@ class Daily_Return:
             "win_rate": float(round(win_rate, 2)),
             "daily_return": df["Daily_Return"].tolist(),
         }
+if __name__ == "__main__":
+    # Example usage
+    data = {
+        "Date": ["2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04"],
+        "Close": [100, 102, 101, 105],
+    }
+
+    df = pd.DataFrame(data)
+    print("test result with built-in function")
+    test_result=Daily_Return.test_validation(df)
+    print(test_result)
+    print("daily return result with manual algorithm")
+    result = Daily_Return.daily_return(df)
+    print(result)
+    
