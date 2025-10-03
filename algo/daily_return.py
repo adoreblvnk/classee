@@ -21,17 +21,21 @@ class Daily_Return:
             raise ValueError("DataFrame must contain at least two rows to calculate daily return")
         return True
     def test_validation(df):
-        df=pd.DataFrame(df)
+        df = pd.DataFrame(df) 
         df['Daily_Return'] = df['Close'].pct_change() * 100
+        df["Daily_Return"][0]=0
+        df["Daily_Return"]=df["Daily_Return"].round(2)  
         df = df[["Date", "Close", "Daily_Return"]]
-        return {"mean": df['Daily_Return'].mean(),
-            "std": df['Daily_Return'].std(),
-            "max": df['Daily_Return'].max(),
-            "min": df['Daily_Return'].min(),
-            "post_day": (df['Daily_Return'] > 0).sum(),
-            "neg_day":(df['Daily_Return'] < 0).sum(),
+        return {
+            "mean": float(round(df['Daily_Return'].mean(),2)),
+            "std": float(round(df['Daily_Return'].std(),2)),
+            "max": float(round(df['Daily_Return'].max(),2)),
+            "min": float(round(df['Daily_Return'].min(),2)),
+            "post_day": float(round((df['Daily_Return'] > 0).sum(),2)),
+            "neutral_day":float(round((df['Daily_Return'] == 0).sum(),2)),
+            "neg_day":float(round((df['Daily_Return'] < 0).sum(),2)),
             "total_trading_days": len(df),
-            "win_rate":(df['Daily_Return'] > 0).sum() / len(df) * 100,
+            "win_rate":float(round((df['Daily_Return'] > 0).sum() / len(df) * 100,2)),
             "daily_return": df["Daily_Return"].tolist(),
         }
 
@@ -51,6 +55,7 @@ class Daily_Return:
                     df["Daily_Return"][x] = ((df["Close"][x] - df["Close"][x - 1]) / df["Close"][x - 1] * 100)# the formula to calculate daily return
                     #df['Daily_Return'] = df['Close'].pct_change() * 100 pandas has a built in function to calculate daily return but we are not using it here
                     # we are calculating it manually to show that we understand the concept behind it by calculating it manually
+                    df["Daily_Return"] = df["Daily_Return"].round(2)# rounding to 2 decimal places for better readability
             df = df[["Date", "Close", "Daily_Return"]]#returning only the relevant columns for daily return analysis
             # calculating mean of daily return
             #there is also a built-in function in pandas to calculate mean but we are not using it here
@@ -91,9 +96,13 @@ class Daily_Return:
             for x in range(len(df["Daily_Return"])):
                 if df["Daily_Return"][x] > 0:
                     post_day = post_day + 1
+            neutral_day=0
+            for x in range(len(df["Daily_Return"])):
+                if df["Daily_Return"][x]==0:
+                    neutral_day=neutral_day+1
             neg_day = 0
             for x in range(len(df["Daily_Return"])):
-                if df["Daily_Return"][x] <= 0:
+                if df["Daily_Return"][x] < 0:
                     neg_day = neg_day + 1
             # calculating win rate
             # win rate is the percentage of positive days out of total trading days
@@ -112,8 +121,9 @@ class Daily_Return:
             "std": float(round(std_div, 2)),
             "max": float(round(max, 2)),
             "min": float(round(min, 2)),
-            "post_day": post_day,
-            "neg_day": neg_day,
+            "post_day": float(round(post_day,2)),
+            "neutral_day": float(round(neutral_day,2)),
+            "neg_day": float(round(neg_day,2)),
             "total_trading_days": len(df),
             "win_rate": float(round(win_rate, 2)),
             "daily_return": df["Daily_Return"].tolist(),
@@ -124,12 +134,10 @@ if __name__ == "__main__":
         "Date": ["2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04"],
         "Close": [100, 102, 101, 105],
     }
-
-    df = pd.DataFrame(data)
+    df=pd.DataFrame(data)
     print("test result with built-in function")
     test_result=Daily_Return.test_validation(df)
     print(test_result)
     print("daily return result with manual algorithm")
     result = Daily_Return.daily_return(df)
     print(result)
-    
