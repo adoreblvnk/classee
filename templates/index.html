@@ -384,7 +384,7 @@
 
     // Convert the DataFrame to a JSON-serializable format
     const returns = {{daily_return.daily_return|tojson}};
-    const returnDates = {{all_dates|tojson}};
+    const returnDates = {{all_dates|tojson}}.slice(1);
     // Extract dates and returns
 
     // Create background colors based on positive/negative values
