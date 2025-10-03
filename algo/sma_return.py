@@ -25,6 +25,9 @@ class SMA_Return:
 
         if window < 0 or window > date_len:
             return f"Window size should be > 0 and <= {len(dates)}"
+        
+        if date_len <= 2:
+            return f"Please enter a larger range of dates"
 
         prices = data["Adj Close"].to_numpy()
 
