@@ -26,7 +26,6 @@ class Daily_Return:
         df["Daily_Return"]=df["Daily_Return"].round(2)  
         df = df[["Date", "Close", "Daily_Return"]]
         df = df[1:]
-        print(df)
         return {
             "mean": float(round(df['Daily_Return'].mean(),2)),
             "std": float(round(df['Daily_Return'].std(),2)),
@@ -41,6 +40,7 @@ class Daily_Return:
         }
 
     def daily_return(df):
+        try:
             # Daily_Return.validation(df)
             df = pd.DataFrame(df)
             if "Close" not in df.columns:
@@ -115,7 +115,10 @@ class Daily_Return:
             # and for daily return list for plotting the daily return graph so only the relevant columns are returned
             # .tolist() is used to convert the pandas series to a list for easy manipulation in the web app
             # rounding all statistics to 2 decimal places for better readability
-            return {
+        except Exception as e:
+            return {"error": str(e)}
+
+        return {
             "mean": float(round(mean, 2)),
             "std": float(round(std_div, 2)),
             "max": float(round(max, 2)),
