@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from .validate import validate_dataset
 
 
 def analyze_up_down_runs(df, start_date=None, end_date=None):
@@ -15,6 +16,9 @@ def analyze_up_down_runs(df, start_date=None, end_date=None):
     Returns:
         dict: Summary with longest runs (with dates), medians, and totals.
     """
+
+    # validate dataset before any computation
+    validate_dataset(df, required_cols=["Date", "Close"], min_rows=2)
 
     # ensure date col is datetime & sort
     df["Date"] = pd.to_datetime(df["Date"])

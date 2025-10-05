@@ -1,6 +1,8 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from .validate import validate_dataset
 
 
 class SMA_Return:
@@ -18,16 +20,15 @@ class SMA_Return:
         return pd.to_datetime(date.lstrip(), format=date_format)
 
     def calculate_sma(self, data: pd.DataFrame):
-
         window = self.window_size
         dates = data.index
         date_len = len(dates)
 
         if window < 0 or window > date_len:
             return f"Window size should be > 0 and <= {len(dates)}"
-        
+
         if date_len <= 2:
-            return f"Please enter a larger range of dates"
+            return "Please enter a larger range of dates"
 
         prices = data["Adj Close"].to_numpy()
 
@@ -99,11 +100,13 @@ class SMA_Return:
         start_date = "01-03-2022" if start_date is None else start_date
         end_date = "24-03-2022" if end_date is None else end_date
 
+        # validate base df with required cols
+        validate_dataset(self.df, required_cols=["Date", "Adj Close"], min_rows=2)
         date_data = self.get_date_data(start_date, end_date)
         sma = self.calculate_sma(date_data)
         # res = self.format_data(sma)
 
-        if type(sma) == pd.DataFrame:
+        if isinstance(sma, pd.DataFrame):
             self.plot_chart(sma)
             return {"img": "chart.png"}
 

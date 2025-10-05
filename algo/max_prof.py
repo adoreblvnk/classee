@@ -1,5 +1,6 @@
 import pandas as pd
 from typing import Dict, Any, Optional
+from .validate import validate_dataset
 
 
 class MaxProf:
@@ -25,6 +26,8 @@ class MaxProf:
         NOTE: uses sliding window algorithm with O(n) time complexity and O(n) space
         where n is number of days. space is O(n) due to storing daily profits.
         """
+        # validate dataset to ensure required cols and sane size
+        validate_dataset(df, required_cols=["Date", "Adj Close"], min_rows=2)
         # default to full df if no window size
         if window_size is None:
             window_size = len(df)
