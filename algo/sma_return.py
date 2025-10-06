@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
+
 import numpy as np
 import pandas as pd
 
@@ -24,10 +26,13 @@ class SMA_Return:
         dates = data.index
         date_len = len(dates)
 
-        if window < 0 or window > date_len:
-            return f"Window size should be > 0 and <= {len(dates)}"
+        if window < 2 or window > date_len:
+            return f"Window size should be > 2"
+        
+        if window > date_len:
+            return f"Window size should be < {date_len}"
 
-        if date_len <= 2:
+        if date_len <= 4:
             return "Please enter a larger range of dates"
 
         prices = data["Adj Close"].to_numpy()
@@ -70,8 +75,10 @@ class SMA_Return:
 
     #     return res
 
-    def plot_chart(self, sma_data):
-        df = pd.DataFrame(sma_data)
+    def plot_chart(self, sma_data: pd.DataFrame):
+        self.make_chart_dir()
+        chart_name = "chart.png"
+        df = sma_data
 
         plt.figure(figsize=(10, 5))
         plt.plot(df["Date"], df["Adj Close"], label="Adj Close", marker="o")
@@ -93,13 +100,15 @@ class SMA_Return:
         plt.savefig("chart/chart.png", dpi=150)
         plt.close()
 
+        return chart_name
+
     def sma_return(self, start_date=None, end_date=None, window_size=None):
         """
             Smoothens out the price history according to window size.
 
             Parameters:
-                start_date (str, optional): Filter start date (YYYY-MM-DD).
-                end_date (str, optional): Filter end date (YYYY-MM-DD).
+                start_date (str, optional): Filter start date (dd/mm/yyyy).
+                end_date (str, optional): Filter end date (dd/mm/yyyy).
                 window_size (int, optional): Sets the window size of past periods
 
             Returns:
@@ -119,8 +128,8 @@ class SMA_Return:
         # res = self.format_data(sma)
 
         if isinstance(sma, pd.DataFrame):
-            self.plot_chart(sma)
-            return {"img": "chart.png"}
+            chart_name = self.plot_chart(sma)
+            return {"img": chart_name}
 
         else:
             return {"error": sma}
