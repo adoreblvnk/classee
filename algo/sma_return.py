@@ -94,6 +94,18 @@ class SMA_Return:
         plt.close()
 
     def sma_return(self, start_date=None, end_date=None, window_size=None):
+        """
+            Smoothens out the price history according to window size.
+
+            Parameters:
+                start_date (str, optional): Filter start date (YYYY-MM-DD).
+                end_date (str, optional): Filter end date (YYYY-MM-DD).
+                window_size (int, optional): Sets the window size of past periods
+
+            Returns:
+                dict: A success return of the directory of the chart filename
+                dict: An error returns the appropriate error message
+        """    
         default_window_size = 5 if window_size is None else window_size
         self.window_size = default_window_size
 
