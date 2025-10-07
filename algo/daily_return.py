@@ -14,9 +14,7 @@ class Daily_Return:
             # putting data in dataframe under pandas library to make it easier to manipulate
             for x in range(1, len(df)):  # for loop to calculate daily return
                 if df["Close"][x - 1] != 0:
-                    df.loc[x, "Daily_Return"] = (
-                        (df["Close"][x] - df["Close"][x - 1]) / df["Close"][x - 1]
-                    ) * 100
+                    df.loc[x, "Daily_Return"] = ((df["Close"][x] - df["Close"][x - 1]) / df["Close"][x - 1]) * 100
                 else:
                     df.loc[x, "Daily_Return"] = 0.0
             # the formula to calculate daily return
@@ -98,7 +96,7 @@ class Daily_Return:
             "post_day": float(round(post_day, 2)),
             "neutral_day": float(round(neutral_day, 2)),
             "neg_day": float(round(neg_day, 2)),
-            "total_trading_days": len(df),
+            "total_return_days": len(df),
             "win_rate": float(round(win_rate, 2)),
             "daily_return": df.tolist(),
         }
@@ -125,7 +123,7 @@ class Daily_Return:
             "post_day": float(round((df > 0).sum(), 2)),
             "neutral_day": float(round((df == 0).sum(), 2)),
             "neg_day": float(round((df < 0).sum(), 2)),
-            "total_trading_days": len(df),
+            "total_return_days": len(df),
             "win_rate": float(round((df > 0).sum() / len(df) * 100, 2)),
             "daily_return": df.tolist(),
         }
