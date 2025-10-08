@@ -21,18 +21,19 @@ class SMA_Return:
         date_format = "%d-%m-%Y"
         return pd.to_datetime(date.lstrip(), format=date_format)
 
-    def calculate_sma(self, data: pd.DataFrame):
+    def calculate_sma(self):
+        data = self.df.copy()
         window = self.window_size
         dates = data.index
         date_len = len(dates)
 
-        if window < 2:
+        if window < 2 or window > date_len:
             return f"Window size should be > 2"
         
         if window > date_len:
             return f"Window size should be < {date_len}"
 
-        if date_len <= 5:
+        if date_len <= 4:
             return "Please enter a larger range of dates"
 
         prices = data["Adj Close"].to_numpy()
@@ -67,7 +68,7 @@ class SMA_Return:
         date_range_filtering = (self.df["Date"] >= start_date) & (
             self.df["Date"] <= end_date
         )
-        return self.df.loc[date_range_filtering].copy()
+        self.df = self.df.loc[date_range_filtering].copy()
 
     # def format_data(self, sma: pd.DataFrame):
     #     formatted = sma[["Date", "Adj Close", "SMA"]]
@@ -123,8 +124,8 @@ class SMA_Return:
 
         # validate base df with required cols
         validate_dataset(self.df, required_cols=["Date", "Adj Close"], min_rows=2)
-        date_data = self.get_date_data(start_date, end_date)
-        sma = self.calculate_sma(date_data)
+        self.get_date_data(start_date, end_date)
+        sma = self.calculate_sma()
         # res = self.format_data(sma)
 
         if isinstance(sma, pd.DataFrame):
