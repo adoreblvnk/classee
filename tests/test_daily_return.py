@@ -24,7 +24,7 @@ def test_daily_return_with_valid_data(sample_stock_data):
     assert result["post_day"] == 2
     assert result["neutral_day"] == 1
     assert result["neg_day"] == 1
-    assert result["total_trading_days"] == 4
+    assert result["total_return_days"] == 4
     assert result["win_rate"] == 50.0
 
 def test_manual_vs_pandas_implementation(sample_stock_data):
