@@ -31,9 +31,15 @@ class Daily_Return:
             # calculating mean of daily return
             # there is also a built-in function in pandas to calculate mean but we are not using it here
             # we are calculating it manually to show that we understand the concept behind it by calculating it manually
-            mean = 0
+            mean=post_day=neg_day=neutral_day=std_div=0
+            max_val=min_val =df [0]
             for x in range(len(df)):
-                mean = mean + df[x]
+                today_return=df[x]
+                mean = mean + today_return
+                if today_return > max_val:
+                    max_val = today_return
+                elif today_return < min_val:
+                    min_val = today_return
             mean = mean / len(df)
             # calculating standard deviation of daily return
             # formula: sqrt( sum( (x_i - mean)^2 ) / (N - 1) )
@@ -43,38 +49,23 @@ class Daily_Return:
             # population.
             # while it seems like we use the entire dataset (in terms of years), in
             # statistics, the true population includes the past, present, & FUTURE
-            std_div = 0
             for x in range(len(df)):
-                std_div = std_div + (df[x] - mean) ** 2
+                today_return=df[x]
+                std_div = std_div + (today_return - mean) ** 2
+                if today_return > 0:
+                    post_day = post_day + 1
+                elif today_return < 0:
+                    neg_day = neg_day+1
+                else:
+                    neutral_day=neutral_day+1
             std_div = (std_div / (len(df) - 1)) ** 0.5
             # calculating max and min daily return
             # max and min are useful to know the best and worst days in terms of daily return for a stock
             # there is also a built-in function in pandas to calculate max and min but we are not using it here
             # we are calculating it manually to show that we understand the concept behind it by calculating it manually
-            max_val = df[0]
-            for x in range(len(df)):
-                if df[x] > max_val:
-                    max_val = df[x]
-
-            min_val = df[0]
-            for x in range(len(df)):
-                if df[x] < min_val:
-                    min_val = df[x]
             # calculating number of positive and negative days
             # positive days are the days when the daily return is greater than 0
             # negative days are the days when the daily return is less than 0
-            post_day = 0
-            for x in range(len(df)):
-                if df[x] > 0:
-                    post_day = post_day + 1
-            neutral_day = 0
-            for x in range(len(df)):
-                if df[x] == 0:
-                    neutral_day = neutral_day + 1
-            neg_day = 0
-            for x in range(len(df)):
-                if df[x] < 0:
-                    neg_day = neg_day + 1
             # calculating win rate
             # win rate is the percentage of positive days out of total trading days
             # it is useful to know the probability of making a profit on any given day
