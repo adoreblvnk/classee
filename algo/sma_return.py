@@ -11,6 +11,7 @@ class SMA_Return:
     # def sma_return(df, window_size=5):
     def __init__(self, df):
         self.df: pd.DataFrame = df
+        self.data_filtered: pd.DataFrame = None
 
     def make_chart_dir(self):
         import os
@@ -22,19 +23,19 @@ class SMA_Return:
         return pd.to_datetime(date.lstrip(), format=date_format)
 
     def calculate_sma(self):
-        data = self.df.copy()
+        data = self.data_filtered
         window = self.window_size
         dates = data.index
         date_len = len(dates)
 
-        if window < 2 or window > date_len:
-            return f"Window size should be > 2"
+        if date_len <= 4:
+            return "Please enter a larger range of dates"
         
         if window > date_len:
             return f"Window size should be < {date_len}"
-
-        if date_len <= 4:
-            return "Please enter a larger range of dates"
+        
+        if window < 2:
+            return f"Window size should be > 2"
 
         prices = data["Adj Close"].to_numpy()
 
@@ -68,7 +69,7 @@ class SMA_Return:
         date_range_filtering = (self.df["Date"] >= start_date) & (
             self.df["Date"] <= end_date
         )
-        self.df = self.df.loc[date_range_filtering].copy()
+        self.data_filtered = self.df.loc[date_range_filtering].copy()
 
     # def format_data(self, sma: pd.DataFrame):
     #     formatted = sma[["Date", "Adj Close", "SMA"]]
