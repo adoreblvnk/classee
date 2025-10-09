@@ -1,10 +1,10 @@
 import pandas as pd
-
+from typing import Dict,Any
 from .validate import validate_dataset
 
 
 class Daily_Return:
-    def daily_return(df):
+    def daily_return(df:pd.DataFrame)->Dict[str,Any]:
         try:
             df = pd.DataFrame(df)
             validate_dataset(df, required_cols=["Date", "Close"], min_rows=2)
