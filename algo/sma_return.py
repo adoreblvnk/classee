@@ -27,7 +27,7 @@ class SMA_Return:
         window = self.window_size
         dates = data.index
         date_len = len(dates)
-
+        
         if date_len <= 4:
             return "Please enter a larger range of dates"
         
@@ -50,14 +50,13 @@ class SMA_Return:
             run_data += i
 
         # lookup the first date according to window, average it and set the SMA accordingingly
-        data.loc[dates[window - 1], "SMA"] = run_data / window
+        data.loc[dates[window - 1], "SMA"] = round(float(run_data / window), 2)
 
         # start from second window since we had already calculated the first window
         # formula = (subsequent_runs + current window - previous window) / window
         for i in range(window, date_len):
             run_data += prices[i] - prices[i - window]
-            data.loc[dates[i], "SMA"] = run_data / window
-
+            data.loc[dates[i], "SMA"] = round(float(run_data / window), 2)
         return data
 
     def get_date_data(self, start_date, end_date):
@@ -70,6 +69,8 @@ class SMA_Return:
             self.df["Date"] <= end_date
         )
         self.data_filtered = self.df.loc[date_range_filtering].copy()
+        
+        return self.data_filtered
 
     # def format_data(self, sma: pd.DataFrame):
     #     formatted = sma[["Date", "Adj Close", "SMA"]]
@@ -109,8 +110,8 @@ class SMA_Return:
             Smoothens out the price history according to window size.
 
             Parameters:
-                start_date (str, optional): Filter start date (dd/mm/yyyy).
-                end_date (str, optional): Filter end date (dd/mm/yyyy).
+                start_date (str, optional): Filter start date (dd-mm-yyyy).
+                end_date (str, optional): Filter end date (dd-mm-yyyy).
                 window_size (int, optional): Sets the window size of past periods
 
             Returns:
