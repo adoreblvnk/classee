@@ -52,7 +52,7 @@ class SMA_Return:
         data.loc[dates[window - 1], "SMA"] = run_data / window
 
         # start from second window since we had already calculated the first window
-        # formula = subsequent_runs + current window - previous window
+        # formula = (subsequent_runs + current window - previous window) / window
         for i in range(window, date_len):
             run_data += prices[i] - prices[i - window]
             data.loc[dates[i], "SMA"] = run_data / window
