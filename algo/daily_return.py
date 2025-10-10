@@ -1,10 +1,10 @@
 import pandas as pd
-from typing import Dict,Any
+from typing import Dict, Any
 from .validate import validate_dataset
 
 
 class Daily_Return:
-    def daily_return(df:pd.DataFrame)->Dict[str,Any]:
+    def daily_return(df: pd.DataFrame) -> Dict[str, Any]:
         try:
             df = pd.DataFrame(df)
             validate_dataset(df, required_cols=["Date", "Close"], min_rows=2)
@@ -14,7 +14,9 @@ class Daily_Return:
             # putting data in dataframe under pandas library to make it easier to manipulate
             for x in range(1, len(df)):  # for loop to calculate daily return
                 if df["Close"][x - 1] != 0:
-                    df.loc[x, "Daily_Return"] = ((df["Close"][x] - df["Close"][x - 1]) / df["Close"][x - 1]) * 100
+                    df.loc[x, "Daily_Return"] = (
+                        (df["Close"][x] - df["Close"][x - 1]) / df["Close"][x - 1]
+                    ) * 100
                 else:
                     df.loc[x, "Daily_Return"] = 0.0
             # the formula to calculate daily return
@@ -31,10 +33,10 @@ class Daily_Return:
             # calculating mean of daily return
             # there is also a built-in function in pandas to calculate mean but we are not using it here
             # we are calculating it manually to show that we understand the concept behind it by calculating it manually
-            mean=post_day=neg_day=neutral_day=std_div=0
-            max_val=min_val =df [0]
+            mean = post_day = neg_day = neutral_day = std_div = 0
+            max_val = min_val = df[0]
             for x in range(len(df)):
-                today_return=df[x]
+                today_return = df[x]
                 mean = mean + today_return
                 if today_return > max_val:
                     max_val = today_return
@@ -50,14 +52,14 @@ class Daily_Return:
             # while it seems like we use the entire dataset (in terms of years), in
             # statistics, the true population includes the past, present, & FUTURE
             for x in range(len(df)):
-                today_return=df[x]
+                today_return = df[x]
                 std_div = std_div + (today_return - mean) ** 2
                 if today_return > 0:
                     post_day = post_day + 1
                 elif today_return < 0:
-                    neg_day = neg_day+1
+                    neg_day = neg_day + 1
                 else:
-                    neutral_day=neutral_day+1
+                    neutral_day = neutral_day + 1
             std_div = (std_div / (len(df) - 1)) ** 0.5
             # calculating max and min daily return
             # max and min are useful to know the best and worst days in terms of daily return for a stock

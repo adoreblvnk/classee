@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
-plt.switch_backend('agg')
-
 import numpy as np
 import pandas as pd
 
 from .validate import validate_dataset
+
+plt.switch_backend("agg")
 
 
 class SMA_Return:
@@ -27,15 +27,15 @@ class SMA_Return:
         window = self.window_size
         dates = data.index
         date_len = len(dates)
-        
+
         if date_len <= 4:
             return "Please enter a larger range of dates"
-        
+
         if window > date_len:
             return f"Window size should be < {date_len}"
-        
+
         if window < 2:
-            return f"Window size should be > 2"
+            return "Window size should be > 2"
 
         prices = data["Adj Close"].to_numpy()
 
@@ -69,7 +69,7 @@ class SMA_Return:
             self.df["Date"] <= end_date
         )
         self.data_filtered = self.df.loc[date_range_filtering].copy()
-        
+
         return self.data_filtered
 
     # def format_data(self, sma: pd.DataFrame):
@@ -107,17 +107,17 @@ class SMA_Return:
 
     def sma_return(self, start_date=None, end_date=None, window_size=None):
         """
-            Smoothens out the price history according to window size.
+        Smoothens out the price history according to window size.
 
-            Parameters:
-                start_date (str, optional): Filter start date (dd-mm-yyyy).
-                end_date (str, optional): Filter end date (dd-mm-yyyy).
-                window_size (int, optional): Sets the window size of past periods
+        Parameters:
+            start_date (str, optional): Filter start date (dd-mm-yyyy).
+            end_date (str, optional): Filter end date (dd-mm-yyyy).
+            window_size (int, optional): Sets the window size of past periods
 
-            Returns:
-                dict: A success return of the directory of the chart filename
-                dict: An error returns the appropriate error message
-        """    
+        Returns:
+            dict: A success return of the directory of the chart filename
+            dict: An error returns the appropriate error message
+        """
         default_window_size = 5 if window_size is None else window_size
         self.window_size = default_window_size
 
