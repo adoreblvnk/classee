@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from validate import validate_dataset
+from .validate import validate_dataset
 
 
 def analyze_up_down_runs(df, start_date=None, end_date=None):
@@ -87,7 +87,7 @@ def analyze_up_down_runs(df, start_date=None, end_date=None):
         "median_down_run_length": median_down,
         "total_upward_runs": len(up_runs),
         "total_downward_runs": len(down_runs),
-    },df # return processed dataframe
+    } # return processed dataframe
 
 if __name__ == "__main__":
     import pandas as pd
