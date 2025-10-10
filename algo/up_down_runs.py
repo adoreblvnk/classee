@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from .validate import validate_dataset
+from validate import validate_dataset
 
 
 def analyze_up_down_runs(df, start_date=None, end_date=None):
@@ -87,39 +87,100 @@ def analyze_up_down_runs(df, start_date=None, end_date=None):
         "median_down_run_length": median_down,
         "total_upward_runs": len(up_runs),
         "total_downward_runs": len(down_runs),
-    }
+    },df # return processed dataframe
+
+if __name__ == "__main__":
+    import pandas as pd
+    import os
+
+    print("MAIN FUNCTIONALITY TEST")
+    # Load CSV test
+    csv_path = r"C:\Users\User\Documents\SIT\INF1002\Proj 1 Repo\stock-market-analysis\data\TSLA.csv"
+    df = pd.read_csv(csv_path)
+
+    result, processed_df = analyze_up_down_runs(df)
+    print("Up/Down Runs Analysis Result:", result)
+
+    # EDGE CASE UNIT TESTS
+
+    print("\nEDGE CASE TESTS")
+
+    # Test 1: Empty DataFrame
+    print("\n[Edge Case 1] Empty DataFrame:")
+    try:
+        analyze_up_down_runs(pd.DataFrame())
+    except ValueError as e:
+        print("Caught error:", e)
+
+    # Test 2: Missing required columns
+    print("\n[Edge Case 2] Missing required columns:")
+    try:
+        bad_df = pd.DataFrame({"Close": [100, 101, 102]})  # no Date column
+        analyze_up_down_runs(bad_df)
+    except ValueError as e:
+        print("Caught error:", e)
+
+    # Test 3: Too few rows
+    print("\n[Edge Case 3] Too few rows:")
+    try:
+        small_df = pd.DataFrame({"Date": ["2024-01-01"], "Close": [100]})
+        analyze_up_down_runs(small_df)
+    except ValueError as e:
+        print("Caught error:", e)
+
+    # Test 4: Constant price (no runs)
+    print("\n[Edge Case 4] Constant price data:")
+    const_df = pd.DataFrame({
+        "Date": pd.date_range("2024-01-01", periods=5),
+        "Close": [100, 100, 100, 100, 100]
+    })
+    const_result, _ = analyze_up_down_runs(const_df)
+    print("Result:", const_result)
+
+    #  ASSERT TEST (optional but good for report)
+
+    print("\nASSERT TEST")
+    # Expected result: longest run lengths should never exceed total days
+    assert result["longest_up"]["length"] <= len(df), " Longest up run is invalid!"
+    assert result["longest_down"]["length"] <= len(df), " Longest down run is invalid!"
+    print(" Assert checks passed. Longest runs are within valid range.")
 
 
-    # Optional visualisation
-    if __name__ == "__main__":
-        import mplfinance as mpf
-        # prepare markers for mplfinance
 
-        # mark upward runs with green
-        up_marker = df["Close"].copy()
-        up_marker[df["Direction"] != 1] = np.nan
+# Optional visualisation
+if __name__ == "__main__":
+    import mplfinance as mpf
+    import pandas as pd
 
-        # mark downward runs with red
-        down_marker = df["Close"].copy()
-        down_marker[df["Direction"] != -1] = np.nan
+    # ensure datetime index
+    processed_df["Date"] = pd.to_datetime(processed_df["Date"])
+    processed_df = processed_df.set_index("Date")
 
-        # create addplot objs
-        ap_up = mpf.make_addplot(
-            up_marker, type="scatter", markersize=50, marker="^", color="green"
-        )
-        ap_down = mpf.make_addplot(
-            down_marker, type="scatter", markersize=50, marker="v", color="red"
-        )
+    # prepare markers for mplfinance
+    up_marker = processed_df["Close"].copy()
+    up_marker[processed_df["Direction"] != 1] = np.nan
 
-        # plot candlestick
-        mpf.plot(
-            df,
-            type="candle",
-            style="yahoo",
-            volume=True,
-            addplot=[ap_up, ap_down],
-            title="TSLA stock Upward and Downward Runs",
-            ylabel="Price ($)",
-            ylabel_lower="Volume",
-            mav=(12, 26),
-        )
+    down_marker = processed_df["Close"].copy()
+    down_marker[processed_df["Direction"] != -1] = np.nan
+
+    # create addplot objects
+    ap_up = mpf.make_addplot(
+        up_marker, type="scatter", markersize=50, marker="^", color="green"
+    )
+    ap_down = mpf.make_addplot(
+        down_marker, type="scatter", markersize=50, marker="v", color="red"
+    )
+
+    # plot candlestick chart
+    mpf.plot(
+        processed_df,
+        type="candle",
+        style="yahoo",
+        volume=True,
+        addplot=[ap_up, ap_down],
+        title="TSLA Upward and Downward Runs",
+        ylabel="Price ($)",
+        ylabel_lower="Volume",
+        mav=(12, 26),
+    )
+
