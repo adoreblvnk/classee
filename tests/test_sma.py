@@ -79,7 +79,6 @@ def test_rolling_window_with_pandas(sample_stock_data):
     sma_test_obj.window_size = 5
     
     data_filtered = sma_test_obj.get_date_data(start_date='07-03-2022', end_date='17-03-2022')
-    sma_test_obj.data_filtered = data_filtered
     sma_manual_calculation = sma_test_obj.calculate_sma()
     remove_na_manual = sma_manual_calculation.dropna()
     
