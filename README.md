@@ -49,7 +49,7 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-**With UV**
+**With uv**
 
 ```bash
 uv run main.py
