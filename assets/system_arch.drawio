@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0" version="28.2.5">
+  <diagram name="Page-1" id="Nd3RH-NwSeMg4nQyaG7T">
+    <mxGraphModel dx="1133" dy="860" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="avro4BwHF151OcboGCo6-1" value="&lt;div&gt;User Interaction&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="120" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-39" value="&lt;div&gt;User&#39;s&lt;/div&gt;&lt;div&gt;Browser&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="avro4BwHF151OcboGCo6-1">
+          <mxGeometry x="20" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-3" value="Backend" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="200" width="820" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-4" value="&lt;div&gt;API Layer&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-3">
+          <mxGeometry x="25" y="80" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-5" value="&lt;div&gt;main.py&lt;/div&gt;&lt;div&gt;(FastAPI endpoint)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-4">
+          <mxGeometry x="20" y="60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-6" value="Business Logic (algo/)" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-3">
+          <mxGeometry x="240" y="40" width="160" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-7" value="SMA_Return" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-6">
+          <mxGeometry x="20" y="40" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-9" value="Daily_Return" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-6">
+          <mxGeometry x="20" y="80" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-10" value="Up_Down_Runs" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-6">
+          <mxGeometry x="20" y="120" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-8" value="Max_Prof" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-6">
+          <mxGeometry x="20" y="160" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-11" value="&lt;div&gt;Data Layer&lt;/div&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-3">
+          <mxGeometry x="520" y="40" width="280" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-16" value="&lt;div&gt;reads data&lt;/div&gt;&lt;div&gt;from&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" edge="1" parent="avro4BwHF151OcboGCo6-11" source="avro4BwHF151OcboGCo6-12" target="avro4BwHF151OcboGCo6-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-12" value="&lt;div&gt;Pandas&lt;/div&gt;&lt;div&gt;Dataframe&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-11">
+          <mxGeometry x="20" y="50" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-15" value="TSLA.csv" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="avro4BwHF151OcboGCo6-11">
+          <mxGeometry x="180" y="40" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-13" value="Shared Logic" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-3">
+          <mxGeometry x="520" y="220" width="160" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-14" value="&lt;div&gt;algo/validate.py&lt;/div&gt;&lt;div&gt;(DRY principle)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-13">
+          <mxGeometry x="20" y="30" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" edge="1" parent="avro4BwHF151OcboGCo6-3" source="avro4BwHF151OcboGCo6-19" target="avro4BwHF151OcboGCo6-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="avro4BwHF151OcboGCo6-3" source="avro4BwHF151OcboGCo6-19" target="avro4BwHF151OcboGCo6-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-19" value="uses" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-3">
+          <mxGeometry x="440" y="100" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="avro4BwHF151OcboGCo6-3" source="avro4BwHF151OcboGCo6-7" target="avro4BwHF151OcboGCo6-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="avro4BwHF151OcboGCo6-3" source="avro4BwHF151OcboGCo6-9" target="avro4BwHF151OcboGCo6-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="avro4BwHF151OcboGCo6-3" source="avro4BwHF151OcboGCo6-10" target="avro4BwHF151OcboGCo6-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="avro4BwHF151OcboGCo6-3" source="avro4BwHF151OcboGCo6-8" target="avro4BwHF151OcboGCo6-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-33" value="&lt;div&gt;calls&lt;/div&gt;&lt;div&gt;algo&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="avro4BwHF151OcboGCo6-3" source="avro4BwHF151OcboGCo6-5" target="avro4BwHF151OcboGCo6-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-34" value="Frontend" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="600" width="360" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-35" value="&lt;div&gt;index.html&lt;/div&gt;&lt;div&gt;(Jinja2 template)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="avro4BwHF151OcboGCo6-34">
+          <mxGeometry x="20" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-36" value="Chart.js Library" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="avro4BwHF151OcboGCo6-34">
+          <mxGeometry x="200" y="40" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-38" value="uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="avro4BwHF151OcboGCo6-34" source="avro4BwHF151OcboGCo6-35" target="avro4BwHF151OcboGCo6-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-40" value="&lt;div&gt;HTTP&lt;/div&gt;&lt;div&gt;request&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="avro4BwHF151OcboGCo6-39" target="avro4BwHF151OcboGCo6-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-41" value="&lt;div&gt;returns HTML response &amp;amp; data&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="avro4BwHF151OcboGCo6-5" target="avro4BwHF151OcboGCo6-35">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="345" y="640" />
+              <mxPoint x="440" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="avro4BwHF151OcboGCo6-42" value="renders in browser" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="avro4BwHF151OcboGCo6-35" target="avro4BwHF151OcboGCo6-39">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

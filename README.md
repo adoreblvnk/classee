@@ -1,11 +1,12 @@
-<div align="center"> <!-- use align as CSS is not allowed on GitHub markdown https://github.com/orgs/community/discussions/22728 -->
-  <img src="<logo_path>" alt="" width=100> <!-- Logo -->
-  <h1>Stock Market Analysis</h1> <!-- Project Name -->
-  <p> <!-- Description -->
-    Stock market analysis for INF1002 Programming Fundamentals
+<div align="center">
+  <!-- <img src="<logo_path>" alt="Logo" width=100> -->
+  <h1>Stock Market Analysis</h1>
+  <p>
+    Stock market analysis for TSLA for INF1002 Programming Fundamentals.
   </p>
-  <p> <!-- Built With -->
-    Built With: &bull;
+  <p>
+    <!-- Built With Badges -->
+    Python &bull; FastAPI &bull; Pandas &bull; Pytest &bull; Tailwind CSS &bull; Chart.js
   </p>
 </div>
 
@@ -15,49 +16,65 @@
 <summary>Table of Contents</summary>
 
 - [About](#about)
-- [Demo](#demo)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+  - [Execution](#execution)
 - [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Changelog](#changelog)
 </details>
 
 ## About
 
-Dataset: https://www.kaggle.com/datasets/varpit94/tesla-stock-data-updated-till-28jun2021
+<div align="center"><img src="./assets/landing_page.png" alt="" width="800"></div>
 
-## Demo
+Stock market analysis tool for TSLA stock prices for INF1002 Programming Fundamentals. Calculates key trading metrics, identifying market trends, & visualizing results. Built to demonstrate mastery of DSA fundamentals.
+
+Analysis tools:
+1. **Simple Moving Average (SMA):** For smoothing price data & identifying trends
+2. **Upward & Downward Runs:** For measuring market momentum
+3. **Daily Returns:** For analyzing historical volatility & performance
+4. **Maximum Profit Calculation:** For finding the most profitable trading windows. Enhancement of [Best Time to Buy and Sell Stock II](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii)
+
+Dataset: [Tesla Stock Data](https://www.kaggle.com/datasets/varpit94/tesla-stock-data-updated-till-28jun2021)
 
 ## Getting Started
 
 ### Installation
 
-Using pip:
+**With Python & pip**
+
 ```bash
-# activate venv
 python3 -m venv .venv
 source .venv/bin/activate
-# install dependencies
 pip install -r requirements.txt
-# run
 python3 main.py
-# [optional] test command if it's working
-curl http://127.0.0.1:8000
 ```
 
-Using uv:
+**With UV**
+
 ```bash
 uv run main.py
 ```
 
+### Execution
+
+**Run the web app**
+
+```bash
+python3 main.py # or uv run main.py
+```
+
+**Run unit tests**
+
+```bash
+python3 -m pytest -v tests # or uv run pytest -v tests
+```
+
 ## Usage
 
-## Roadmap
+Navigate to `localhost:8000` to access the web app.
 
-## Changelog
-
-See [CHANGELOG](CHANGELOG.md) for details.
+- **Simple Moving Average (SMA):** Use the date range selector and "Window Period" input to customize the SMA calculation.
+- **Maximum Profit:** Enter a number in the "Window Size" input field to find the most profitable trading period of that length.
 
 ## License <!-- omit in toc -->
 
@@ -65,7 +82,10 @@ Distributed under the MIT License.
 
 ## Credits <!-- omit in toc -->
 
-- 
+- Joseph ([adoreblvnk](https://github.com/adoreblvnk))
+- Vincent Foo ([vincentfoo2003](https://github.com/vincentfoo2003))
+- Teo Yeow Heng ([yeowhengg](https://github.com/yeowhengg))
+- Tse Yat Hong Joel ([Drowtsee](https://github.com/Drowtsee))
 
 ## Acknowledgements  <!-- omit in toc -->
 

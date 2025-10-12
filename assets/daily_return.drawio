@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0" version="28.2.5">
+  <diagram name="Page-1" id="26Gu04nd8sLMFzrz894f">
+    <mxGraphModel dx="781" dy="593" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-1" target="5bu1uOP9mNjhEtGEPvaE-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-1" value="Daily Return" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-16" value="Data Pass" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-2" target="5bu1uOP9mNjhEtGEPvaE-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-17" value="Data Fail" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-2" target="5bu1uOP9mNjhEtGEPvaE-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-2" value="Validation Check" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-3" target="5bu1uOP9mNjhEtGEPvaE-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-3" value="Data Convert to pd.DataFrame" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="440" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-4" target="5bu1uOP9mNjhEtGEPvaE-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-4" value="for Loop Calculation of Daily Return" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="500" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-6" target="5bu1uOP9mNjhEtGEPvaE-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-6" value="Statistics Calculation" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="560" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-7" target="5bu1uOP9mNjhEtGEPvaE-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-7" value="&lt;div&gt;Plotting of Graph&lt;/div&gt;&lt;div&gt;&amp;amp; Displaying Data&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="620" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-8" target="5bu1uOP9mNjhEtGEPvaE-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-8" value="Return All Data to Frontend" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="620" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="5bu1uOP9mNjhEtGEPvaE-9" target="5bu1uOP9mNjhEtGEPvaE-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-9" value="Error Code" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="340" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5bu1uOP9mNjhEtGEPvaE-10" value="End" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="620" width="80" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

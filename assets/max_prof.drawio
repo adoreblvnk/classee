@@ -1,0 +1,62 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0" version="28.2.5">
+  <diagram name="Page-1" id="9j6zcUHBoQ1dR4EUHtzY">
+    <mxGraphModel dx="781" dy="593" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Z2waTAg2TwMwRfXSRvQi-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-1" target="qBZW4yA_26V9tIZ_XJ7D-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-1" value="&lt;div&gt;Calculate Daily&lt;/div&gt;&lt;div&gt;Profits Array&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry y="240" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-2" target="qBZW4yA_26V9tIZ_XJ7D-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-2" value="&lt;div&gt;Initialise Max Profit&lt;/div&gt;&lt;div&gt;with 1st Window Sum&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="240" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-3" target="qBZW4yA_26V9tIZ_XJ7D-8" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="350" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-22" value="End of Data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-3" target="qBZW4yA_26V9tIZ_XJ7D-20" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-3" value="Slide Window &amp;amp; Update Sum" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="300" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;curved=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-6" target="qBZW4yA_26V9tIZ_XJ7D-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-6" value="&lt;div&gt;Update Max Profit &amp;amp;&lt;/div&gt;&lt;div&gt;Best Window Index&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="160" y="490" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-17" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;curved=1;" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-8" target="qBZW4yA_26V9tIZ_XJ7D-3" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="360" />
+              <mxPoint x="300" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Z2waTAg2TwMwRfXSRvQi-4" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-8" target="qBZW4yA_26V9tIZ_XJ7D-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-8" value="&lt;div&gt;is Current Profit &amp;gt; Max Profit?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="360" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="qBZW4yA_26V9tIZ_XJ7D-20" target="qBZW4yA_26V9tIZ_XJ7D-21" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-20" value="&lt;div&gt;Prepare Final Result&lt;/div&gt;(profit, dates, etc)" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qBZW4yA_26V9tIZ_XJ7D-21" value="Prepare Final Result" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="470" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
