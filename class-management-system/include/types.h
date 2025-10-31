@@ -6,11 +6,11 @@
 
 // struct for student record data
 typedef struct StudentRecord {
-    int id;
-    char name[MAX_NAME_LEN];
-    char programme[MAX_PROG_LEN];
-    float mark;
-    struct StudentRecord *next;
+  int id;
+  char name[MAX_NAME_LEN];
+  char programme[MAX_PROG_LEN];
+  float mark;
+  struct StudentRecord *next;
 } StudentRecord;
 
 #endif // TYPES_H
