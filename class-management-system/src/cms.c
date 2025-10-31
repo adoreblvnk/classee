@@ -28,32 +28,10 @@ void openDatabase(StudentRecord **head, const char *filename) {
     char programme[MAX_PROG_LEN];
     float mark;
 
-    // parse file, build linked list directly
+    // parse file, %[^\t] is a scanset that reads until tab
+	// NOTE: must be separated by tabs!
     while (fscanf(file, "%d\t%[^\t]\t%[^\t]\t%f\n", &id, name, programme, &mark) == 4) {
-        StudentRecord *newNode = (StudentRecord *)malloc(sizeof(StudentRecord));
-        if (!newNode) {
-            perror("Failed to allocate memory during file load");
-            continue; // skip to next record
-        }
-        newNode->id = id;
-        strncpy(newNode->name, name, MAX_NAME_LEN - 1);
-        newNode->name[MAX_NAME_LEN - 1] = '\0';
-        strncpy(newNode->programme, programme, MAX_PROG_LEN - 1);
-        newNode->programme[MAX_PROG_LEN - 1] = '\0';
-        newNode->mark = mark;
-        
-        // manual sorted insertion to keep data organized
-        if (*head == NULL || (*head)->id > id) {
-            newNode->next = *head;
-            *head = newNode;
-        } else {
-            StudentRecord *current = *head;
-            while (current->next != NULL && current->next->id < id) {
-                current = current->next;
-            }
-            newNode->next = current->next;
-            current->next = newNode;
-        }
+        insertRecord(head, id, name, programme, mark);
     }
 
     fclose(file);
@@ -71,6 +49,36 @@ void showAll(const StudentRecord *head) {
         for (const StudentRecord *current = head; current != NULL; current = current->next) {
             printRecord(current);
         }
+    }
+}
+
+// insert new record to linked list (sorted by id)
+void insertRecord(StudentRecord **head, int id, const char *name, const char *programme, float mark) {
+	// NOTE: check if record already exists
+
+    StudentRecord *newNode = (StudentRecord *)malloc(sizeof(StudentRecord));
+    if (!newNode) {
+        perror("Failed to allocate memory for new record");
+        return;
+    }
+    newNode->id = id;
+    strncpy(newNode->name, name, MAX_NAME_LEN - 1);
+    newNode->name[MAX_NAME_LEN - 1] = '\0';
+    strncpy(newNode->programme, programme, MAX_PROG_LEN - 1);
+    newNode->programme[MAX_PROG_LEN - 1] = '\0';
+    newNode->mark = mark;
+
+    // insert in sorted order (by id)
+    if (*head == NULL || (*head)->id > id) {
+        newNode->next = *head;
+        *head = newNode;
+    } else {
+        StudentRecord *current = *head;
+        while (current->next != NULL && current->next->id < id) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
     }
 }
 
