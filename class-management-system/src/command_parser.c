@@ -17,7 +17,9 @@ void processCommand(StudentRecord **head, char *input, const char *db_filename) 
     }
   } else if (strcasecmp(command, "SAVE") == 0) {
     saveDatabase(*head, db_filename);
-  } else if (strcasecmp(command, "EXIT") == 0) {
+  } else if (strcasecmp(command, "SUMMARY") == 0) {
+    getAll(*head);
+  }else if (strcasecmp(command, "EXIT") == 0) {
     // terminate loop
   } else {
     printf("CMS: Unknown command \"%s\".\n", command);
