@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "types.h" // Include the shared data structure definition
+#include "types.h" // for StudentRecord
 
 // helper funcs
 void freeList(StudentRecord *head);
