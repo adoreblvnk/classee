@@ -11,13 +11,10 @@ int main() {
 
   while (1) {
     printf("P3_7: ");
-    if (!fgets(input, sizeof(input), stdin))
-      break; // handle eof
+    if (!fgets(input, sizeof(input), stdin)) { break; } // handle eof
 
-    // exit condition
-    if (strncasecmp(input, "EXIT", 4) == 0) {
-      break;
-    }
+    // exit condition (rmb to add \n)
+    if (util_strcasecmp(input, "EXIT\n") == 0) { break; }
 
     processCommand(&head, input, db_filename);
   }

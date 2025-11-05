@@ -7,7 +7,9 @@
 void openDatabase(StudentRecord **head, const char *filename) {
   FILE *file = fopen(filename, "r");
   if (!file) {
-    printf("CMS: The database file \"%s\" could not be opened. A new one will be created upon saving.\n", filename);
+    printf("CMS: The database file \"%s\" could not be opened. A new one will be created upon "
+           "saving.\n",
+           filename);
     return;
   }
 
@@ -50,7 +52,8 @@ void showAll(const StudentRecord *head) {
 }
 
 // insert new record to linked list (sorted by id)
-void insertRecord(StudentRecord **head, int id, const char *name, const char *programme, float mark) {
+void insertRecord(StudentRecord **head, int id, const char *name, const char *programme,
+                  float mark) {
   // NOTE: check if record already exists
 
   StudentRecord *newNode = (StudentRecord *)malloc(sizeof(StudentRecord));
@@ -60,7 +63,7 @@ void insertRecord(StudentRecord **head, int id, const char *name, const char *pr
     return;
   }
   newNode->id = id;
-  // safe copy, if we don't add \0, then it's not a valid string & will keep copying forever! 
+  // safe copy, if we don't add \0, then it's not a valid string & will keep copying forever!
   strncpy(newNode->name, name, MAX_NAME_LEN - 1);
   newNode->name[MAX_NAME_LEN - 1] = '\0';
   strncpy(newNode->programme, programme, MAX_PROG_LEN - 1);
@@ -99,7 +102,8 @@ void saveDatabase(const StudentRecord *head, const char *filename) {
   fprintf(file, "ID\tName\tProgramme\tMark\n");
 
   for (const StudentRecord *current = head; current != NULL; current = current->next) {
-    fprintf(file, "%d\t%s\t%s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+    fprintf(file, "%d\t%s\t%s\t%.1f\n", current->id, current->name, current->programme,
+            current->mark);
   }
 
   fclose(file);
