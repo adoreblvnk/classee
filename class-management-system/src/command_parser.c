@@ -12,12 +12,14 @@ void processCommand(StudentRecord **head, char *input, const char *db_filename) 
     openDatabase(head, db_filename);
   } else if (util_strcasecmp(command, "SHOW") == 0) {
     args = strtok(NULL, "\n");
-    if (args && util_strcasecmp(args, "ALL") == 0) { showAll(*head); }
+    if (args && util_strcasecmp(args, "ALL") == 0) { showAll(*head);}
+    else if (util_strcasecmp(args, "SUMMARY") == 0) { getAll(*head); }
+    else { printf("CMS: Invalid argument for SHOW command.\n"); }
+    
   } else if (util_strcasecmp(command, "SAVE") == 0) {
     saveDatabase(*head, db_filename);
-  } else if (util_strcasecmp(command, "SUMMARY") == 0) {
-    getAll(*head);
-  } else if (util_strcasecmp(command, "EXIT") == 0) {
+  } 
+  else if (util_strcasecmp(command, "EXIT") == 0) {
     // terminate loop
   } else {
     printf("CMS: Unknown command \"%s\".\n", command);

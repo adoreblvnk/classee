@@ -1,9 +1,8 @@
 #ifndef SUMMARY_H
 #define SUMMARY_H
 
-#include "../include/cms.h"
+#include "cms.h"  // Assuming StudentRecord is defined here
 
-// Define the summary results structure
 struct SummaryResults {
     const StudentRecord *topper;
     const StudentRecord *lower;
@@ -11,9 +10,7 @@ struct SummaryResults {
     int count;
 };
 
-// Function declarations
 void getAll(const StudentRecord *head);
-struct SummaryResults showTopper(const StudentRecord *head);
-struct SummaryResults showAverageMark(const StudentRecord *head);
+struct SummaryResults getSummaryResults(const StudentRecord *head);
 
 #endif
