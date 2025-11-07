@@ -1,18 +1,35 @@
-
 #include "../include/summary.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "../include/cms.h"
 #include "../include/utils.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-void getAll(const StudentRecord *head) {
-    if (!head) {
+// forward declaration for recursive helper
+void traverseForSummary(const StudentRecord *node, const StudentRecord **topper,
+                        const StudentRecord **lower, float *totalMarks, int *count);
+
+void traverseForSummary(const StudentRecord *node, const StudentRecord **topper,
+                        const StudentRecord **lower, float *totalMarks, int *count) {
+    if (node == NULL) { return; }
+    
+    *totalMarks += node->mark;
+    (*count)++;
+    
+    if (node->mark > (*topper)->mark) { *topper = node; }
+    if (node->mark < (*lower)->mark) { *lower = node; }
+    
+    traverseForSummary(node->left, topper, lower, totalMarks, count);
+    traverseForSummary(node->right, topper, lower, totalMarks, count);
+}
+
+void getAll(const StudentRecord *root) {
+    if (!root) {
         printf("No records to display.\n");
         return;
     }
     
     // Get summary results
-    struct SummaryResults results = getSummaryResults(head);
+    struct SummaryResults results = getSummaryResults(root);
     
     if (results.count == 0) {
         printf("No valid records found.\n");
@@ -28,7 +45,7 @@ void getAll(const StudentRecord *head) {
     printf("Total Students: %d\n", results.count);
 }
 
-struct SummaryResults getSummaryResults(const StudentRecord *head) {
+struct SummaryResults getSummaryResults(const StudentRecord *root) {
     struct SummaryResults results;
     
     // Initialize with safe defaults
@@ -37,31 +54,17 @@ struct SummaryResults getSummaryResults(const StudentRecord *head) {
     results.average = 0.0;
     results.count = 0;
     
-    if (!head) {
+    if (!root) {
         printf("No records available to show summary.\n");
         return results;
     }
 
-    const StudentRecord *current = head;
-    const StudentRecord *topper = head;
-    const StudentRecord *lower = head; 
+    const StudentRecord *topper = root;
+    const StudentRecord *lower = root;
     float totalMarks = 0.0;
     int count = 0;
     
-    // Traverse all nodes including head
-    while (current != NULL) {
-        totalMarks += current->mark;
-        count++;
-        
-        if (current->mark > topper->mark) {
-            topper = current;
-        }
-        if (current->mark < lower->mark) {
-            lower = current;
-        }
-        
-        current = current->next;
-    }
+    traverseForSummary(root, &topper, &lower, &totalMarks, &count);
     
     results.average = (count > 0) ? totalMarks / count : 0.0;
     results.count = count;

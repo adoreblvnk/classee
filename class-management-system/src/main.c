@@ -3,7 +3,7 @@
 #include "../include/utils.h"
 
 int main() {
-  StudentRecord *head = NULL;
+  StudentRecord *root = NULL;
   char input[256];
   const char *db_filename = "data/P3_7-CMS.txt"; // db filename
 
@@ -20,10 +20,10 @@ int main() {
     // NOTE: handle exit here to exit loop
     if (util_strcasecmp(input, "EXIT\n") == 0) { break; }
 
-    processCommand(&head, input, db_filename);
+    processCommand(&root, input, db_filename);
   }
 
-  freeList(head); // free mem before exit
+  freeTree(root); // free mem before exit
   printf("CMS: Shutting down. All data has been cleared from memory.\n");
   return 0;
 }

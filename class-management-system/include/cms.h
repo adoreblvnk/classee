@@ -10,9 +10,9 @@
 // func prototypes
 
 // core ops
-void openDatabase(StudentRecord **head, const char *filename);
-void showAll(const StudentRecord *head);
-void insertRecord(StudentRecord **head, int id, const char *name, const char *programme, float mark);
-void saveDatabase(const StudentRecord *head, const char *filename);
+void openDatabase(StudentRecord **root, const char *filename);
+void showAll(const StudentRecord *root);
+void insertRecord(StudentRecord **root, int id, const char *name, const char *programme, float mark);
+void saveDatabase(const StudentRecord *root, const char *filename);
 
 #endif // CMS_H

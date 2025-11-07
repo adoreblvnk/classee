@@ -1,10 +1,32 @@
 #include "../include/cms.h"
 #include "../include/utils.h"
 
+// forward declarations for recursive helpers (only used in this file)
+static void showInOrder(const StudentRecord *root);
+static void saveInOrder(const StudentRecord *root, FILE *file);
+
+// helper for showall
+static void showInOrder(const StudentRecord *root) {
+  if (root != NULL) {
+    showInOrder(root->left);
+    printRecord(root);
+    showInOrder(root->right);
+  }
+}
+
+// helper for savedb
+static void saveInOrder(const StudentRecord *root, FILE *file) {
+  if (root != NULL) {
+    saveInOrder(root->left, file);
+    fprintf(file, "%d\t%s\t%s\t%.1f\n", root->id, root->name, root->programme, root->mark);
+    saveInOrder(root->right, file);
+  }
+}
+
 // core logic
 
-// open db file & load records to linked list
-void openDatabase(StudentRecord **head, const char *filename) {
+// open db file & load records to bst
+void openDatabase(StudentRecord **root, const char *filename) {
   FILE *file = fopen(filename, "r");
   if (!file) {
     printf("CMS: The database file \"%s\" could not be opened. A new one will be created upon "
@@ -13,9 +35,9 @@ void openDatabase(StudentRecord **head, const char *filename) {
     return;
   }
 
-  // free existing list before loading new stuff
-  freeList(*head);
-  *head = NULL;
+  // free existing tree before loading new stuff
+  freeTree(*root);
+  *root = NULL;
 
   char line[256];
   // skip the 5 header lines (db name, authors, blank line, table name, col headers)
@@ -27,67 +49,61 @@ void openDatabase(StudentRecord **head, const char *filename) {
   char name[MAX_NAME_LEN], programme[MAX_PROG_LEN];
   float mark;
 
-  // parse file, %[^\t] is a scanset that reads until tab
+  // parse file & insert to bst, %[^\t] is a scanset that reads until tab
   // NOTE: must be separated by tabs!
   while (fscanf(file, "%d\t%[^\t]\t%[^\t]\t%f\n", &id, name, programme, &mark) == 4) {
-    insertRecord(head, id, name, programme, mark);
+    insertRecord(root, id, name, programme, mark);
   }
 
   fclose(file);
   printf("CMS: The database file \"%s\" is successfully opened.\n", filename);
 }
 
-// display all records in linked list
-void showAll(const StudentRecord *head) {
+// display all records in bst (in-order traversal)
+void showAll(const StudentRecord *root) {
   printf("CMS: Here are all the records found in the table \"StudentRecords\".\n");
   printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
-  if (!head) {
+  if (!root) {
     printf("No records to display.\n");
   } else {
-    for (const StudentRecord *current = head; current != NULL; current = current->next) {
-      printRecord(current);
-    }
+    showInOrder(root);
   }
 }
 
-// insert new record to linked list (sorted by id)
-void insertRecord(StudentRecord **head, int id, const char *name, const char *programme,
+// insert new record to bst (sorted by id)
+void insertRecord(StudentRecord **root, int id, const char *name, const char *programme,
                   float mark) {
   // NOTE: check if record already exists
-
-  StudentRecord *newNode = (StudentRecord *)malloc(sizeof(StudentRecord));
-  // if malloc returns NULL, then malloc failed
-  if (!newNode) {
-    perror("Failed to allocate memory for new record");
+  if (*root == NULL) {
+    StudentRecord *newNode = (StudentRecord *)malloc(sizeof(StudentRecord));
+    // if malloc returns NULL, then malloc failed
+    if (!newNode) {
+      perror("Failed to allocate memory for new record");
+      return;
+    }
+    newNode->id = id;
+    // safe copy, if we don't add \0, then it's not a valid string & will keep copying forever!
+    strncpy(newNode->name, name, MAX_NAME_LEN - 1);
+    newNode->name[MAX_NAME_LEN - 1] = '\0';
+    strncpy(newNode->programme, programme, MAX_PROG_LEN - 1);
+    newNode->programme[MAX_PROG_LEN - 1] = '\0';
+    newNode->mark = mark;
+    newNode->left = newNode->right = NULL;
+    *root = newNode;
     return;
   }
-  newNode->id = id;
-  // safe copy, if we don't add \0, then it's not a valid string & will keep copying forever!
-  strncpy(newNode->name, name, MAX_NAME_LEN - 1);
-  newNode->name[MAX_NAME_LEN - 1] = '\0';
-  strncpy(newNode->programme, programme, MAX_PROG_LEN - 1);
-  newNode->programme[MAX_PROG_LEN - 1] = '\0';
-  newNode->mark = mark;
 
-  // insert new node in correct pos
-  // if linked list is empty or new id is smaller than head id, then make this id the new head
-  if (*head == NULL || (*head)->id > id) {
-    newNode->next = *head;
-    *head = newNode;
-  } else {
-    StudentRecord *current = *head;
-    // skip to next node if we're not at last node & new id is greater than curr id of StudentRecord
-    while (current->next != NULL && current->next->id < id) {
-      current = current->next;
-    }
-    // insert new node after current (current -> new -> next)
-    newNode->next = current->next;
-    current->next = newNode;
+  // insert left if id < root->id, right if id > root->id
+  if (id < (*root)->id) {
+    insertRecord(&(*root)->left, id, name, programme, mark);
+  } else if (id > (*root)->id) {
+    insertRecord(&(*root)->right, id, name, programme, mark);
   }
+  // else, id already exists, do nothing
 }
 
-// save all records from linked list to db
-void saveDatabase(const StudentRecord *head, const char *filename) {
+// save all records from bst to db
+void saveDatabase(const StudentRecord *root, const char *filename) {
   char header[5][256]; // 2D array is like a matrix
   int header_line_no = 0;
 
@@ -117,11 +133,7 @@ void saveDatabase(const StudentRecord *head, const char *filename) {
     fputs(header[i], file);
   }
 
-  // write the student records for each node from linked list
-  for (const StudentRecord *current = head; current != NULL; current = current->next) {
-    fprintf(file, "%d\t%s\t%s\t%.1f\n", current->id, current->name, current->programme,
-            current->mark);
-  }
+  saveInOrder(root, file);
 
   fclose(file);
   printf("CMS: The database file \"%s\" is successfully saved.\n", filename);

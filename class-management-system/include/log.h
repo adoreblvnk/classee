@@ -16,6 +16,6 @@ void logCommand(const char *command, int id, const char *name, const char *progr
 void showLog();
 
 // restore db state from log to target change id & truncates log file
-void restoreState(StudentRecord **head, int target_change_id);
+void restoreState(StudentRecord **root, int target_change_id);
 
 #endif // LOG_H

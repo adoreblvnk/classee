@@ -98,7 +98,7 @@ void showLog() {
 }
 
 // restore db state from log to target change id & truncates log file
-void restoreState(StudentRecord **head, int target_change_id) {
+void restoreState(StudentRecord **root, int target_change_id) {
   FILE *log_file = fopen(LOG_FILE, "r");
   if (!log_file) {
     printf("CMS: Log file not found. Cannot restore.\n");
@@ -111,8 +111,8 @@ void restoreState(StudentRecord **head, int target_change_id) {
     return;
   }
 
-  freeList(*head); // clear current StudentRecord linked list
-  *head = NULL;
+  freeTree(*root); // clear current bst
+  *root = NULL;
 
   char line[512];
   // copy header to temp log
@@ -135,7 +135,7 @@ void restoreState(StudentRecord **head, int target_change_id) {
     if (col_count < 8 || atoi(cols[7]) == 0) { continue; } // NOTE: skip early if not a change
 
     if (util_strcasecmp(cols[1], "insert") == 0) {
-      insertRecord(head, atoi(cols[2]), cols[3], cols[4], atof(cols[5]));
+      insertRecord(root, atoi(cols[2]), cols[3], cols[4], atof(cols[5]));
     }
     // TODO: add logic for 'update' & 'delete' if they are logged as changes
   }

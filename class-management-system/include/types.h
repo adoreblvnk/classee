@@ -10,7 +10,8 @@ typedef struct StudentRecord {
   char name[MAX_NAME_LEN];
   char programme[MAX_PROG_LEN];
   float mark;
-  struct StudentRecord *next; // ts is a pointer to the next StudentRecord
+  struct StudentRecord *left;  // for bst
+  struct StudentRecord *right; // for bst
 } StudentRecord;
 
 #endif // TYPES_H

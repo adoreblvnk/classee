@@ -5,7 +5,7 @@
 #include <string.h> // for size_t
 
 // helper funcs
-void freeList(StudentRecord *head);
+void freeTree(StudentRecord *root);
 void printRecord(const StudentRecord *record);
 
 // our version of POSIX C string functions

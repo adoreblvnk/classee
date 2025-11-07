@@ -3,14 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// free all mem used by linked list
-void freeList(StudentRecord *head) {
-  StudentRecord *current = head;
-  while (current != NULL) {
-    StudentRecord *next = current->next;
-    free(current);
-    current = next;
-  }
+// free all mem used by bst
+void freeTree(StudentRecord *root) {
+  if (root == NULL) { return; }
+  freeTree(root->left);
+  freeTree(root->right);
+  free(root);
 }
 
 // print single student record, formatted

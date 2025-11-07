@@ -5,20 +5,20 @@
 #include <string.h>
 
 // parse cmds & their args
-void processCommand(StudentRecord **head, char *input, const char *db_filename) {
+void processCommand(StudentRecord **root, char *input, const char *db_filename) {
   char *command = strtok(input, " \n");
   if (!command) { return; }
   char *args = strtok(NULL, "\n");
 
   if (util_strcasecmp(command, "OPEN") == 0) {
-    openDatabase(head, db_filename);
+    openDatabase(root, db_filename);
     logCommand("open", 0, NULL, NULL, 0.0);
   } else if (util_strcasecmp(command, "SHOW") == 0) {
     if (args && util_strcasecmp(args, "ALL") == 0) {
-      showAll(*head);
+      showAll(*root);
       logCommand("show all", 0, NULL, NULL, 0.0);
     } else if (util_strcasecmp(args, "SUMMARY") == 0) {
-      getAll(*head);
+      getAll(*root);
       logCommand("show summary", 0, NULL, NULL, 0.0);
     } else if (util_strcasecmp(args, "LOG") == 0) {
       showLog(); // we don't log LOG cmd itself
@@ -26,7 +26,7 @@ void processCommand(StudentRecord **head, char *input, const char *db_filename) 
       printf("CMS: Invalid argument for SHOW command.\n");
     }
   } else if (util_strcasecmp(command, "SAVE") == 0) {
-    saveDatabase(*head, db_filename);
+    saveDatabase(*root, db_filename);
     logCommand("save", 0, NULL, NULL, 0.0);
   } else if (util_strcasecmp(command, "RESTORE") == 0) {
     if (args) {
@@ -35,7 +35,7 @@ void processCommand(StudentRecord **head, char *input, const char *db_filename) 
         printf("CMS: Invalid change ID for RESTORE. Choose a value between 1 & %d.\n",
                getCurrentChangeId());
       } else {
-        restoreState(head, change_id);
+        restoreState(root, change_id);
       }
     } else {
       printf("CMS: Missing change ID for RESTORE.\n");

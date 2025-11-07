@@ -4,6 +4,6 @@
 #include "cms.h"
 
 // parse cmds & their args
-void processCommand(StudentRecord **head, char *input, const char *db_filename);
+void processCommand(StudentRecord **root, char *input, const char *db_filename);
 
 #endif // COMMAND_PARSER_H
