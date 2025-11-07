@@ -60,6 +60,7 @@ void openDatabase(StudentRecord **root, const char *filename) {
 }
 
 // display all records in bst (in-order traversal)
+// O(n). must visit every node once for traversal
 void showAll(const StudentRecord *root) {
   printf("CMS: Here are all the records found in the table \"StudentRecords\".\n");
   printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
@@ -71,6 +72,7 @@ void showAll(const StudentRecord *root) {
 }
 
 // insert new record to bst (sorted by id)
+// O(log n) avg case. O(n) worst case if bst degenerates to a linked list (eg every new id is lower than root id)
 void insertRecord(StudentRecord **root, int id, const char *name, const char *programme,
                   float mark) {
   // NOTE: check if record already exists
@@ -103,6 +105,7 @@ void insertRecord(StudentRecord **root, int id, const char *name, const char *pr
 }
 
 // save all records from bst to db
+// O(n). must visit every node once to write to file
 void saveDatabase(const StudentRecord *root, const char *filename) {
   char header[5][256]; // 2D array is like a matrix
   int header_line_no = 0;

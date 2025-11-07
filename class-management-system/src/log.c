@@ -98,6 +98,8 @@ void showLog() {
 }
 
 // restore db state from log to target change id & truncates log file
+// O(k * log n) avg. k=target_change_id, n=records. reads k lines, each insert is O(log n)
+// O(k * n) worst case if tree is unbalanced (eg if every new id is lower than root id)
 void restoreState(StudentRecord **root, int target_change_id) {
   FILE *log_file = fopen(LOG_FILE, "r");
   if (!log_file) {
