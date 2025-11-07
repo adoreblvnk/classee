@@ -1,7 +1,7 @@
 #ifndef SUMMARY_H
 #define SUMMARY_H
 
-#include "cms.h"  // Assuming StudentRecord is defined here
+#include "types.h"
 
 struct SummaryResults {
     const StudentRecord *topper;

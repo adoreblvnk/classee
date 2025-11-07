@@ -1,5 +1,6 @@
 #include "../include/command_parser.h"
 #include "../include/log.h"
+#include "../include/summary.h"
 #include "../include/utils.h"
 #include <string.h>
 
