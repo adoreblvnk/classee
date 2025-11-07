@@ -41,7 +41,6 @@ void openDatabase(StudentRecord **head, const char *filename) {
 void showAll(const StudentRecord *head) {
   printf("CMS: Here are all the records found in the table \"StudentRecords\".\n");
   printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
-  printf("------------------------------------------------------------------\n");
   if (!head) {
     printf("No records to display.\n");
   } else {
@@ -89,18 +88,36 @@ void insertRecord(StudentRecord **head, int id, const char *name, const char *pr
 
 // save all records from linked list to db
 void saveDatabase(const StudentRecord *head, const char *filename) {
-  FILE *file = fopen(filename, "w");
+  char header[5][256]; // 2D array is like a matrix
+  int header_line_no = 0;
+
+  // read the headers into header[5][256] which is 5 lines
+  FILE *file = fopen(filename, "r");
+  if (file) {
+    while (header_line_no < 5 && fgets(header[header_line_no], 256, file)) {
+      header_line_no++;
+    }
+    fclose(file);
+  }
+  // if header lines is not 5 then exit with error
+  if (header_line_no != 5) {
+    printf("CMS: The database file \"%s\" is not a valid database file.\n", filename);
+    return;
+  }
+
+  // NOTE: write mode erases curr file contents!
+  file = fopen(filename, "w");
   if (!file) {
     perror("CMS: Error opening file for saving");
     return;
   }
 
-  // format ensures file can be read back correctly
-  fprintf(file, "Database Name: Sample-CMS\n");
-  fprintf(file, "Authors: Your Name Here\n\n");
-  fprintf(file, "Table Name: StudentRecords\n");
-  fprintf(file, "ID\tName\tProgramme\tMark\n");
+  // write the preserved header back to file
+  for (int i = 0; i < 5; i++) {
+    fputs(header[i], file);
+  }
 
+  // write the student records for each node from linked list
   for (const StudentRecord *current = head; current != NULL; current = current->next) {
     fprintf(file, "%d\t%s\t%s\t%.1f\n", current->id, current->name, current->programme,
             current->mark);

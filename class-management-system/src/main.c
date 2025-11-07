@@ -1,10 +1,13 @@
 #include "../include/command_parser.h"
+#include "../include/log.h"
 #include "../include/utils.h"
 
 int main() {
   StudentRecord *head = NULL;
   char input[256];
   const char *db_filename = "data/P3_7-CMS.txt"; // db filename
+
+  init_logger(); // init logger & load last change id
 
   printf("Class Management System (CMS) Initialized.\n");
   printf("Type 'OPEN' to load the database or 'EXIT' to quit.\n");
@@ -14,6 +17,7 @@ int main() {
     if (!fgets(input, sizeof(input), stdin)) { break; } // handle eof
 
     // exit condition (rmb to add \n)
+    // NOTE: handle exit here to exit loop
     if (util_strcasecmp(input, "EXIT\n") == 0) { break; }
 
     processCommand(&head, input, db_filename);
