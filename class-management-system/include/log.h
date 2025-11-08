@@ -1,21 +1,20 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include "types.h"
-
-// getter func for current_change_id
+// getter for current change_id
 int getCurrentChangeId(void);
 
-// init logger, creates log file if not exists, sets current_change_id to max change_id
-void init_logger();
+// getter for current change_id and increment
+int getCurrentChangeIdAndIncr(void);
 
-// log cmd to log file
-void logCommand(const char *command, int id, const char *name, const char *programme, float mark);
+// init log, creates file if not exists, and sets current_change_id from the file
+void init_log();
 
-// display entire command log
+// log any cmd to the immutable log file
+void log_command(const char *command, int id, const char *name, const char *programme, float mark,
+                 int is_change);
+
+// display the immutable log entries
 void showLog();
-
-// restore db state from log to target change id & truncates log file
-void restoreState(StudentRecord **root, int target_change_id);
 
 #endif // LOG_H

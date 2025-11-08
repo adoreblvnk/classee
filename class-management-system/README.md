@@ -1,23 +1,47 @@
 generate build directory
 
-`cmake -S . -B build`
+```
+cmake -S . -B build
+```
 
 build (the executable)
 
-`cmake --build build`
+```
+cmake --build build
+```
 
 run
 
-`./build/src/main`
+```
+./build/src/main
+```
 
 or
 
-`.\build\bin\cms.exe`
+```
+.\build\bin\cms.exe
+```
 
 clean
 
-`rm -rf build`
+```
+rm -rf build
+```
 
 or
 
 delete the build directory
+
+shorthands
+
+clean and generate build dir
+
+```
+rm -rf build && cmake -S . -B build
+```
+
+build and run
+
+```
+cmake --build build && ./build/bin/cms
+```

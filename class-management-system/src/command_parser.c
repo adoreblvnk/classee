@@ -1,7 +1,10 @@
 #include "../include/command_parser.h"
+#include "../include/journal.h"
 #include "../include/log.h"
 #include "../include/summary.h"
 #include "../include/utils.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 // parse cmds & their args
@@ -12,34 +15,37 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
   if (util_strcasecmp(command, "OPEN") == 0) {
     openDatabase(root, db_filename);
-    logCommand("open", 0, NULL, NULL, 0.0);
+    log_command("open", 0, NULL, NULL, 0.0, 0);
   } else if (util_strcasecmp(command, "SHOW") == 0) {
-    if (args && util_strcasecmp(args, "ALL") == 0) {
+    if (!args) {
+      printf("CMS: Missing argument for SHOW command (ALL, SUMMARY, LOG, JOURNAL).\n");
+      return;
+    }
+    if (util_strcasecmp(args, "ALL") == 0) {
       showAll(*root);
-      logCommand("show all", 0, NULL, NULL, 0.0);
+      log_command("show all", 0, NULL, NULL, 0.0, 0);
     } else if (util_strcasecmp(args, "SUMMARY") == 0) {
       getAll(*root);
-      logCommand("show summary", 0, NULL, NULL, 0.0);
+      log_command("show summary", 0, NULL, NULL, 0.0, 0);
     } else if (util_strcasecmp(args, "LOG") == 0) {
-      showLog(); // we don't log LOG cmd itself
+      showLog();
+      log_command("show log", 0, NULL, NULL, 0.0, 0);
+    } else if (util_strcasecmp(args, "JOURNAL") == 0) {
+      showJournal();
+      log_command("show journal", 0, NULL, NULL, 0.0, 0);
     } else {
       printf("CMS: Invalid argument for SHOW command.\n");
     }
   } else if (util_strcasecmp(command, "SAVE") == 0) {
     saveDatabase(*root, db_filename);
-    logCommand("save", 0, NULL, NULL, 0.0);
-  } else if (util_strcasecmp(command, "RESTORE") == 0) {
+    log_command("save", 0, NULL, NULL, 0.0, 0);
+  } else if (util_strcasecmp(command, "RESET") == 0) {
     if (args) {
-      int change_id = atoi(args);
-      if (change_id < 0 || change_id > getCurrentChangeId()) {
-        printf("CMS: Invalid change ID for RESTORE. Choose a value between 1 & %d.\n",
-               getCurrentChangeId());
-      } else {
-        restoreState(root, change_id);
-      }
+      resetState(root, atoi(args));
+      log_command("reset", atoi(args), NULL, NULL, 0.0, 0);
     } else {
-      printf("CMS: Missing change ID for RESTORE.\n");
-    } // we can't restore a RESTORE cmd so we don't log it
+      printf("CMS: Missing change ID for RESET.\n");
+    }
   } else {
     printf("CMS: Unknown command \"%s\".\n", command);
   }

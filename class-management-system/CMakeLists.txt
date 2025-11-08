@@ -12,6 +12,7 @@ set(CMS_SOURCES
   src/command_parser.c
   src/cms.c
   src/log.c
+  src/journal.c
   src/summary.c
   src/utils.c
 )

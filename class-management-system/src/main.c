@@ -1,4 +1,5 @@
 #include "../include/command_parser.h"
+#include "../include/journal.h"
 #include "../include/log.h"
 #include "../include/utils.h"
 
@@ -7,7 +8,8 @@ int main() {
   char input[256];
   const char *db_filename = "data/P3_7-CMS.txt"; // db filename
 
-  init_logger(); // init logger & load last change id
+  init_log();     // init log
+  init_journal(); // init state manager & load last change_id
 
   printf("Class Management System (CMS) Initialized.\n");
   printf("Type 'OPEN' to load the database or 'EXIT' to quit.\n");
