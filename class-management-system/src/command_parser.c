@@ -1,7 +1,7 @@
 #include "../include/command_parser.h"
 #include "../include/services/journal.h"
 #include "../include/services/log.h"
-#include "../include/summary.h"
+#include "../include/summary.h"  
 #include "../include/utils/str_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +12,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   char *command = strtok(input, " \n");
   if (!command) { return; }
   char *args = strtok(NULL, "\n");
+ 
 
   if (util_strcasecmp(command, "OPEN") == 0) {
     openDatabase(root, db_filename);
@@ -21,16 +22,35 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       printf("CMS: Missing argument for SHOW command (ALL, SUMMARY, LOG, JOURNAL).\n");
       return;
     }
-    if (util_strcasecmp(args, "ALL") == 0) {
+    
+    // Parse SHOW arguments more carefully
+    char *show_arg = strtok(args, " \n");
+    
+    if (util_strcasecmp(show_arg, "ALL") == 0) {
       showAll(*root);
       log_command("show all", 0, NULL, NULL, 0.0, 0);
-    } else if (util_strcasecmp(args, "SUMMARY") == 0) {
-      getAll(*root);
-      log_command("show summary", 0, NULL, NULL, 0.0, 0);
-    } else if (util_strcasecmp(args, "LOG") == 0) {
+    } else if (util_strcasecmp(show_arg, "SUMMARY") == 0) {
+      char *course_arg = args + strlen(show_arg) + 1;
+      if (course_arg) {
+        // SHOW SUMMARY <course_name> - use displaysummary with course name
+        printf("Detected course argument for SUMMARY: %s\n", course_arg);
+        displaysummary(*root, course_arg);
+        log_command("show summary course", 0, course_arg, NULL, 0.0, 0);
+        if (course_arg== "all" || course_arg== "ALL") {
+          printf("Detected 'all' argument, displaying summary for all courses.\n");
+          displaysummary(*root, "ALL");
+          log_command("show summary", 0, NULL, NULL, 0.0, 0);
+        }
+      } 
+      else {
+        // SHOW SUMMARY - use displaysummary with "ALL"
+        displaysummary(*root, "ALL");
+        log_command("show summary", 0, NULL, NULL, 0.0, 0);
+      }
+    } else if (util_strcasecmp(show_arg, "LOG") == 0) {
       showLog();
       log_command("show log", 0, NULL, NULL, 0.0, 0);
-    } else if (util_strcasecmp(args, "JOURNAL") == 0) {
+    } else if (util_strcasecmp(show_arg, "JOURNAL") == 0) {
       showJournal();
       log_command("show journal", 0, NULL, NULL, 0.0, 0);
     } else {
