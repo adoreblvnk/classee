@@ -34,7 +34,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         // SHOW SUMMARY <course_name> - use displaysummary with course name
         displaysummary(*root, course_arg);
         log_command("show summary course", 0, course_arg, NULL, 0.0, 0);
-        if (course_arg== "all" || course_arg== "ALL") {
+        if (util_strcasecmp(show_arg, "ALL") == 0) {
           displaysummary(*root, "ALL");
           log_command("show summary", 0, NULL, NULL, 0.0, 0);
         }

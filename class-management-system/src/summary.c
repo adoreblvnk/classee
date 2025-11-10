@@ -54,8 +54,8 @@ struct SummaryResults getcourseSummaryResults(const StudentRecord *root, const c
     int count = 0;
     
     // Traverse and only include students from the specified course
-    traverseForCourseSummary(root, course_name, &results.topper, &results.lower, &totalMarks, &count, &course_name);
-    
+    traverseForCourseSummary(root, course_name, &results.topper, &results.lower, &totalMarks, &count);
+    strncpy(results.course_name, course_name, sizeof(results.course_name) - 1);
     results.average = (count > 0) ? totalMarks / count : 0.0;
     results.count = count;
     
@@ -65,7 +65,7 @@ struct SummaryResults getcourseSummaryResults(const StudentRecord *root, const c
 // New traversal function that filters by course
 void traverseForCourseSummary(const StudentRecord *node, const char *course_name,
                              const StudentRecord **topper, const StudentRecord **lower,
-                             float *totalMarks, int *count, const char **course_name_out) {
+                             float *totalMarks, int *count) {
     if (node == NULL || course_name == NULL) return;
     
     // Convert both strings to lowercase for case-insensitive comparison
@@ -82,7 +82,6 @@ void traverseForCourseSummary(const StudentRecord *node, const char *course_name
     if (strcmp(node_course, target_course) == 0) {
         *totalMarks += node->mark;
         (*count)++;
-        *course_name_out = node->programme;
         
         // Initialize topper and lower if this is the first valid student
         if (*topper == NULL) {
@@ -95,8 +94,8 @@ void traverseForCourseSummary(const StudentRecord *node, const char *course_name
     }
     
     // Continue traversal
-    traverseForCourseSummary(node->left, course_name, topper, lower, totalMarks, count, course_name_out);
-    traverseForCourseSummary(node->right, course_name, topper, lower, totalMarks, count, course_name_out);
+    traverseForCourseSummary(node->left, course_name, topper, lower, totalMarks, count);
+    traverseForCourseSummary(node->right, course_name, topper, lower, totalMarks, count);
 }
 
 // Rest of your functions remain the same...
@@ -144,12 +143,11 @@ void displaysummary(const StudentRecord *root, const char *filter) {
 }
 
 void traverseForSummary(const StudentRecord *node, const StudentRecord **topper,
-                        const StudentRecord **lower, float *totalMarks, int *count,char *course_name) {
+                        const StudentRecord **lower, float *totalMarks, int *count) {
     if (node == NULL) return;
     
     *totalMarks += node->mark;
     (*count)++;
-    *course_name = node->programme;
     
     if (*topper == NULL) {
         *topper = node;
@@ -159,8 +157,8 @@ void traverseForSummary(const StudentRecord *node, const StudentRecord **topper,
         if (node->mark < (*lower)->mark) *lower = node;
     }
     
-    traverseForSummary(node->left, topper, lower, totalMarks, count, course_name);
-    traverseForSummary(node->right, topper, lower, totalMarks, count, course_name);
+    traverseForSummary(node->left, topper, lower, totalMarks, count);
+    traverseForSummary(node->right, topper, lower, totalMarks, count);
 }
 
 struct SummaryResults getSummaryResults(const StudentRecord *root) {
@@ -179,7 +177,7 @@ struct SummaryResults getSummaryResults(const StudentRecord *root) {
     float totalMarks = 0.0;
     int count = 0;
     
-    traverseForSummary(root, &results.topper, &results.lower, &totalMarks, &count, results.course_name);
+    traverseForSummary(root, &results.topper, &results.lower, &totalMarks, &count);
     
     results.average = (count > 0) ? totalMarks / count : 0.0;
     results.count = count;
