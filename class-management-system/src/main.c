@@ -1,4 +1,5 @@
 #include "../include/command_parser.h"
+#include "../include/config.h"
 #include "../include/database.h"
 #include "../include/services/journal.h"
 #include "../include/services/log.h"
@@ -7,7 +8,7 @@
 int main() {
   StudentRecord *root = NULL;
   char input[256];
-  const char *db_filename = "data/P3_7-CMS.txt"; // db filename
+  const char *db_filename = DB_FILE; // db filename
 
   init_log();     // init log
   init_journal(); // init state manager & load last change_id

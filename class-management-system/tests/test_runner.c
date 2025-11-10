@@ -1,12 +1,21 @@
 #include "unity/src/unity.h"
 
+// setUp & tearDown is provided by unity
+void setUp(void) {}
+void tearDown(void) {}
+
+// func prototypes for test suites
 void run_str_utils_tests(void);
+void run_file_utils_tests(void);
+void run_integration_tests(void);
 
 int main(void) {
-    UNITY_BEGIN();
+  UNITY_BEGIN();
 
-    // run tests
-    run_str_utils_tests();
+  // run all test suites
+  run_str_utils_tests();
+  run_file_utils_tests();
+  run_integration_tests();
 
-    return UNITY_END();
+  return UNITY_END();
 }

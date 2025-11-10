@@ -52,9 +52,8 @@ void openDatabase(StudentRecord **root, const char *filename) {
       fprintf(new_file, "Table Name: StudentRecords\n");
       fprintf(new_file, "ID\tName\tProgramme\tMark\n");
       fclose(new_file);
-      printf(
-          "CMS: The database file \"%s\" was not found. A new one has been created.\n",
-          filename);
+      printf("CMS: The database file \"%s\" was not found. A new one has been created.\n",
+             filename);
     } else {
       perror("CMS: Error creating database file");
     }
@@ -102,7 +101,8 @@ void showAll(const StudentRecord *root) {
 }
 
 // insert new record to bst (sorted by id)
-// O(log n) avg case. O(n) worst case if bst degenerates to a linked list (eg every new id is lower than root id)
+// O(log n) avg case. O(n) worst case if bst degenerates to a linked list (eg every new id is lower
+// than root id)
 void insertRecord(StudentRecord **root, int id, const char *name, const char *programme,
                   float mark) {
   // NOTE: check if record already exists

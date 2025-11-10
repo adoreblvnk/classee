@@ -41,9 +41,14 @@ if(BUILD_TESTING)
   # build `run_tests` executable
   add_executable(run_tests
     tests/test_runner.c # test runner w main func
-    tests/test_utils.c
+    tests/test_str_utils.c
+    tests/test_file_utils.c
+    tests/test_integration.c  # integration tests
     ${CMS_SOURCES}
   )
+
+  # Define the TESTING macro only for the run_tests target
+  target_compile_definitions(run_tests PRIVATE TESTING)
 
   # look for headers inside `include` dir & `tests` dir (for Unity)
   target_include_directories(run_tests PUBLIC include PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)

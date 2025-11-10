@@ -1,4 +1,5 @@
 #include "../../include/services/journal.h"
+#include "../../include/config.h"
 #include "../../include/database.h"
 #include "../../include/services/log.h"
 #include "../../include/utils/file_utils.h"
@@ -8,8 +9,6 @@
 #include <string.h>
 #include <time.h>
 
-static const char *JOURNAL_FILE = "data/cms.journal";
-static const char *TEMP_JOURNAL_FILE = "data/cms.journal.tmp";
 static const char *JOURNAL_HEADER = "change_id,command,id,name,programme,mark,time\n";
 
 // init journal
@@ -44,7 +43,7 @@ void resetState(StudentRecord **root, int target_change_id) {
     printf("CMS: Journal file not found. Cannot reset.\n");
     return;
   }
-  FILE *temp_journal_file = fopen(TEMP_JOURNAL_FILE, "w");
+  FILE *temp_journal_file = fopen(JOURNAL_TMP_FILE, "w");
   if (!temp_journal_file) {
     fclose(journal_file);
     printf("CMS: Could not create temp file for reset.\n");
@@ -80,7 +79,7 @@ void resetState(StudentRecord **root, int target_change_id) {
   fclose(temp_journal_file);
   // replace the old log with the new, truncated one
   remove(JOURNAL_FILE);
-  rename(TEMP_JOURNAL_FILE, JOURNAL_FILE);
+  rename(JOURNAL_TMP_FILE, JOURNAL_FILE);
 
   // NOTE: DON'T F***ING RESET THE GLOBAL change_id COUNTER ELSE THERE'LL BE DUPLICATES
   printf("CMS: Database state has been reset to change #%d.\n", target_change_id);

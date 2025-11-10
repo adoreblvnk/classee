@@ -1,11 +1,11 @@
 #include "../../include/services/log.h"
 #include "../../include/utils/file_utils.h"
+#include "../../include/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 static int current_change_id = 0;
-static const char *LOG_FILE = "data/cms.log";
 static const char *LOG_HEADER = "change_id,command,id,name,programme,mark,time,is_change\n";
 
 // getter func for the current change_id
