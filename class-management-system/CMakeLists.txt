@@ -34,7 +34,7 @@ if(BUILD_TESTING)
     Unity
     GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
     GIT_TAG        v2.5.2
-    SOURCE_DIR     ${CMAKE_CURRENT_SOURCE_DIR}/tests/unity
+    # NOTE: Removed SOURCE_DIR for better practice, letting CMake manage the download location.
   )
   FetchContent_MakeAvailable(Unity)
 
@@ -51,10 +51,14 @@ if(BUILD_TESTING)
   target_compile_definitions(run_tests PRIVATE TESTING)
 
   # look for headers inside `include` dir & `tests` dir (for Unity)
-  target_include_directories(run_tests PUBLIC include PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+  target_include_directories(run_tests PUBLIC include PRIVATE tests)
   # use `unity` lib when linking
   target_link_libraries(run_tests PRIVATE unity)
 
   # register run_tests with CTest
-  add_test(NAME UnitTests COMMAND run_tests)
+  add_test(
+    NAME UnitTests 
+    COMMAND $<TARGET_FILE:run_tests>
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
 endif()
