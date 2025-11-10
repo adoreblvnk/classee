@@ -1,5 +1,5 @@
-#ifndef CMS_H
-#define CMS_H
+#ifndef DATABASE_H
+#define DATABASE_H
 
 #include "types.h"
 #include <ctype.h>
@@ -15,4 +15,7 @@ void showAll(const StudentRecord *root);
 void insertRecord(StudentRecord **root, int id, const char *name, const char *programme, float mark);
 void saveDatabase(const StudentRecord *root, const char *filename);
 
-#endif // CMS_H
+// bst helpers
+void freeTree(StudentRecord *root);
+
+#endif // DATABASE_H

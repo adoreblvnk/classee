@@ -1,7 +1,8 @@
 #include "../include/command_parser.h"
-#include "../include/journal.h"
-#include "../include/log.h"
-#include "../include/utils.h"
+#include "../include/database.h"
+#include "../include/services/journal.h"
+#include "../include/services/log.h"
+#include "../include/utils/str_utils.h"
 
 int main() {
   StudentRecord *root = NULL;

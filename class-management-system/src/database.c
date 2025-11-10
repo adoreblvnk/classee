@@ -1,9 +1,9 @@
-#include "../include/cms.h"
-#include "../include/utils.h"
+#include "../include/database.h"
 
 // forward declarations for recursive helpers (only used in this file)
 static void showInOrder(const StudentRecord *root);
 static void saveInOrder(const StudentRecord *root, FILE *file);
+static void printRecord(const StudentRecord *record);
 
 // helper for showall
 static void showInOrder(const StudentRecord *root) {
@@ -23,15 +23,41 @@ static void saveInOrder(const StudentRecord *root, FILE *file) {
   }
 }
 
+// print single student record, formatted
+static void printRecord(const StudentRecord *record) {
+  if (record) {
+    printf("%-8d %-20s %-25s %-5.1f\n", record->id, record->name, record->programme, record->mark);
+  }
+}
+
+// free all mem used by bst
+void freeTree(StudentRecord *root) {
+  if (root == NULL) { return; }
+  freeTree(root->left);
+  freeTree(root->right);
+  free(root);
+}
+
 // core logic
 
 // open db file & load records to bst
 void openDatabase(StudentRecord **root, const char *filename) {
   FILE *file = fopen(filename, "r");
   if (!file) {
-    printf("CMS: The database file \"%s\" could not be opened. A new one will be created upon "
-           "saving.\n",
-           filename);
+    // if file doesn't exist, create it with a default header
+    FILE *new_file = fopen(filename, "w");
+    if (new_file) {
+      fprintf(new_file, "Database Name: INF1002-CMS\n");
+      fprintf(new_file, "Authors: \n\n");
+      fprintf(new_file, "Table Name: StudentRecords\n");
+      fprintf(new_file, "ID\tName\tProgramme\tMark\n");
+      fclose(new_file);
+      printf(
+          "CMS: The database file \"%s\" was not found. A new one has been created.\n",
+          filename);
+    } else {
+      perror("CMS: Error creating database file");
+    }
     return;
   }
 
@@ -40,9 +66,13 @@ void openDatabase(StudentRecord **root, const char *filename) {
   *root = NULL;
 
   char line[256];
-  // skip the 5 header lines (db name, authors, blank line, table name, col headers)
+  // skip the 5 header lines & check for read errors
   for (int i = 0; i < 5; i++) {
-    fgets(line, sizeof(line), file);
+    if (fgets(line, sizeof(line), file) == NULL) {
+      printf("CMS: Error reading header from database file or file is malformed.\n");
+      fclose(file);
+      return;
+    }
   }
 
   int id;

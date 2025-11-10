@@ -1,7 +1,7 @@
 #ifndef COMMAND_PARSER_H
 #define COMMAND_PARSER_H
 
-#include "cms.h"
+#include "database.h"
 
 // parse cmds & their args
 void processCommand(StudentRecord **root, char *input, const char *db_filename);

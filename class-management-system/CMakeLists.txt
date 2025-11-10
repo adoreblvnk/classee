@@ -10,11 +10,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # set all source files (files without a main func)
 set(CMS_SOURCES
   src/command_parser.c
-  src/cms.c
-  src/log.c
-  src/journal.c
+  src/database.c
   src/summary.c
-  src/utils.c
+  src/services/log.c
+  src/services/journal.c
+  src/utils/file_utils.c
+  src/utils/str_utils.c
 )
 
 # build `cms` executable

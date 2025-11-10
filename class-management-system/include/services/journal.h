@@ -1,7 +1,7 @@
 #ifndef JOURNAL_H
 #define JOURNAL_H
 
-#include "types.h"
+#include "../types.h"
 
 // init journal, creates file if not exists
 void init_journal();

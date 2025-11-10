@@ -1,8 +1,8 @@
 #include "../include/command_parser.h"
-#include "../include/journal.h"
-#include "../include/log.h"
+#include "../include/services/journal.h"
+#include "../include/services/log.h"
 #include "../include/summary.h"
-#include "../include/utils.h"
+#include "../include/utils/str_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

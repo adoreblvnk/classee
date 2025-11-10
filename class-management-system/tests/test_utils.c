@@ -1,4 +1,4 @@
-#include "../include/utils.h"
+#include "../include/utils/str_utils.h" // updated include path
 #include "unity/src/unity.h"
 
 // setUp and tearDown are special functions Unity runs before and after each test
@@ -24,7 +24,7 @@ void test_util_strcasecmp_return_non_zero_for_different_strings(void) {
 }
 
 // this function is called by the test runner
-void run_utils_tests(void) {
+void run_str_utils_tests(void) {
   RUN_TEST(test_util_strcasecmp_return_zero_for_identical_strings);
   RUN_TEST(test_util_strcasecmp_return_zero_for_different_case_strings);
   RUN_TEST(test_util_strcasecmp_return_non_zero_for_different_strings);

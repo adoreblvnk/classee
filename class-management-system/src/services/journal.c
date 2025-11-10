@@ -1,7 +1,8 @@
-#include "../include/journal.h"
-#include "../include/cms.h"
-#include "../include/log.h" // For getCurrentChangeIdAndIncr()
-#include "../include/utils.h"
+#include "../../include/services/journal.h"
+#include "../../include/database.h"
+#include "../../include/services/log.h"
+#include "../../include/utils/file_utils.h"
+#include "../../include/utils/str_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,14 +13,7 @@ static const char *TEMP_JOURNAL_FILE = "data/cms.journal.tmp";
 static const char *JOURNAL_HEADER = "change_id,command,id,name,programme,mark,time\n";
 
 // init journal
-void init_journal() {
-  // ensures journal file exists with a header
-  FILE *journal_file = fopen(JOURNAL_FILE, "a");
-  if (journal_file) {
-    if (ftell(journal_file) == 0) { fprintf(journal_file, "%s", JOURNAL_HEADER); }
-    fclose(journal_file);
-  }
-}
+void init_journal() { init_data_file(JOURNAL_FILE, JOURNAL_HEADER); }
 
 // log a state-changing cmd to journal file
 // NOTE: call this func after log_command() as it increments global change_id counter
@@ -37,30 +31,10 @@ void log_journal_command(const char *command, int id, const char *name, const ch
 
 // display the mutable command journal (7-columns)
 void showJournal() {
-  FILE *file = fopen(JOURNAL_FILE, "r");
-  if (!file) {
-    printf("CMS: Journal file not found.\n");
-    return;
-  }
-  char line[512];
-  printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", "Change ID", "Command", "ID", "Name",
-         "Programme", "Mark", "Timestamp");
-  fgets(line, sizeof(line), file); // skip header
-  while (fgets(line, sizeof(line), file)) {
-    char *cols[7];
-    int col_count = 0;
-    char *line_ptr = line;
-    while ((cols[col_count] = util_strsep(&line_ptr, ",\n")) != NULL && col_count < 7) {
-      col_count++;
-    }
-    if (col_count < 7) { continue; }
-    time_t raw_time = atol(cols[6]);
-    char formatted_time[50];
-    strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
-    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", cols[0], cols[1], cols[2], cols[3], cols[4],
-           cols[5], formatted_time);
-  }
-  fclose(file);
+  char header_buffer[256];
+  sprintf(header_buffer, "%-10s %-15s %-8s %-20s %-25s %-5s %-20s", "Change ID", "Command", "ID",
+          "Name", "Programme", "Mark", "Timestamp");
+  display_data_file(JOURNAL_FILE, "Journal", header_buffer, 0); // 0 for journal
 }
 
 // reset db state from journal to target change id & truncates journal file

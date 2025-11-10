@@ -1,22 +1,7 @@
-#include "../include/utils.h"
-#include <ctype.h> // for tolower
+#include "../../include/utils/str_utils.h"
+#include <ctype.h>
 #include <stdio.h>
-#include <stdlib.h>
-
-// free all mem used by bst
-void freeTree(StudentRecord *root) {
-  if (root == NULL) { return; }
-  freeTree(root->left);
-  freeTree(root->right);
-  free(root);
-}
-
-// print single student record, formatted
-void printRecord(const StudentRecord *record) {
-  if (record) {
-    printf("%-8d %-20s %-25s %-5.1f\n", record->id, record->name, record->programme, record->mark);
-  }
-}
+#include <string.h>
 
 // our version of POSIX strcasecmp (case-insensitive string comparison)
 int util_strcasecmp(const char *s1, const char *s2) {
