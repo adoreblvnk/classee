@@ -12,7 +12,6 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   char *command = strtok(input, " \n");
   if (!command) { return; }
   char *args = strtok(NULL, "\n");
- 
 
   if (util_strcasecmp(command, "OPEN") == 0) {
     openDatabase(root, db_filename);
@@ -33,11 +32,9 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       char *course_arg = args + strlen(show_arg) + 1;
       if (course_arg) {
         // SHOW SUMMARY <course_name> - use displaysummary with course name
-        printf("Detected course argument for SUMMARY: %s\n", course_arg);
         displaysummary(*root, course_arg);
         log_command("show summary course", 0, course_arg, NULL, 0.0, 0);
         if (course_arg== "all" || course_arg== "ALL") {
-          printf("Detected 'all' argument, displaying summary for all courses.\n");
           displaysummary(*root, "ALL");
           log_command("show summary", 0, NULL, NULL, 0.0, 0);
         }
@@ -59,7 +56,24 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   } else if (util_strcasecmp(command, "SAVE") == 0) {
     saveDatabase(*root, db_filename);
     log_command("save", 0, NULL, NULL, 0.0, 0);
-  } else if (util_strcasecmp(command, "RESET") == 0) {
+  } 
+  else if (util_strcasecmp(command, "HELP") == 0) {
+  printf("---------------------\n");
+  printf("CMS Commands:\n");
+  printf("  OPEN                - Open the database file.\n");
+  printf("  SHOW ALL            - Display all student records.\n");
+  printf("  SHOW SUMMARY ALL    - Display summary statistics for all courses.\n");
+  printf("  SHOW SUMMARY [course_name] - Display summary statistics. Optionally filter by course.\n");
+  printf("  SHOW LOG            - Display the command log.\n");
+  printf("  SHOW JOURNAL        - Display the journal of changes.\n");
+  printf("  SAVE                - Save the current database to file.\n");
+  printf("  RESET <change_id>   - Reset the database to a previous state based on change ID.\n");
+  printf("  HELP                - Show this help message.\n");
+  printf("  EXIT                - Exit the program.\n");
+  printf("\n");
+  printf("---------------------\n");
+  }
+  else if (util_strcasecmp(command, "RESET") == 0) {
     if (args) {
       resetState(root, atoi(args));
       log_command("reset", atoi(args), NULL, NULL, 0.0, 0);

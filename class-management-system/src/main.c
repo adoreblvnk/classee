@@ -14,7 +14,21 @@ int main() {
   init_journal(); // init state manager & load last change_id
 
   printf("Class Management System (CMS) Initialized.\n");
-  printf("Type 'OPEN' to load the database or 'EXIT' to quit.\n");
+  printf("---------------------\n");
+  printf("CMS Commands:\n");
+  printf("  OPEN                - Open the database file.\n");
+  printf("  SHOW ALL            - Display all student records.\n");
+  printf("  SHOW SUMMARY ALL    - Display summary statistics for all courses.\n");
+  printf("  SHOW SUMMARY [course_name] - Display summary statistics. Optionally filter by course.\n");
+  printf("  SHOW LOG            - Display the command log.\n");
+  printf("  SHOW JOURNAL        - Display the journal of changes.\n");
+  printf("  SAVE                - Save the current database to file.\n");
+  printf("  RESET <change_id>   - Reset the database to a previous state based on change ID.\n");
+  printf("  HELP                - Show this help message.\n");
+  printf("  EXIT                - Exit the program.\n");
+  printf("\n");
+  printf("---------------------\n");
+  printf("Type open to load the database.\n");
 
   while (1) {
     printf("P3_7: ");
