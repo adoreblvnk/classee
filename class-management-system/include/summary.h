@@ -17,6 +17,6 @@ struct SummaryResults getcourseSummaryResults(const StudentRecord *root, const c
 int isValidCourse(const StudentRecord *root, const char *course_name);
 void traverseForCourseSummary(const StudentRecord *node, const char *course_name,
                              const StudentRecord **topper, const StudentRecord **lower,
-                             float *totalMarks, int *count, char const **course_name_out);
+                             float *totalMarks, int *count, char **course_name_out);
 
 #endif

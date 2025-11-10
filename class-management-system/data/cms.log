@@ -199,3 +199,4 @@ change_id,command,id,name,programme,mark,time,is_change
 144,open,,,,,1762767531,0
 145,show summary course,,,,,1762767533,0
 146,show summary course,,,,,1762767534,0
+change_id,command,id,name,programme,mark,time,is_change
