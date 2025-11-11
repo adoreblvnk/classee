@@ -16,6 +16,7 @@ set(CMS_SOURCES
   src/services/journal.c
   src/utils/file_utils.c
   src/utils/str_utils.c
+  src/utils/print_util.c
 )
 
 # build `cms` executable

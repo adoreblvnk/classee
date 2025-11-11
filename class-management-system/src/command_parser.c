@@ -3,6 +3,7 @@
 #include "../include/services/log.h"
 #include "../include/summary.h"  
 #include "../include/utils/str_utils.h"
+#include "../include/utils/print_util.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,20 +59,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     log_command("save", 0, NULL, NULL, 0.0, 0);
   } 
   else if (util_strcasecmp(command, "HELP") == 0) {
-  printf("---------------------\n");
-  printf("CMS Commands:\n");
-  printf("  OPEN                - Open the database file.\n");
-  printf("  SHOW ALL            - Display all student records.\n");
-  printf("  SHOW SUMMARY ALL    - Display summary statistics for all courses.\n");
-  printf("  SHOW SUMMARY [course_name] - Display summary statistics. Optionally filter by course.\n");
-  printf("  SHOW LOG            - Display the command log.\n");
-  printf("  SHOW JOURNAL        - Display the journal of changes.\n");
-  printf("  SAVE                - Save the current database to file.\n");
-  printf("  RESET <change_id>   - Reset the database to a previous state based on change ID.\n");
-  printf("  HELP                - Show this help message.\n");
-  printf("  EXIT                - Exit the program.\n");
-  printf("\n");
-  printf("---------------------\n");
+    printMenu();
   }
   else if (util_strcasecmp(command, "RESET") == 0) {
     if (args) {

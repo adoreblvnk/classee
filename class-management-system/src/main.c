@@ -4,6 +4,7 @@
 #include "../include/services/journal.h"
 #include "../include/services/log.h"
 #include "../include/utils/str_utils.h"
+#include "../include/utils/print_util.h"
 
 int main() {
   StudentRecord *root = NULL;
@@ -13,22 +14,7 @@ int main() {
   init_log();     // init log
   init_journal(); // init state manager & load last change_id
 
-  printf("Class Management System (CMS) Initialized.\n");
-  printf("---------------------\n");
-  printf("CMS Commands:\n");
-  printf("  OPEN                - Open the database file.\n");
-  printf("  SHOW ALL            - Display all student records.\n");
-  printf("  SHOW SUMMARY ALL    - Display summary statistics for all courses.\n");
-  printf("  SHOW SUMMARY [course_name] - Display summary statistics. Optionally filter by course.\n");
-  printf("  SHOW LOG            - Display the command log.\n");
-  printf("  SHOW JOURNAL        - Display the journal of changes.\n");
-  printf("  SAVE                - Save the current database to file.\n");
-  printf("  RESET <change_id>   - Reset the database to a previous state based on change ID.\n");
-  printf("  HELP                - Show this help message.\n");
-  printf("  EXIT                - Exit the program.\n");
-  printf("\n");
-  printf("---------------------\n");
-  printf("Type open to load the database.\n");
+  printMenu();
 
   while (1) {
     printf("P3_7: ");
