@@ -79,6 +79,6 @@ int main(int argc, char *argv[]) {
   }
 
   fclose(file);
-  printf("generated %d records in '%s' with %s ids\n", num_records, argv[2], argv[3]);
+  printf("generated %d records in '%s'\n", num_records, argv[2]);
   return 0;
 }
