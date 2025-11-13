@@ -1,4 +1,6 @@
 #include "../include/database.h"
+#include "../include/config.h"
+#include <time.h>
 
 // forward declarations for recursive helpers (only used in this file)
 static void showInOrder(const StudentRecord *root);
@@ -27,6 +29,18 @@ static void saveInOrder(const StudentRecord *root, FILE *file) {
 static void printRecord(const StudentRecord *record) {
   if (record) {
     printf("%-8d %-20s %-25s %-5.1f\n", record->id, record->name, record->programme, record->mark);
+  }
+}
+
+// shuffles records array in place. This prevents BST degenerating into a linked list
+static void fisher_yates_shuffle(StudentRecord records[], int n) {
+  if (n > 1) {
+    for (int i = n - 1; i > 0; i--) {
+      int j = rand() % (i + 1); // get random index from 0 to i
+      StudentRecord temp = records[i];
+      records[i] = records[j];
+      records[j] = temp;
+    }
   }
 }
 
@@ -74,17 +88,49 @@ void openDatabase(StudentRecord **root, const char *filename) {
     }
   }
 
-  int id;
-  char name[MAX_NAME_LEN], programme[MAX_PROG_LEN];
-  float mark;
+  // create a temp array to shuffle records before inserting to BST
+  long start_pos = ftell(file); // not 0 cah we read header lines
+  int record_count = 0;
+  while (fgets(line, sizeof(line), file)) {
+    record_count++;
+  }
+
+  if (record_count == 0) {
+    fclose(file);
+    printf("CMS: The database file \"%s\" is open, but contains no records.\n", filename);
+    return;
+  }
+
+  // allocate memory for temp array
+  StudentRecord *records = (StudentRecord *)malloc(record_count * sizeof(StudentRecord));
+  if (!records) {
+    fclose(file);
+    perror("failed to allocate memory for records");
+    return;
+  }
+
+  fseek(file, start_pos, SEEK_SET); // reset file ptr
 
   // parse file & insert to bst, %[^\t] is a scanset that reads until tab
   // NOTE: must be separated by tabs!
-  while (fscanf(file, "%d\t%[^\t]\t%[^\t]\t%f\n", &id, name, programme, &mark) == 4) {
-    insertRecord(root, id, name, programme, mark);
+  int i = 0;
+  while (i < record_count && fscanf(file, "%d\t%[^\t]\t%[^\t]\t%f\n", &records[i].id, records[i].name, records[i].programme, &records[i].mark) == 4) {
+    i++;
+  }
+  fclose(file);
+
+  // shuffle array to balance BST during initial insertion
+#if SHUFFLE
+  srand(time(NULL));
+  fisher_yates_shuffle(records, record_count);
+#endif
+
+  // insert records from shuffled array
+  for (i = 0; i < record_count; i++) {
+    insertRecord(root, records[i].id, records[i].name, records[i].programme, records[i].mark);
   }
 
-  fclose(file);
+  free(records); // free temp arr
   printf("CMS: The database file \"%s\" is successfully opened.\n", filename);
 }
 

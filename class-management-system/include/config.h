@@ -1,6 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define SHUFFLE 1
 #ifdef TESTING
 // test file paths
 #define DB_FILE "test_P3_7.txt"
