@@ -36,28 +36,28 @@ void display_data_file(const char *filename, const char *title_for_error,
 
 // helper for showLog & showJournal, prints a formatted entry from a csv line
 void print_log_or_journal_entry(char *line, int is_log) {
-  int num_cols = is_log ? 8 : 7;
-  char *cols[8]; // max of 8 cols
+  int num_cols_to_parse = is_log ? 4 : 7;
+  char *cols[8]; // max of 8 cols is safe
   int col_count = 0;
   char *line_ptr = line;
 
   // parse csv line
-  while ((cols[col_count] = util_strsep(&line_ptr, ",\n")) != NULL && col_count < num_cols) {
+  while ((cols[col_count] = util_strsep(&line_ptr, ",\n")) != NULL &&
+         col_count < num_cols_to_parse) {
     col_count++;
   }
+  if (col_count < num_cols_to_parse) { return; } // skip malformed lines
 
-  if (col_count < num_cols) { return; } // skip malformed lines
-
-  // format timestamp
-  time_t raw_time = atol(cols[6]);
   char formatted_time[50];
-  strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
-
   if (is_log) {
-    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s %-s\n", cols[0], cols[1], cols[2], cols[3],
-           cols[4], cols[5], formatted_time, (atoi(cols[7]) == 1 ? "Yes" : "No"));
+    time_t raw_time = atol(cols[2]); // time is at index 2 for log
+    strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
+    printf("%-10s %-35s %-20s %-s\n", cols[0], cols[1], formatted_time,
+           (atoi(cols[3]) == 1 ? "Yes" : "No"));
   } else { // is journal
-    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", cols[0], cols[1], cols[2], cols[3], cols[4],
-           cols[5], formatted_time);
+    time_t raw_time = atol(cols[6]); // time is at index 6 for journal
+    strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
+    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", cols[0], cols[1], cols[2], cols[3],
+           cols[4], cols[5], formatted_time);
   }
 }

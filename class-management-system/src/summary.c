@@ -1,5 +1,6 @@
 #include "../include/summary.h"
 #include "../include/database.h"
+#include "../include/utils/str_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -109,7 +110,7 @@ void displaysummary(const StudentRecord *root, const char *filter) {
         return;
     }
     
-    if (strcmp(filter, "all") == 0) {
+    if (util_strcasecmp(filter, "all") == 0) {
         printf("Displaying summary for all courses:\n");
         struct SummaryResults results = getSummaryResults(root);
         // Handle case with no records

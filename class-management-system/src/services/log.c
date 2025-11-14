@@ -1,12 +1,12 @@
 #include "../../include/services/log.h"
-#include "../../include/utils/file_utils.h"
 #include "../../include/config.h"
+#include "../../include/utils/file_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 static int current_change_id = 0;
-static const char *LOG_HEADER = "change_id,command,id,name,programme,mark,time,is_change\n";
+static const char *LOG_HEADER = "change_id,command,time,is_change\n";
 
 // getter func for the current change_id
 int getCurrentChangeId(void) { return current_change_id; }
@@ -36,27 +36,19 @@ void init_log() {
 }
 
 // log any cmd (only append)
-void log_command(const char *command, int id, const char *name, const char *programme, float mark,
-                 int is_change) {
+void log_command(const char *command, int is_change) {
   FILE *log_file = fopen(LOG_FILE, "a");
   if (log_file) {
     int change_id = getCurrentChangeIdAndIncr();
     long int timestamp = time(NULL);
-    fprintf(log_file, "%d,%s,", change_id, command);
-    if (is_change) {
-      fprintf(log_file, "%d,%s,%s,%.1f,", id, name, programme, mark);
-    } else {
-      fprintf(log_file, ",,,,"); // empty placeholders for non-modifying cmds
-    }
-    fprintf(log_file, "%ld,%d\n", timestamp, is_change);
+    fprintf(log_file, "%d,%s,%ld,%d\n", change_id, command, timestamp, is_change);
     fclose(log_file);
   }
 }
 
-// display the immutable log entries (8-columns)
+// display the immutable log entries (4-columns)
 void showLog() {
   char header_buffer[256];
-  sprintf(header_buffer, "%-10s %-15s %-8s %-20s %-25s %-5s %-20s %-s", "Change ID", "Command",
-          "ID", "Name", "Programme", "Mark", "Timestamp", "Change");
+  sprintf(header_buffer, "%-10s %-35s %-20s %-s", "Change ID", "Command", "Timestamp", "Change");
   display_data_file(LOG_FILE, "Log", header_buffer, 1); // 1 for log
 }

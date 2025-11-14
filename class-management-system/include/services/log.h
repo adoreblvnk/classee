@@ -11,8 +11,7 @@ int getCurrentChangeIdAndIncr(void);
 void init_log();
 
 // log any cmd to the immutable log file
-void log_command(const char *command, int id, const char *name, const char *programme, float mark,
-                 int is_change);
+void log_command(const char *command, int is_change);
 
 // display the immutable log entries
 void showLog();

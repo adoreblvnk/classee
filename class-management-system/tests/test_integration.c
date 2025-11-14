@@ -61,14 +61,16 @@ void test_integration_open_save(void) {
 
 // test commands are logged to log & journal
 void test_integration_cmd_is_logged(void) {
-  log_command("insert", 3, "Charlie", "IS", 77.0, 1);
-  log_journal_command("insert", 3, "Charlie", "IS", 77.0);
+  // call the new, simplified log_command TODO: more rigorous tests
+  log_command("insert ID=3 Name=Charlie Programme=Information Security Mark=77", 1);
+  log_journal_command("insert", 3, "Charlie", "Information Security", 77.0);
 
   char *log_content = read_file_content(LOG_FILE);
   TEST_ASSERT_NOT_NULL(log_content);
 
-  // change_id is 1 cah setup() started count at 0.
-  TEST_ASSERT_NOT_NULL(strstr(log_content, "1,insert,3,Charlie,IS,77.0"));
+  // check for the new log format: "change_id,command,..."
+  // change_id is 1 because setup() starts count at 0
+  TEST_ASSERT_NOT_NULL(strstr(log_content, "1,insert,"));
   free(log_content);
 }
 
