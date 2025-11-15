@@ -82,7 +82,7 @@ void traverseForCourseSummary(const StudentRecord *node, const char *course_name
     toLowerString(target_course);
     
     // Only process students in the specified course
-    if (strcmp(node_course, target_course) == 0) {
+    if (util_strcasecmp(node_course, target_course) == 0) {
         // Accumulate stats
         *totalMarks += node->mark;
         (*count)++;

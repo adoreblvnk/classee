@@ -13,6 +13,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   char *command = util_strsep(&input, " \n");
   if (!command || *command == '\0') { return; }
   char *args = input; // rest of str are args
+  args[strcspn(args, "\n")] = 0; // rm \n
   // copy command to str for logging later
   char log_buf[100]; // copy full cmd after command
   sprintf(log_buf, "%s %s", command, args);
