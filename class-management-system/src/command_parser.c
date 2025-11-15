@@ -1,5 +1,5 @@
 #include "../include/command_parser.h"
-#include "../include/services/journal.h"
+#include "../include/services/transaction_log.h"
 #include "../include/services/log.h"
 #include "../include/summary.h"
 #include "../include/utils/print_util.h"
@@ -42,8 +42,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       }
     } else if (util_strcasecmp(show_arg, "LOG") == 0) {
       showLog();
-    } else if (util_strcasecmp(show_arg, "JOURNAL") == 0) {
-      showJournal();
+    } else if (util_strcasecmp(show_arg, "TLOG") == 0) {
+      show_tlog();
     } else {
       printf("CMS: Invalid argument for SHOW command.\n");
       return;
@@ -52,12 +52,12 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     saveDatabase(*root, db_filename);
   } else if (util_strcasecmp(command, "HELP") == 0) {
     printMenu();
-  } else if (util_strcasecmp(command, "RESET") == 0) {
+  } else if (util_strcasecmp(command, "ROLLBACK") == 0) {
     if (args && *args != '\0') {
-      resetState(root, atoi(args));
+      perform_rollback(root, atoi(args));
       log_flag = 1; // changes state
     } else {
-      printf("CMS: Missing change ID for RESET.\n");
+      printf("CMS: Missing change ID for ROLLBACK.\n");
       return;
     }
   } else {

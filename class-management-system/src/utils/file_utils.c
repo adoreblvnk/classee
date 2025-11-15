@@ -14,7 +14,7 @@ void init_data_file(const char *filename, const char *header) {
   }
 }
 
-// generic display func for log & journal
+// generic display func for log & transaction log
 void display_data_file(const char *filename, const char *title_for_error,
                        const char *formatted_header, int is_log_format) {
   FILE *file = fopen(filename, "r");
@@ -34,7 +34,7 @@ void display_data_file(const char *filename, const char *title_for_error,
   fclose(file);
 }
 
-// helper for showLog & showJournal, prints a formatted entry from a csv line
+// helper for showLog & show_tlog, prints a formatted entry from a csv line
 void print_log_or_journal_entry(char *line, int is_log) {
   int num_cols_to_parse = is_log ? 4 : 7;
   char *cols[8]; // max of 8 cols is safe
@@ -54,8 +54,8 @@ void print_log_or_journal_entry(char *line, int is_log) {
     strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
     printf("%-10s %-35s %-20s %-s\n", cols[0], cols[1], formatted_time,
            (atoi(cols[3]) == 1 ? "Yes" : "No"));
-  } else { // is journal
-    time_t raw_time = atol(cols[6]); // time is at index 6 for journal
+  } else { // is transaction log
+    time_t raw_time = atol(cols[6]); // time is at index 6 for tlog
     strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
     printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", cols[0], cols[1], cols[2], cols[3],
            cols[4], cols[5], formatted_time);

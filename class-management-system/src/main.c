@@ -1,18 +1,18 @@
 #include "../include/command_parser.h"
 #include "../include/config.h"
 #include "../include/database.h"
-#include "../include/services/journal.h"
+#include "../include/services/transaction_log.h"
 #include "../include/services/log.h"
-#include "../include/utils/str_utils.h"
 #include "../include/utils/print_util.h"
+#include "../include/utils/str_utils.h"
 
 int main() {
   StudentRecord *root = NULL;
   char input[256];
   const char *db_filename = DB_FILE; // db filename
 
-  init_log();     // init log
-  init_journal(); // init state manager & load last change_id
+  init_log();  // init log
+  init_tlog(); // init state manager & load last change_id
 
   printMenu();
 

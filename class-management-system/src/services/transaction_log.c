@@ -1,4 +1,4 @@
-#include "../../include/services/journal.h"
+#include "../../include/services/transaction_log.h"
 #include "../../include/config.h"
 #include "../../include/database.h"
 #include "../../include/services/log.h"
@@ -9,56 +9,56 @@
 #include <string.h>
 #include <time.h>
 
-static const char *JOURNAL_HEADER = "change_id,command,id,name,programme,mark,time\n";
+static const char *TLOG_HEADER = "change_id,command,id,name,programme,mark,time\n";
 
-// init journal
-void init_journal() { init_data_file(JOURNAL_FILE, JOURNAL_HEADER); }
+// init tlog
+void init_tlog() { init_data_file(TLOG_FILE, TLOG_HEADER); }
 
-// log a state-changing cmd to journal file
+// log a state-changing cmd to tlog file
 // NOTE: call this func after log_command() as it increments global change_id counter
-void log_journal_command(const char *command, int id, const char *name, const char *programme,
-                         float mark) {
-  FILE *journal_file = fopen(JOURNAL_FILE, "a");
-  if (journal_file) {
+void log_transaction(const char *command, int id, const char *name, const char *programme,
+                     float mark) {
+  FILE *tlog_file = fopen(TLOG_FILE, "a");
+  if (tlog_file) {
     int change_id = getCurrentChangeId();
     long int timestamp = time(NULL);
-    fprintf(journal_file, "%d,%s,%d,%s,%s,%.1f,%ld\n", change_id, command, id, name, programme,
-            mark, timestamp);
-    fclose(journal_file);
+    fprintf(tlog_file, "%d,%s,%d,%s,%s,%.1f,%ld\n", change_id, command, id, name ? name : "",
+            programme ? programme : "", mark, timestamp);
+    fclose(tlog_file);
   }
 }
 
-// display the mutable command journal (7-columns)
-void showJournal() {
+// display the mutable command transaction log (7-columns)
+void show_tlog() {
   char header_buffer[256];
   sprintf(header_buffer, "%-10s %-15s %-8s %-20s %-25s %-5s %-20s", "Change ID", "Command", "ID",
           "Name", "Programme", "Mark", "Timestamp");
-  display_data_file(JOURNAL_FILE, "Journal", header_buffer, 0); // 0 for journal
+  display_data_file(TLOG_FILE, "Tlog", header_buffer, 0); // 0 for tlog
 }
 
-// reset db state from journal to target change id & truncates journal file
-void resetState(StudentRecord **root, int target_change_id) {
-  FILE *journal_file = fopen(JOURNAL_FILE, "r");
-  if (!journal_file) {
-    printf("CMS: Journal file not found. Cannot reset.\n");
+// reset db state from tlog to target change id & truncates tlog file
+void perform_rollback(StudentRecord **root, int target_change_id) {
+  FILE *tlog_file = fopen(TLOG_FILE, "r");
+  if (!tlog_file) {
+    printf("CMS: Transaction log file not found. Cannot reset.\n");
     return;
   }
-  FILE *temp_journal_file = fopen(JOURNAL_TMP_FILE, "w");
-  if (!temp_journal_file) {
-    fclose(journal_file);
-    printf("CMS: Could not create temp file for reset.\n");
+  FILE *temp_tlog_file = fopen(TLOG_TMP_FILE, "w");
+  if (!temp_tlog_file) {
+    fclose(tlog_file);
+    printf("CMS: Could not create temp file for rollback.\n");
     return;
   }
   freeTree(*root); // clear current bst
   *root = NULL;
   char line[512];
   // copy header to temp log
-  if (fgets(line, sizeof(line), journal_file)) { fputs(line, temp_journal_file); }
+  if (fgets(line, sizeof(line), tlog_file)) { fputs(line, temp_tlog_file); }
 
-  while (fgets(line, sizeof(line), journal_file)) {
+  while (fgets(line, sizeof(line), tlog_file)) {
     // exit early (break) if we've passed our target change id
     if (atoi(line) > target_change_id) { break; }
-    fputs(line, temp_journal_file); // write back line to temp log
+    fputs(line, temp_tlog_file); // write back line to temp log
 
     // now, process the line to rebuild the in-memory state
     char temp_line[512];
@@ -75,11 +75,11 @@ void resetState(StudentRecord **root, int target_change_id) {
     }
     // TODO: add logic for 'update' & 'delete'
   }
-  fclose(journal_file);
-  fclose(temp_journal_file);
+  fclose(tlog_file);
+  fclose(temp_tlog_file);
   // replace the old log with the new, truncated one
-  remove(JOURNAL_FILE);
-  rename(JOURNAL_TMP_FILE, JOURNAL_FILE);
+  remove(TLOG_FILE);
+  rename(TLOG_TMP_FILE, TLOG_FILE);
 
   // NOTE: DON'T F***ING RESET THE GLOBAL change_id COUNTER ELSE THERE'LL BE DUPLICATES
   printf("CMS: Database state has been reset to change #%d.\n", target_change_id);
