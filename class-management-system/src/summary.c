@@ -119,12 +119,12 @@ void displaysummary(const StudentRecord *root, const char *filter) {
             return;
         }
         // Display results
-        printf("Topper: %s (ID: %d) with Mark: %.2f\n", 
+        printf("Overall topper: %s (ID: %d) with Mark: %.2f\n", 
             results.topper->name, results.topper->id, results.topper->mark);
-        printf("Lowest Scorer: %s (ID: %d) with Mark: %.2f\n", 
+        printf("Lowest performer: %s (ID: %d) with Mark: %.2f\n", 
             results.lower->name, results.lower->id, results.lower->mark);
-        printf("Average Mark: %.2f\n", results.average);
-        printf("Total Students: %d\n", results.count);
+        printf("Average Mark: %.2f marks\n", results.average);
+        printf("Total student population: %d\n", results.count);
     } 
     else {
         // Check if course exists before processing
@@ -141,12 +141,12 @@ void displaysummary(const StudentRecord *root, const char *filter) {
         }
         // Display results
         printf("Displaying summary for course: %s\n", results.course_name);
-        printf("Topper: %s (ID: %d) with Mark: %.2f\n", 
+        printf("Program topper: %s (ID: %d) with Mark: %.2f\n", 
             results.topper->name, results.topper->id, results.topper->mark);
-        printf("Lowest Scorer: %s (ID: %d) with Mark: %.2f\n", 
+        printf("Lowest performer in the program: %s (ID: %d) with Mark: %.2f\n", 
             results.lower->name, results.lower->id, results.lower->mark);
-        printf("Average Mark: %.2f\n", results.average);
-        printf("Total Students: %d\n", results.count);
+        printf("Program average: %.2f marks\n", results.average);
+        printf("Total students in program: %d\n", results.count);
     }
 }
 

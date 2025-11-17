@@ -1,0 +1,19 @@
+change_id,command,time,is_change
+1,open ,1763306569,0
+2,show all,1763306571,0
+3,show summary all,1763306592,0
+4,show summary Computer Science,1763306608,0
+change_id,command,time,is_change
+5,open ,1763365363,0
+6,show summary all,1763365368,0
+7,show all,1763365434,0
+8,Show summary Computer Science,1763365462,0
+9,Show summary Computer,1763365554,0
+10,show all,1763365953,0
+11,show summary all,1763365955,0
+change_id,command,time,is_change
+12,open ,1763366139,0
+13,show summary all,1763366145,0
+14,Show summary computer science,1763366169,0
+15,Show summary COMPUTER SCIENCE,1763366178,0
+16,Show summary Computer Science,1763366196,0
