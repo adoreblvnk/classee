@@ -168,6 +168,13 @@ StudentRecord* studentExist(const StudentRecord *root, int id){
     return studentExist(root->right, id); // recursively find until root -> id == id for right node
 }
 
+void updateRecord(StudentRecord *root, const char *name, const char *programme, const float mark){
+    strcpy(root->name, name);
+    strcpy(root->programme, programme);
+    root->mark = mark;
+    return;
+}
+
 // insert new record to bst (sorted by id)
 // O(log n) avg case. O(n) worst case if bst degenerates to a linked list (eg every new id is lower
 // than root id)

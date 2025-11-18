@@ -7,8 +7,7 @@
 
 
 bool validStudentIDLen(char *studentID) {
-    if (strlen(studentID) == 7) return true;
-    return false;
+    return strlen(studentID) == 7;
 } 
 
 bool validStudentIDType(char *studentID) {
@@ -24,6 +23,10 @@ void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer) {
     }
 
     dataInputBuffer[strcspn(dataInputBuffer, "\n")] = 0; // rm \n
+}
+
+bool validLen(char *buffer) {
+    return strlen(buffer) >= 1;
 }
 
 bool validLettersAndSpace(char *buffer) {

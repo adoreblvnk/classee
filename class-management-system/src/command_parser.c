@@ -74,14 +74,14 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             //int id, const char *name, const char *programme, float mark
             printf("Adding new student record.\nPlease enter their name:\n");
             inputParser(nameBuffer, sizeof(nameBuffer));
-            if (!validLettersAndSpace(nameBuffer)) {
+            if (!validLettersAndSpace(nameBuffer) && !validLen(nameBuffer)) {
                 printf("Ensure name only consist of letters and spaces.\n");
                 return;
             }
 
             printf("Enter their programme:\n");
             inputParser(programmeBuffer, sizeof(programmeBuffer));
-            if (!validLettersAndSpace(programmeBuffer)) {
+            if (!validLettersAndSpace(programmeBuffer) && !validLen(programmeBuffer)) {
                 printf("Ensure programme name consist of letters and spaces\n");
                 return;
             }
@@ -124,6 +124,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
             int id = atoi(args);
             StudentRecord *studentRecord = studentExist(*root, id);
+            printf("retrieved record: %s", studentRecord->name);
             if (!studentRecord) {
                 printf("Student %d is not found in the database.\n", id); 
                 return;
@@ -137,29 +138,36 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             printf("Usage: Press enter to skip current selector.\n");
             printf("New name: \n");
             inputParser(nameBuffer, sizeof(nameBuffer));
+            
             if (!validLettersAndSpace(nameBuffer)) {
-                printf("Ensure name only consist of letters and spaces.\n");
+                printf("Ensure name consists of letters and spaces.\n");
                 return;
             }
+
+            if(!validLen(nameBuffer)) strcpy(nameBuffer,studentRecord->name);
 
             printf("Enter new programme:\n");
             inputParser(programmeBuffer, sizeof(programmeBuffer));
             if (!validLettersAndSpace(programmeBuffer)) {
-                printf("Ensure programme name consist of letters and spaces\n");
+                printf("Ensure programme name consists of letters and spaces\n");
                 return;
             }
 
+            if(!validLen(programmeBuffer)) strcpy(programmeBuffer, studentRecord->programme);
+
+            float mark;
             printf("Enter new mark:\n");
             inputParser(markBuffer, sizeof(markBuffer));
-            if (!validFloat(markBuffer)) {
-                printf("Ensure proper float number or normal number.\n");
+
+            if(!validLen(markBuffer)) mark = studentRecord->mark;
+            else if (!validFloat(markBuffer)) {
+                printf("Ensure proper float number or real number.\n");
                 return;
             }
-            float mark = strtof(markBuffer, NULL);
+            else mark = strtof(markBuffer, NULL);
 
-            printf("student id: %d", studentRecord->id);
-
-
+            updateRecord(studentRecord, nameBuffer, programmeBuffer, mark);
+            printf("Updated successfully.");
         }
     }
 
