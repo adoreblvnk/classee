@@ -147,6 +147,26 @@ void showAll(const StudentRecord *root) {
   }
 }
 
+StudentRecord* findStudent(const StudentRecord *root, int id) {
+    if (root == NULL) return NULL; // empty or reached end of root
+    if (root -> id == id) return (StudentRecord*) root;  // current root -> id == id
+
+    // start searching left
+    StudentRecord *left = findStudent(root->left, id); // recursively find until root -> id == id for left node
+    if (left != NULL) return left;
+
+    return findStudent(root->right, id); // recursively find until root -> id == id for right node
+}
+
+void queryStudent(const StudentRecord *root, int id) {
+    const StudentRecord* student = findStudent(root, id);
+    if(student){
+        printRecord(student);
+        return;
+    }
+    printf("Student %d is not found in the database.\n", id);
+}
+
 bool studentExist(const StudentRecord *root, int id){
     if (root == NULL) return false;
     if (root->id == id) return true;

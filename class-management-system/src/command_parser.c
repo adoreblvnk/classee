@@ -93,12 +93,24 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
                 return;
             }
             float mark = strtof(markBuffer, NULL);
-
             insertRecord(root, id, nameBuffer, programmeBuffer, mark);
-            
-
+            printf("Successfully inserted %d into database.\n", id);
         }
     } 
+    else if (util_strcasecmp(command, "QUERY") == 0) {
+        if(args) {
+            if(!validStudentIDType(args)){
+                printf("Student ID type should be numbers only. Please retry.\n"); 
+                return;
+            } 
+            if(!validStudentIDLen(args)){
+                printf("Student ID len should be 7. Please retry.\n"); 
+                return;
+            } 
+
+            queryStudent(*root, atoi(args));
+        }
+    }
     else if (util_strcasecmp(command, "HELP") == 0) {
     printMenu();
   } else if (util_strcasecmp(command, "ROLLBACK") == 0) {

@@ -20,4 +20,6 @@ void saveDatabase(const StudentRecord *root, const char *filename);
 void freeTree(StudentRecord *root);
 
 bool studentExist(const StudentRecord *root, int id);
+void queryStudent(const StudentRecord *root, int id);
+
 #endif // DATABASE_H
