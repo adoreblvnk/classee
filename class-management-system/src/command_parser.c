@@ -172,7 +172,23 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
     else if (util_strcasecmp(command, "DELETE") == 0) {
         if(args) {
+            if(!validStudentIDType(args)){
+                printf("Student ID type should be numbers only. Please retry.\n"); 
+                return;
+            } 
+            if(!validStudentIDLen(args)){
+                printf("Student ID len should be 7. Please retry.\n"); 
+                return;
+            } 
 
+            int id = atoi(args);
+            if (!studentExist(*root, id)) {
+                printf("Student %d is not found in the database.\n", id); 
+                return;
+            }
+
+            deleteRecord(root, id);
+            printf("Successfully deleted %d", id);
         }
     }
 

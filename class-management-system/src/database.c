@@ -45,6 +45,13 @@ static void fisher_yates_shuffle(StudentRecord records[], int n) {
   }
 }
 
+// find the SMALLEST id in left node
+StudentRecord* findMin(StudentRecord* root)
+{
+	while(root->left != NULL) root = root->left;
+	return root;
+}
+
 // free all mem used by bst
 void freeTree(StudentRecord *root) {
   if (root == NULL) { return; }
@@ -176,6 +183,51 @@ void updateRecord(StudentRecord *root, const char *name, const char *programme, 
     root->programme[sizeof(root->programme) - 1] = '\0';
 
     root->mark = mark;
+    return;
+}
+
+void deleteRecord(StudentRecord **root, int id) {
+    if (*root == NULL) return; // first validation
+    else if (id < (*root)->id) { // recursively find left tree until found
+        deleteRecord(&((*root)->left), id);
+    }
+    else if (id > (*root) -> id){ // recursively find right tree until found
+        deleteRecord(&((*root)->right), id);
+    }
+    else { // found
+        // 3 cases
+        // case 1: no child node
+        if ((*root)->left == NULL && (*root)->right == NULL) {
+            free((*root));
+            (*root) = NULL;
+        }
+        
+        // case 2: if only one child node
+        else if ((*root)-> left == NULL) {
+            StudentRecord *p_temp = (*root); // the target node
+            (*root) = (*root) -> right; // right child will be the right child of the tree
+            free(p_temp);
+        }
+        else if ((*root) -> right == NULL) {
+            StudentRecord *p_temp = (*root); // the target node
+            (*root) = (*root) -> left; // left child will be the left child of the tree
+            free(p_temp);
+        }
+        
+        // case 3: if node has 2 child.
+        // find smallest in RIGHT node
+        else {
+            StudentRecord *p_temp = findMin((*root)->right);
+            // copy all data from successor
+            (*root)->id = p_temp->id;
+            strcpy((*root)->name, p_temp->name);
+            strcpy((*root)->programme, p_temp->programme);
+            (*root)->mark = p_temp->mark;
+
+            // recursively deletes the duplicated id node
+            deleteRecord(&((*root)->right), p_temp->id);
+        }
+    }
     return;
 }
 
