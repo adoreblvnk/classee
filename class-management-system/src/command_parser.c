@@ -124,7 +124,6 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
             int id = atoi(args);
             StudentRecord *studentRecord = studentExist(*root, id);
-            printf("retrieved record: %s", studentRecord->name);
             if (!studentRecord) {
                 printf("Student %d is not found in the database.\n", id); 
                 return;

@@ -21,7 +21,7 @@ void updateRecord(StudentRecord *root, const char *name, const char *programme, 
 void freeTree(StudentRecord *root);
 
 // db helper to find students
-StudentRecord* studentExist(const StudentRecord *root, int id);
+StudentRecord* studentExist(StudentRecord *root, int id);
 void queryStudent(const StudentRecord *root, int id);
 
 #endif // DATABASE_H
