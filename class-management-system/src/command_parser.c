@@ -64,7 +64,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             } 
             int id = atoi(args);
             if (studentExist(*root, id)) {
-                printf("Student ID already exist.\n"); 
+                printf("CMS: The record with ID=%d already exists\n", id); 
                 return;
             }
 
@@ -94,7 +94,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             }
             float mark = strtof(markBuffer, NULL);
             insertRecord(root, id, nameBuffer, programmeBuffer, mark);
-            printf("Successfully inserted %d into database.\n", id);
+            printf("CMS: A new record with ID=%d is successfully inserted.\n", id);
         }
     } 
     else if (util_strcasecmp(command, "QUERY") == 0) {
@@ -125,7 +125,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             int id = atoi(args);
             StudentRecord *studentRecord = studentExist(*root, id);
             if (!studentRecord) {
-                printf("Student %d is not found in the database.\n", id); 
+                printf("CMS: The record with ID=%d does not exist.\n", id); 
                 return;
             }
 
@@ -166,7 +166,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             else mark = strtof(markBuffer, NULL);
 
             updateRecord(studentRecord, nameBuffer, programmeBuffer, mark);
-            printf("Updated successfully.\n");
+            printf("CMS: The record with ID=%d is successfully updated.\n", id);
         }
     }
 
@@ -183,12 +183,12 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
             int id = atoi(args);
             if (!studentExist(*root, id)) {
-                printf("Student %d is not found in the database.\n", id); 
+                printf("CMS: The record with ID=%d does not exist.\n", id); 
                 return;
             }
 
             deleteRecord(root, id);
-            printf("Successfully deleted %d", id);
+            printf("CMS: The record with ID=%d is successfully deleted.\n", id);
         }
     }
 

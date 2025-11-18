@@ -157,10 +157,12 @@ void showAll(const StudentRecord *root) {
 void queryStudent(const StudentRecord *root, int id) {
     const StudentRecord* student = studentExist(root, id);
     if(student){
+        printf("CMS: The record with ID=%d is found in the data table.\n", id);
+        printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
         printRecord(student);
         return;
     }
-    printf("Student %d is not found in the database.\n", id);
+    printf("CMS: The record with ID=%d does not exist.\n", id);
 }
 
 StudentRecord* studentExist(const StudentRecord *root, int id){
