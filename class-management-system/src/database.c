@@ -169,8 +169,12 @@ StudentRecord* studentExist(const StudentRecord *root, int id){
 }
 
 void updateRecord(StudentRecord *root, const char *name, const char *programme, const float mark){
-    strcpy(root->name, name);
-    strcpy(root->programme, programme);
+    strncpy(root->name, name, sizeof(root->name) - 1);
+    root->name[sizeof(root->name) - 1] = '\0';
+
+    strncpy(root->programme, programme, sizeof(root->programme) - 1);
+    root->programme[sizeof(root->programme) - 1] = '\0';
+
     root->mark = mark;
     return;
 }

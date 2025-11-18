@@ -74,14 +74,14 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             //int id, const char *name, const char *programme, float mark
             printf("Adding new student record.\nPlease enter their name:\n");
             inputParser(nameBuffer, sizeof(nameBuffer));
-            if (!validLettersAndSpace(nameBuffer) && !validLen(nameBuffer)) {
+            if (!validLettersAndSpace(nameBuffer) || !validLen(nameBuffer)) {
                 printf("Ensure name only consist of letters and spaces.\n");
                 return;
             }
 
             printf("Enter their programme:\n");
             inputParser(programmeBuffer, sizeof(programmeBuffer));
-            if (!validLettersAndSpace(programmeBuffer) && !validLen(programmeBuffer)) {
+            if (!validLettersAndSpace(programmeBuffer) || !validLen(programmeBuffer)) {
                 printf("Ensure programme name consist of letters and spaces\n");
                 return;
             }
@@ -168,6 +168,12 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
             updateRecord(studentRecord, nameBuffer, programmeBuffer, mark);
             printf("Updated successfully.");
+        }
+    }
+
+    else if (util_strcasecmp(command, "DELETE") == 0) {
+        if(args) {
+
         }
     }
 
