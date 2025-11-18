@@ -5,6 +5,7 @@
 #include "../include/services/log.h"
 #include "../include/utils/print_util.h"
 #include "../include/utils/str_utils.h"
+#include "../include/utils/general_utils.h"
 
 int main() {
   StudentRecord *root = NULL;

@@ -4,6 +4,7 @@
 #include "../include/summary.h"
 #include "../include/utils/print_util.h"
 #include "../include/utils/str_utils.h"
+#include "../include/utils/general_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -50,7 +51,55 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     }
   } else if (util_strcasecmp(command, "SAVE") == 0) {
     saveDatabase(*root, db_filename);
-  } else if (util_strcasecmp(command, "HELP") == 0) {
+  } 
+    else if (util_strcasecmp(command, "INSERT") == 0) {
+        if (args) {
+            if(!validStudentIDType(args)){
+                printf("Student ID type should be numbers only. Please retry.\n"); 
+                return;
+            } 
+            if(!validStudentIDLen(args)){
+                printf("Student ID len should be 7. Please retry.\n"); 
+                return;
+            } 
+            int id = atoi(args);
+            if (studentExist(*root, id)) {
+                printf("Student ID already exist.\n"); 
+                return;
+            }
+
+            char nameBuffer[256];
+            char programmeBuffer[256];
+            char markBuffer[256];
+            //int id, const char *name, const char *programme, float mark
+            printf("Adding new student record.\nPlease enter their name:\n");
+            inputParser(nameBuffer, sizeof(nameBuffer));
+            if (!validLettersAndSpace(nameBuffer)) {
+                printf("Ensure name only consist of letters and spaces.\n");
+                return;
+            }
+
+            printf("Enter their programme:\n");
+            inputParser(programmeBuffer, sizeof(programmeBuffer));
+            if (!validLettersAndSpace(programmeBuffer)) {
+                printf("Ensure programme name consist of letters and spaces\n");
+                return;
+            }
+
+            printf("Enter their mark:\n");
+            inputParser(markBuffer, sizeof(markBuffer));
+            if (!validFloat(markBuffer)) {
+                printf("Ensure proper float number or normal number.\n");
+                return;
+            }
+            float mark = strtof(markBuffer, NULL);
+
+            insertRecord(root, id, nameBuffer, programmeBuffer, mark);
+            
+
+        }
+    } 
+    else if (util_strcasecmp(command, "HELP") == 0) {
     printMenu();
   } else if (util_strcasecmp(command, "ROLLBACK") == 0) {
     if (args && *args != '\0') {

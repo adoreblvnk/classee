@@ -1,6 +1,7 @@
 #include "../include/database.h"
 #include "../include/config.h"
 #include <time.h>
+#include <stdbool.h>
 
 // forward declarations for recursive helpers (only used in this file)
 static void showInOrder(const StudentRecord *root);
@@ -144,6 +145,13 @@ void showAll(const StudentRecord *root) {
   } else {
     showInOrder(root);
   }
+}
+
+bool studentExist(const StudentRecord *root, int id){
+    if (root == NULL) return false;
+    if (root->id == id) return true;
+    // recursively searches the left and right of each node to find id
+    return studentExist(root->left, id) || studentExist(root->right, id);
 }
 
 // insert new record to bst (sorted by id)

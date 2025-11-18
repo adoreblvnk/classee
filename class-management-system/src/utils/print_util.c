@@ -1,5 +1,5 @@
 #include "../../include/utils/print_util.h"
-
+#include <stdio.h>
 void printMenu() {
     printf("Class Management System (CMS) Initialized.\n");
     printf("---------------------\n");
@@ -10,7 +10,7 @@ void printMenu() {
     printf("  SHOW SUMMARY [course_name] - Display summary statistics. Optionally filter by course.\n");
     printf("  SHOW LOG            - Display the command log.\n");
     printf("  SHOW TLOG           - Display the transaction log for rollbacks.\n");
-    printf("  INSERT              - Insert a new student record.\n"); // TODO: combine it with joseph's insert feature.
+    printf("  INSERT [student id] - Insert a new student record.\n"); // TODO: combine it with joseph's insert feature.
     printf("  QUERY               - Search for a student record.\n"); // TODO: add a query feature.
     printf("  UPDATE              - Update an existing student record. \n"); // TODO: add an update feature.
     printf("  DELETE              - Delete an existing student record. \n"); //TODO: add a delete feature.

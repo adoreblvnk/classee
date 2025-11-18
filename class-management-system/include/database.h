@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 // func prototypes
 
@@ -18,4 +19,5 @@ void saveDatabase(const StudentRecord *root, const char *filename);
 // bst helpers
 void freeTree(StudentRecord *root);
 
+bool studentExist(const StudentRecord *root, int id);
 #endif // DATABASE_H
