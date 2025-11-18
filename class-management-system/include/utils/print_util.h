@@ -2,5 +2,5 @@
 #define PRINT_UTIL_H
 
 void printMenu();
-
+void printDeclaration();
 #endif // PRINT_UTIL_H

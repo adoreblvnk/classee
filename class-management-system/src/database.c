@@ -154,7 +154,6 @@ void showAll(const StudentRecord *root) {
   }
 }
 
-
 void queryStudent(const StudentRecord *root, int id) {
     const StudentRecord* student = studentExist(root, id);
     if(student){

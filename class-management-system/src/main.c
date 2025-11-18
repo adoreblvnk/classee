@@ -8,6 +8,7 @@
 #include "../include/utils/general_utils.h"
 
 int main() {
+    printDeclaration();
   StudentRecord *root = NULL;
   char input[256];
   const char *db_filename = DB_FILE; // db filename
