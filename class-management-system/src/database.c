@@ -157,7 +157,7 @@ void queryStudent(const StudentRecord *root, int id) {
     printf("Student %d is not found in the database.\n", id);
 }
 
-StudentRecord* studentExist(StudentRecord *root, int id){
+StudentRecord* studentExist(const StudentRecord *root, int id){
     if (root == NULL) return NULL; // empty or reached end of root
     if (root -> id == id) return (StudentRecord*) root;  // current root -> id == id
 

@@ -166,7 +166,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
             else mark = strtof(markBuffer, NULL);
 
             updateRecord(studentRecord, nameBuffer, programmeBuffer, mark);
-            printf("Updated successfully.");
+            printf("Updated successfully.\n");
         }
     }
 
