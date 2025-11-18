@@ -147,19 +147,9 @@ void showAll(const StudentRecord *root) {
   }
 }
 
-StudentRecord* findStudent(const StudentRecord *root, int id) {
-    if (root == NULL) return NULL; // empty or reached end of root
-    if (root -> id == id) return (StudentRecord*) root;  // current root -> id == id
-
-    // start searching left
-    StudentRecord *left = findStudent(root->left, id); // recursively find until root -> id == id for left node
-    if (left != NULL) return left;
-
-    return findStudent(root->right, id); // recursively find until root -> id == id for right node
-}
 
 void queryStudent(const StudentRecord *root, int id) {
-    const StudentRecord* student = findStudent(root, id);
+    const StudentRecord* student = studentExist(root, id);
     if(student){
         printRecord(student);
         return;
@@ -167,11 +157,15 @@ void queryStudent(const StudentRecord *root, int id) {
     printf("Student %d is not found in the database.\n", id);
 }
 
-bool studentExist(const StudentRecord *root, int id){
-    if (root == NULL) return false;
-    if (root->id == id) return true;
-    // recursively searches the left and right of each node to find id
-    return studentExist(root->left, id) || studentExist(root->right, id);
+StudentRecord* studentExist(const StudentRecord *root, int id){
+    if (root == NULL) return NULL; // empty or reached end of root
+    if (root -> id == id) return (StudentRecord*) root;  // current root -> id == id
+
+    // start searching left
+    StudentRecord *left = studentExist(root->left, id); // recursively find until root -> id == id for left node
+    if (left != NULL) return left;
+
+    return studentExist(root->right, id); // recursively find until root -> id == id for right node
 }
 
 // insert new record to bst (sorted by id)

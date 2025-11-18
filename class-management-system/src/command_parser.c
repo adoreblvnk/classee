@@ -107,10 +107,62 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
                 printf("Student ID len should be 7. Please retry.\n"); 
                 return;
             } 
-
             queryStudent(*root, atoi(args));
         }
     }
+
+    else if (util_strcasecmp(command, "UPDATE") == 0) {
+        if(args) {
+            if(!validStudentIDType(args)){
+                printf("Student ID type should be numbers only. Please retry.\n"); 
+                return;
+            } 
+            if(!validStudentIDLen(args)){
+                printf("Student ID len should be 7. Please retry.\n"); 
+                return;
+            } 
+
+            int id = atoi(args);
+            StudentRecord *studentRecord = studentExist(*root, id);
+            if (!studentRecord) {
+                printf("Student %d is not found in the database.\n", id); 
+                return;
+            }
+
+            char nameBuffer[256];
+            char programmeBuffer[256];
+            char markBuffer[256];
+
+            printf("Updating student record for %d\n", id);
+            printf("Usage: Press enter to skip current selector.\n");
+            printf("New name: \n");
+            inputParser(nameBuffer, sizeof(nameBuffer));
+            if (!validLettersAndSpace(nameBuffer)) {
+                printf("Ensure name only consist of letters and spaces.\n");
+                return;
+            }
+
+            printf("Enter new programme:\n");
+            inputParser(programmeBuffer, sizeof(programmeBuffer));
+            if (!validLettersAndSpace(programmeBuffer)) {
+                printf("Ensure programme name consist of letters and spaces\n");
+                return;
+            }
+
+            printf("Enter new mark:\n");
+            inputParser(markBuffer, sizeof(markBuffer));
+            if (!validFloat(markBuffer)) {
+                printf("Ensure proper float number or normal number.\n");
+                return;
+            }
+            float mark = strtof(markBuffer, NULL);
+
+            printf("student id: %d", studentRecord->id);
+
+
+        }
+    }
+
     else if (util_strcasecmp(command, "HELP") == 0) {
     printMenu();
   } else if (util_strcasecmp(command, "ROLLBACK") == 0) {
