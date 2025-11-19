@@ -54,10 +54,10 @@ void print_log_or_journal_entry(char *line, int is_log) {
     strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
     printf("%-10s %-35s %-20s %-s\n", cols[0], cols[1], formatted_time,
            (atoi(cols[3]) == 1 ? "Yes" : "No"));
-  } else { // is transaction log
+  } else {                           // is transaction log
     time_t raw_time = atol(cols[6]); // time is at index 6 for tlog
     strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
-    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", cols[0], cols[1], cols[2], cols[3],
-           cols[4], cols[5], formatted_time);
+    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", cols[0], cols[1], cols[2], cols[3], cols[4],
+           cols[5], formatted_time);
   }
 }

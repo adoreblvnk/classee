@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-//helper func for checking studentID len
+// helper func for checking studentID len
 bool validStudentIDLen(char *studentID);
 
 // helper func for checking student id data type
@@ -16,9 +16,5 @@ void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer);
 bool validLettersAndSpace(char *buffer);
 bool validFloat(char *buffer);
 bool validLen(char *buffer);
-
-
-
-
 
 #endif

@@ -1,7 +1,7 @@
 #include "../include/database.h"
 #include "../include/config.h"
-#include <time.h>
 #include <stdbool.h>
+#include <time.h>
 
 // forward declarations for recursive helpers (only used in this file)
 static void showInOrder(const StudentRecord *root);
@@ -46,10 +46,10 @@ static void fisher_yates_shuffle(StudentRecord records[], int n) {
 }
 
 // find the SMALLEST id in left node
-StudentRecord* findMin(StudentRecord* root)
-{
-	while(root->left != NULL) root = root->left;
-	return root;
+StudentRecord *findMin(StudentRecord *root) {
+  while (root->left != NULL)
+    root = root->left;
+  return root;
 }
 
 // free all mem used by bst
@@ -122,7 +122,8 @@ void openDatabase(StudentRecord **root, const char *filename) {
   // parse file & insert to bst, %[^\t] is a scanset that reads until tab
   // NOTE: must be separated by tabs!
   int i = 0;
-  while (i < record_count && fscanf(file, "%d\t%[^\t]\t%[^\t]\t%f\n", &records[i].id, records[i].name, records[i].programme, &records[i].mark) == 4) {
+  while (i < record_count && fscanf(file, "%d\t%[^\t]\t%[^\t]\t%f\n", &records[i].id,
+                                    records[i].name, records[i].programme, &records[i].mark) == 4) {
     i++;
   }
   fclose(file);
@@ -155,81 +156,80 @@ void showAll(const StudentRecord *root) {
 }
 
 void queryStudent(const StudentRecord *root, int id) {
-    const StudentRecord* student = studentExist(root, id);
-    if(student){
-        printf("CMS: The record with ID=%d is found in the data table.\n", id);
-        printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
-        printRecord(student);
-        return;
-    }
-    printf("CMS: The record with ID=%d does not exist.\n", id);
-}
-
-StudentRecord* studentExist(const StudentRecord *root, int id){
-    if (root == NULL) return NULL; // empty or reached end of root
-    if (root -> id == id) return (StudentRecord*) root;  // current root -> id == id
-
-    // start searching left
-    StudentRecord *left = studentExist(root->left, id); // recursively find until root -> id == id for left node
-    if (left != NULL) return left;
-
-    return studentExist(root->right, id); // recursively find until root -> id == id for right node
-}
-
-void updateRecord(StudentRecord *root, const char *name, const char *programme, const float mark){
-    strncpy(root->name, name, sizeof(root->name) - 1);
-    root->name[sizeof(root->name) - 1] = '\0';
-
-    strncpy(root->programme, programme, sizeof(root->programme) - 1);
-    root->programme[sizeof(root->programme) - 1] = '\0';
-
-    root->mark = mark;
+  const StudentRecord *student = studentExist(root, id);
+  if (student) {
+    printf("CMS: The record with ID=%d is found in the data table.\n", id);
+    printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
+    printRecord(student);
     return;
+  }
+  printf("CMS: The record with ID=%d does not exist.\n", id);
+}
+
+StudentRecord *studentExist(const StudentRecord *root, int id) {
+  if (root == NULL) return NULL;                    // empty or reached end of root
+  if (root->id == id) return (StudentRecord *)root; // current root -> id == id
+
+  // start searching left
+  StudentRecord *left =
+      studentExist(root->left, id); // recursively find until root -> id == id for left node
+  if (left != NULL) return left;
+
+  return studentExist(root->right, id); // recursively find until root -> id == id for right node
+}
+
+void updateRecord(StudentRecord *root, const char *name, const char *programme, const float mark) {
+  strncpy(root->name, name, sizeof(root->name) - 1);
+  root->name[sizeof(root->name) - 1] = '\0';
+
+  strncpy(root->programme, programme, sizeof(root->programme) - 1);
+  root->programme[sizeof(root->programme) - 1] = '\0';
+
+  root->mark = mark;
+  return;
 }
 
 void deleteRecord(StudentRecord **root, int id) {
-    if (*root == NULL) return; // first validation
-    else if (id < (*root)->id) { // recursively find left tree until found
-        deleteRecord(&((*root)->left), id);
+  if (*root == NULL)
+    return;                    // first validation
+  else if (id < (*root)->id) { // recursively find left tree until found
+    deleteRecord(&((*root)->left), id);
+  } else if (id > (*root)->id) { // recursively find right tree until found
+    deleteRecord(&((*root)->right), id);
+  } else { // found
+    // 3 cases
+    // case 1: no child node
+    if ((*root)->left == NULL && (*root)->right == NULL) {
+      free((*root));
+      (*root) = NULL;
     }
-    else if (id > (*root) -> id){ // recursively find right tree until found
-        deleteRecord(&((*root)->right), id);
-    }
-    else { // found
-        // 3 cases
-        // case 1: no child node
-        if ((*root)->left == NULL && (*root)->right == NULL) {
-            free((*root));
-            (*root) = NULL;
-        }
-        
-        // case 2: if only one child node
-        else if ((*root)-> left == NULL) {
-            StudentRecord *p_temp = (*root); // the target node
-            (*root) = (*root) -> right; // right child will be the right child of the tree
-            free(p_temp);
-        }
-        else if ((*root) -> right == NULL) {
-            StudentRecord *p_temp = (*root); // the target node
-            (*root) = (*root) -> left; // left child will be the left child of the tree
-            free(p_temp);
-        }
-        
-        // case 3: if node has 2 child.
-        // find smallest in RIGHT node
-        else {
-            StudentRecord *p_temp = findMin((*root)->right);
-            // copy all data from successor
-            (*root)->id = p_temp->id;
-            strcpy((*root)->name, p_temp->name);
-            strcpy((*root)->programme, p_temp->programme);
-            (*root)->mark = p_temp->mark;
 
-            // recursively deletes the duplicated id node
-            deleteRecord(&((*root)->right), p_temp->id);
-        }
+    // case 2: if only one child node
+    else if ((*root)->left == NULL) {
+      StudentRecord *p_temp = (*root); // the target node
+      (*root) = (*root)->right;        // right child will be the right child of the tree
+      free(p_temp);
+    } else if ((*root)->right == NULL) {
+      StudentRecord *p_temp = (*root); // the target node
+      (*root) = (*root)->left;         // left child will be the left child of the tree
+      free(p_temp);
     }
-    return;
+
+    // case 3: if node has 2 child.
+    // find smallest in RIGHT node
+    else {
+      StudentRecord *p_temp = findMin((*root)->right);
+      // copy all data from successor
+      (*root)->id = p_temp->id;
+      strcpy((*root)->name, p_temp->name);
+      strcpy((*root)->programme, p_temp->programme);
+      (*root)->mark = p_temp->mark;
+
+      // recursively deletes the duplicated id node
+      deleteRecord(&((*root)->right), p_temp->id);
+    }
+  }
+  return;
 }
 
 // insert new record to bst (sorted by id)

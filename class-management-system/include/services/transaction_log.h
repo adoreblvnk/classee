@@ -8,7 +8,7 @@ void init_tlog();
 
 // log a state-changing cmd to transaction log file
 void log_transaction(const char *command, int id, const char *name, const char *programme,
-                      float mark);
+                     float mark);
 
 // display the mutable command transaction log (rollback capable)
 void show_tlog();
