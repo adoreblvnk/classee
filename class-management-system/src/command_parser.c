@@ -99,17 +99,19 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       log_flag = 1; // changes state
     }
   } else if (util_strcasecmp(command, "QUERY") == 0) {
-    if (args) {
-      if (!validStudentIDType(args)) {
-        printf("Student ID type should be numbers only. Please retry.\n");
-        return;
-      }
-      if (!validStudentIDLen(args)) {
-        printf("Student ID len should be 7. Please retry.\n");
-        return;
-      }
-      queryStudent(*root, atoi(args));
+    if (!args || *args == '\0') {
+      printf("CMS: Missing student ID for QUERY command.\n");
+      return;
     }
+    if (!validStudentIDType(args)) {
+      printf("Student ID type should be numbers only. Please retry.\n");
+      return;
+    }
+    if (!validStudentIDLen(args)) {
+      printf("Student ID len should be 7. Please retry.\n");
+      return;
+    }
+    queryStudent(*root, atoi(args));
   }
 
   else if (util_strcasecmp(command, "UPDATE") == 0) {
