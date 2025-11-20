@@ -167,15 +167,17 @@ void queryStudent(const StudentRecord *root, int id) {
 }
 
 StudentRecord *studentExist(const StudentRecord *root, int id) {
-  if (root == NULL) return NULL;                    // empty or reached end of root
-  if (root->id == id) return (StudentRecord *)root; // current root -> id == id
-
-  // start searching left
-  StudentRecord *left =
-      studentExist(root->left, id); // recursively find until root -> id == id for left node
-  if (left != NULL) return left;
-
-  return studentExist(root->right, id); // recursively find until root -> id == id for right node
+  const StudentRecord *current = root;
+  while (current != NULL) {
+    if (id == current->id) {
+      return (StudentRecord *)current; // found
+    } else if (id < current->id) {
+      current = current->left; // go left
+    } else {
+      current = current->right; // go right
+    }
+  }
+  return NULL; // not found
 }
 
 void updateRecord(StudentRecord *root, const char *name, const char *programme, const float mark) {

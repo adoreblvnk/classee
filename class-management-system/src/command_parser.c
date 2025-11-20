@@ -16,8 +16,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   char *args = input;            // rest of str are args
   args[strcspn(args, "\n")] = 0; // rm \n
   // copy command to str for logging later
-  char log_buf[100]; // copy full cmd after command
-  sprintf(log_buf, "%s %s", command, args);
+  char log_buf[256];                                          // copy full cmd after command
+  snprintf(log_buf, sizeof(log_buf), "%s %s", command, args); // prevent sprintf overflow
   int log_flag = 0;
 
   if (util_strcasecmp(command, "OPEN") == 0) {
@@ -204,6 +204,13 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     printMenu();
   } else if (util_strcasecmp(command, "ROLLBACK") == 0) {
     if (args && *args != '\0') {
+      // validate that args is a positive number
+      for (int i = 0; args[i] != '\0'; i++) {
+        if (!isdigit(args[i])) {
+          printf("CMS: Invalid change ID. Must be a positive number.\n");
+          return; // exit early
+        }
+      }
       perform_rollback(root, atoi(args));
       log_flag = 1; // changes state
     } else {

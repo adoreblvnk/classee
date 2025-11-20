@@ -36,11 +36,11 @@ void show_tlog() {
   display_data_file(TLOG_FILE, "Tlog", header_buffer, 0); // 0 for tlog
 }
 
-// reset db state from tlog to target change id & truncates tlog file
+// rollback db state from tlog to target change id & truncates tlog file
 void perform_rollback(StudentRecord **root, int target_change_id) {
   FILE *tlog_file = fopen(TLOG_FILE, "r");
   if (!tlog_file) {
-    printf("CMS: Transaction log file not found. Cannot reset.\n");
+    printf("CMS: Transaction log file not found. Cannot rollback.\n");
     return;
   }
   FILE *temp_tlog_file = fopen(TLOG_TMP_FILE, "w");
@@ -82,5 +82,5 @@ void perform_rollback(StudentRecord **root, int target_change_id) {
   rename(TLOG_TMP_FILE, TLOG_FILE);
 
   // NOTE: DON'T F***ING RESET THE GLOBAL change_id COUNTER ELSE THERE'LL BE DUPLICATES
-  printf("CMS: Database state has been reset to change #%d.\n", target_change_id);
+  printf("CMS: Database state has been rollback to change #%d.\n", target_change_id);
 }

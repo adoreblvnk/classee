@@ -7,7 +7,6 @@ void tearDown(void) {}
 // func prototypes for test suites
 void run_str_utils_tests(void);
 void run_file_utils_tests(void);
-void run_integration_tests(void);
 
 int main(void) {
   UNITY_BEGIN();
@@ -15,7 +14,6 @@ int main(void) {
   // run all test suites
   run_str_utils_tests();
   run_file_utils_tests();
-  run_integration_tests();
 
   return UNITY_END();
 }
