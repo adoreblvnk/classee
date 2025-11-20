@@ -2,6 +2,7 @@
 #define GENERAL_UTILS_H
 
 #include <stdbool.h>
+#include "./types.h"
 
 // helper func for checking studentID len
 bool validStudentIDLen(char *studentID);
@@ -16,5 +17,10 @@ void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer);
 bool validLettersAndSpace(char *buffer);
 bool validFloat(char *buffer);
 bool validLen(char *buffer);
+bool validArgument(char *command, PromptDataHolder *data);
+
+// for arguments
+PromptDataHolder stringTokenization(char *buffer);
+
 
 #endif
