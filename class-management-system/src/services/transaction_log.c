@@ -70,10 +70,21 @@ void perform_rollback(StudentRecord **root, int target_change_id) {
       col_count++;
     }
     if (col_count < 7) { continue; } // NOTE: skip early if not a change / malformed
+
+    // get record details from parsed columns
+    int id = atoi(cols[2]);
+    char *name = cols[3];
+    char *programme = cols[4];
+    float mark = atof(cols[5]);
     if (util_strcasecmp(cols[1], "insert") == 0) {
-      insertRecord(root, atoi(cols[2]), cols[3], cols[4], atof(cols[5]));
+      insertRecord(root, id, name, programme, mark);
+    } else if (util_strcasecmp(cols[1], "update") == 0) {
+      // find record & update it
+      StudentRecord *record_to_update = studentExist(*root, id);
+      if (record_to_update) { updateRecord(record_to_update, name, programme, mark); }
+    } else if (util_strcasecmp(cols[1], "delete") == 0) {
+      deleteRecord(root, id);
     }
-    // TODO: add logic for 'update' & 'delete'
   }
   fclose(tlog_file);
   fclose(temp_tlog_file);

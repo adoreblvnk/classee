@@ -1,8 +1,6 @@
 #include "../include/summary.h"
-#include "../include/database.h"
 #include "../include/utils/str_utils.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h> 
 
@@ -19,12 +17,14 @@ int isValidCourse(const StudentRecord *root, const char *course_name) {
     
     // Convert input course name to lowercase for comparison
     char lower_course[100];
-    strcpy(lower_course, course_name);
+    strncpy(lower_course, course_name, sizeof(lower_course) - 1);
+    lower_course[sizeof(lower_course) - 1] = '\0'; // ensure null termination
     toLowerString(lower_course);
     
     // Check current node
     char node_course[100];
-    strcpy(node_course, root->programme);
+    strncpy(node_course, root->programme, sizeof(node_course) - 1);
+    node_course[sizeof(node_course) - 1] = '\0'; // ensure null termination
     toLowerString(node_course);
     
     if (strcmp(node_course, lower_course) == 0) {
@@ -59,6 +59,7 @@ struct SummaryResults getcourseSummaryResults(const StudentRecord *root, const c
     // Traverse and only include students from the specified course
     traverseForCourseSummary(root, course_name, &results.topper, &results.lower, &totalMarks, &count);
     strncpy(results.course_name, course_name, sizeof(results.course_name) - 1);
+    results.course_name[sizeof(results.course_name) - 1] = '\0'; // ensure null termination
     results.average = (count > 0) ? totalMarks / count : 0.0;
     results.count = count;
     
@@ -75,8 +76,10 @@ void traverseForCourseSummary(const StudentRecord *node, const char *course_name
     char node_course[100];
     char target_course[100];
     
-    strcpy(node_course, node->programme);
-    strcpy(target_course, course_name);
+    strcpy(node_course, node->programme); // safe to use strcpy as it's limited by MAX_PROG_LEN (50)
+
+    strncpy(target_course, course_name, sizeof(target_course) - 1);
+    target_course[sizeof(target_course) - 1] = '\0'; // ensure null termination
     
     toLowerString(node_course);
     toLowerString(target_course);

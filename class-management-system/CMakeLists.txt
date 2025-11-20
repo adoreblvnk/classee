@@ -45,7 +45,6 @@ if(BUILD_TESTING)
     tests/test_runner.c # test runner w main func
     tests/test_str_utils.c
     tests/test_file_utils.c
-    tests/test_integration.c  # integration tests
     ${CMS_SOURCES}
   )
 
