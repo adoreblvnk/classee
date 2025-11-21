@@ -310,7 +310,7 @@ void saveDatabase(const StudentRecord *root, const char *filename) {
 // Count total nodes in BST
 static int countNodes(const StudentRecord *node) {
   if (!node) { return 0; }
-  return 1 + countNodes(node->left) + countNodes(note->right);
+  return 1 + countNodes(node->left) + countNodes(node->right);
 }
 
 // in-order traversal to fill array
@@ -372,7 +372,7 @@ static int compareRecords(const void *a, const void *b) {
   if (g_sortOrder == ORDER_DESC)
   cmp = -cmp;
 
-  return cmp
+  return cmp;
 }
 
 void sortRecords(StudentRecord *arr, int size, SortField field, SortOrder order) {

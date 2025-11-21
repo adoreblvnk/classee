@@ -32,8 +32,48 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     char *show_arg = util_strsep(&args, " \n");
 
     if (util_strcasecmp(show_arg, "ALL") == 0) {
-      showAll(*root);
-    } else if (util_strcasecmp(show_arg, "SUMMARY") == 0) {
+      // If no extra arguments -> normal SHOW ALL
+      if (!args || *args == '\0') {
+        showAll(*root);
+        return;
+    }
+
+    // Try to parse: SHOW ALL SORT BY MARK [ASC|DESC]
+    char *arg1 = util_strsep(&args, " \n");  // SORT
+    char *arg2 = util_strsep(&args, " \n");  // BY
+    char *arg3 = util_strsep(&args, " \n");  // MARK
+    char *arg4 = util_strsep(&args, " \n");  // optional ASC/DESC
+
+    // We only handle MARK in this enhancement
+    if (!(arg1 && util_strcasecmp(arg1, "SORT") == 0 &&
+          arg2 && util_strcasecmp(arg2, "BY") == 0 &&
+          arg3 && util_strcasecmp(arg3, "MARK") == 0)) {
+        printf("CMS: Invalid SORT BY usage. Use: SHOW ALL SORT BY MARK [ASC|DESC].\n");
+        return;
+    }
+
+    SortOrder order = ORDER_ASC;
+    if (arg4 && util_strcasecmp(arg4, "DESC") == 0) {
+        order = ORDER_DESC;
+    }
+
+    int size = 0;
+    StudentRecord *arr = flattenTreeToArray(*root, &size);
+
+    if (!arr || size == 0) {
+        printf("No records to display.\n");
+        freeRecordArray(arr);   // safe even if arr == NULL
+        return;
+    }
+
+    sortRecords(arr, size, SORT_BY_MARK, order);
+    printSortedRecords(arr, size);
+    freeRecordArray(arr);
+    return;   // IMPORTANT: don't fall through
+}
+    
+      
+    else if (util_strcasecmp(show_arg, "SUMMARY") == 0) {
       // show all if args is null, empty, or "ALL"
       if (!args || *args == '\0' || util_strcasecmp(args, "ALL") == 0) {
         displaysummary(*root, "ALL");
