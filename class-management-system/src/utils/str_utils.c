@@ -51,3 +51,14 @@ char *util_strsep(char **stringp, const char *delim) {
 
   return start; // old value of *stringp aka the start
 }
+
+// trim leading & trailing whitespace from a str in-place
+void util_trim(char *str) {
+  if (!str) return;
+  char *start = str;
+  while (*start && isspace((unsigned char)*start)) { start++; }
+  char *end = start + strlen(start) - 1;
+  while (end > start && isspace((unsigned char)*end)) { end--; }
+  *(end + 1) = '\0';
+  if (start != str) { memmove(str, start, strlen(start) + 1); }
+}

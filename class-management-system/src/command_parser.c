@@ -178,6 +178,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
              "type \"N\" to cancel.\nP3_7:",
              id);
       inputParser(confirmationBuffer, cmfBufferSize);
+      util_trim(confirmationBuffer); // trim leading/trailing whitespace
 
       if (util_strcasecmp("Y", confirmationBuffer) == 0) {
         deleteRecord(root, id);
