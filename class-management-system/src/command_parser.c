@@ -47,8 +47,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     // We only handle MARK in this enhancement
     if (!(arg1 && util_strcasecmp(arg1, "SORT") == 0 &&
           arg2 && util_strcasecmp(arg2, "BY") == 0 &&
-          arg3 && util_strcasecmp(arg3, "MARK") == 0)) {
-        printf("CMS: Invalid SORT BY usage. Use: SHOW ALL SORT BY MARK [ASC|DESC].\n");
+          arg3 && (util_strcasecmp(arg3, "MARK") == 0 || util_strcasecmp(arg3, "ID") == 0))) {
+        printf("CMS: Invalid SORT BY usage. Use: SHOW ALL SORT BY [MARK|ID] [ASC|DESC].\n");
         return;
     }
 
@@ -66,7 +66,14 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
     }
 
-    sortRecords(arr, size, SORT_BY_MARK, order);
+    SortField sort_field;
+    if (util_strcasecmp(arg3, "MARK") == 0) {
+        sort_field = SORT_BY_MARK;
+    } else {
+        sort_field = SORT_BY_ID;
+    }
+
+    sortRecords(arr, size, sort_field, order);
     printSortedRecords(arr, size);
     freeRecordArray(arr);
     return;   // IMPORTANT: don't fall through
