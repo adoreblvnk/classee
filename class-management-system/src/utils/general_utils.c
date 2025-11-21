@@ -96,28 +96,39 @@ PromptDataHolder stringTokenization(char *buffer) {
   PromptDataHolder data = {0};
   if (buffer == NULL) return data;
 
-  char *sToken = strtok(buffer, " =");
-  char currentKey[16] = ""; // initialize to empty string
-  char currentValue[32];
+  char *p = buffer;
+  // define separators for key-value pairs. The space is important
+  const char *keys[] = {" ID=", " Name=", " Programme=", " Mark="};
 
-  while (sToken != NULL) {
-    if (isKey(sToken)) {
-      strncpy(currentKey, sToken, sizeof(currentKey) - 1); // copy key safely
-      currentKey[sizeof(currentKey) - 1] = '\0';           // ensure null-termination
+  while (*p) {
+    // skip leading spaces
+    while (*p && isspace((unsigned char)*p)) {
+      p++;
+    }
+    if (!*p) { break; } // end of string
+
+    char *key = p;
+    char *equals = strchr(p, '=');
+    if (!equals) { break; } // malformed pair (no '=' found)
+    *equals = '\0';         // terminate key
+
+    p = equals + 1; // go past '='
+    char *value = p;
+    char *end = NULL;
+
+    // find earliest occurrence of next key to mark the end of curr val
+    for (int i = 0; i < sizeof(keys) / sizeof(keys[0]); i++) {
+      char *marker = util_strcasestr(p, keys[i]);
+      if (marker && (!end || marker < end)) { end = marker; }
     }
 
-    sToken = strtok(NULL, " =");
-    if (sToken == NULL) break;
-
-    // copy value safely
-    strncpy(currentValue, sToken, sizeof(currentValue) - 1);
-    currentValue[sizeof(currentValue) - 1] = '\0';
-
-    if (isKey(currentValue)) { continue; }
-
-    // check key has been found before applying value
-    if (currentKey[0] != '\0') { applyKeyValue(&data, currentKey, currentValue); }
+    if (end) {
+      *end = '\0'; // terminate value str
+      p = end + 1; // move p to start of next key
+    } else {
+      p += strlen(p); // no more keys, move to end of string
+    }
+    applyKeyValue(&data, key, value);
   }
-
   return data;
 }

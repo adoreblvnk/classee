@@ -2,14 +2,6 @@
 #include "../include/utils/str_utils.h"
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h> 
-
-// Helper function for case-insensitive comparison
-void toLowerString(char *str) {
-    for (int i = 0; str[i]; i++) {
-        str[i] = tolower((unsigned char)str[i]);
-    }
-}
 
 // Function to validate if course exists in records
 int isValidCourse(const StudentRecord *root, const char *course_name) {
@@ -19,19 +11,17 @@ int isValidCourse(const StudentRecord *root, const char *course_name) {
     char lower_course[100];
     strncpy(lower_course, course_name, sizeof(lower_course) - 1);
     lower_course[sizeof(lower_course) - 1] = '\0'; // ensure null termination
-    toLowerString(lower_course);
     
     // Check current node
     char node_course[100];
     strncpy(node_course, root->programme, sizeof(node_course) - 1);
     node_course[sizeof(node_course) - 1] = '\0'; // ensure null termination
-    toLowerString(node_course);
     
-    if (strcmp(node_course, lower_course) == 0) {
+    if (util_strcasecmp(node_course, lower_course) == 0) {
         return 1;
     }
     // to make sure the if user enter "all" as course name, we accept it
-    else if (strcmp(lower_course, "all") == 0) {
+    else if (util_strcasecmp(lower_course, "all") == 0) {
         return 1; // "all" is always valid
     }
     
@@ -81,8 +71,6 @@ void traverseForCourseSummary(const StudentRecord *node, const char *course_name
     strncpy(target_course, course_name, sizeof(target_course) - 1);
     target_course[sizeof(target_course) - 1] = '\0'; // ensure null termination
     
-    toLowerString(node_course);
-    toLowerString(target_course);
     
     // Only process students in the specified course
     if (util_strcasecmp(node_course, target_course) == 0) {

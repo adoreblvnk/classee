@@ -116,7 +116,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         printf("Student ID type should be numbers only. Please retry.\n");
         return;
       }
-     
+
       int id = atoi(data.id);
       StudentRecord *studentRecord = studentExist(*root, id);
       if (!studentRecord) {
@@ -179,21 +179,14 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
              id);
       inputParser(confirmationBuffer, cmfBufferSize);
 
-      if (util_strcasecmp("Y", confirmationBuffer) != 0) { // only proceed if input is "Y" or "y"
-        printf("The deletion is cancelled.\n");
-        return;
+      if (util_strcasecmp("Y", confirmationBuffer) == 0) {
+        deleteRecord(root, id);
+        printf("CMS: The record with ID=%d is successfully deleted.\n", id);
+        log_transaction("delete", id, "", "", 0.0);
+        log_flag = 1; // changes state
+      } else {
+        printf("CMS: The deletion is cancelled.\n");
       }
-      deleteRecord(root, id);
-      if (util_strcasecmp("N", confirmationBuffer) == 0) {
-        printf("The deletion is cancelled.\n");
-        return;
-      }
-
-      deleteRecord(root, id);
-      printf("CMS: The record with ID=%d is successfully deleted.\n", id);
-
-      log_transaction("delete", id, "", "", 0.0);
-      log_flag = 1; // changes state
     }
   }
 
