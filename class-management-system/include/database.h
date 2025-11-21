@@ -26,4 +26,21 @@ void freeTree(StudentRecord *root);
 // db helper to find students
 StudentRecord *studentExist(const StudentRecord *root, int id);
 
+//sorting enums
+typedef enum {
+    SORT_BY_ID,
+    SORT_BY_MARK
+} SortField;
+
+typedef enum {
+    ORDER_ASC,
+    ORDER_DESC
+} SortOrder;
+
+//Sorting Functions
+StudentRecord *flattenTreeToArray(const StudentRecord *root, int *size);
+void freeRecordArray(StudentRecord *arr);
+void sortRecords(StudentRecord *arr, int size, SortField field, SortOrder order);
+void printSortedRecords(const StudentRecord *arr, int size);
+
 #endif // DATABASE_H

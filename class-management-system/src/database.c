@@ -305,3 +305,97 @@ void saveDatabase(const StudentRecord *root, const char *filename) {
   fclose(file);
   printf("CMS: The database file \"%s\" is successfully saved.\n", filename);
 }
+// Sorting Implementation
+
+// Count total nodes in BST
+static int countNodes(const StudentRecord *node) {
+  if (!node) { return 0; }
+  return 1 + countNodes(node->left) + countNodes(note->right);
+}
+
+// in-order traversal to fill array
+static void flattenHelper(const StudentRecord *node, StudentRecord *arr, int *index) {
+  if (!node) { return; }
+  flattenHelper(node->left, arr, index);
+  arr[*index] = *node; // copies entire struct
+  (*index)++;
+  flattenHelper(node->right, arr, index);
+}
+
+StudentRecord *flattenTreeToArray(const StudentRecord *root, int *size) {
+  if (!size) return NULL;
+
+  if (!root) {
+    *size = 0;
+    return NULL;
+  }
+
+  int count = countNodes(root);
+  *size = count;
+
+  StudentRecord *arr = (StudentRecord *)malloc(count * sizeof(StudentRecord));
+  if (!arr) {
+    perror("CMS: Failed to allocate memory for sorting");
+    *size = 0;
+    return NULL;
+  }
+
+  int index = 0;
+  flattenHelper(root, arr, &index);
+  return arr;
+}
+
+void freeRecordArray(StudentRecord *arr) {
+  free(arr);
+}
+
+//global config for qsort compare
+static SortField g_sortField;
+static SortOrder g_sortOrder;
+
+static int compareRecords(const void *a, const void *b) {
+  const StudentRecord *x = (const StudentRecord *)a;
+  const StudentRecord *y = (const StudentRecord *)b;
+  int cmp = 0;
+
+  if (g_sortField == SORT_BY_ID) {
+    if (x->id < y->id) cmp = -1;
+    else if (x->id > y->id) cmp = 1;
+    else cmp = 0;
+  }
+  else if (g_sortField == SORT_BY_MARK) {
+    if (x->mark < y->mark) cmp = -1;
+    else if (x->mark > y->mark) cmp = 1;
+    else cmp = 0;
+  }
+
+  if (g_sortOrder == ORDER_DESC)
+  cmp = -cmp;
+
+  return cmp
+}
+
+void sortRecords(StudentRecord *arr, int size, SortField field, SortOrder order) {
+  if (!arr || size <= 1) return;
+  g_sortField = field;
+  g_sortOrder = order;
+  qsort(arr, size, sizeof(StudentRecord), compareRecords);
+}
+
+void printSortedRecords(const StudentRecord *arr, int size) {
+  printf("CMS: Here are all the records found in the table \"StudentRecords\" (sorted).\n");
+  printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
+
+  if (!arr || size <= 0) {
+    printf("No records to display.\n");
+    return;
+  }
+
+  for (int i = 0; i < size; i++) {
+    printf("%-8d %-20s %-25s %-5.1f\n",
+           arr[i].id,
+           arr[i].name,
+           arr[i].programme,
+           arr[i].mark);
+  }
+}
