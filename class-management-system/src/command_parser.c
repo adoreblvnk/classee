@@ -83,7 +83,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       }
 
       if (!validFloat(data.mark)) {
-        printf("Ensure proper float number or normal number.\n");
+        printf("Ensure positive float number.\n");
         return;
       }
 
@@ -143,7 +143,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       if (!validLen(data.mark))
         mark = studentRecord->mark;
       else if (!validFloat(data.mark)) {
-        printf("Ensure proper float number or real number.\n");
+        printf("Ensure positive float number.\n");
         return;
       } else
         mark = strtof(data.mark, NULL);

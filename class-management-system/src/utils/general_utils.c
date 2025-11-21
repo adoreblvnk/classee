@@ -39,16 +39,14 @@ bool validLettersAndSpace(char *buffer) {
 
 bool validFloat(char *buffer) {
   char *p_bufferEnd;
-  strtof(buffer, &p_bufferEnd);
-
-  if (p_bufferEnd ==
-      buffer) { // if endptr is at the start with buffer e.g. buffer = 'ab1' = 'a' , p_buffer = 'a'
-    return false;
-  }
-  if (*p_bufferEnd != '\0') { // if at the end of the pointer does not equals to '\0', means invalid
-                              // number too e.g. buffer = '12a' = 'a', p_buffer = 'a'
-    return false;
-  }
+  float value = strtof(buffer, &p_bufferEnd);
+  // if endptr is at the start with buffer e.g. buffer = 'ab1' = 'a' , p_buffer = 'a'
+  if (p_bufferEnd == buffer) { return false; }
+  // if at the end of the pointer does not equals to '\0', means invalid number too e.g. buffer =
+  // '12a' = 'a', p_buffer = 'a'
+  if (*p_bufferEnd != '\0') { return false; }
+  // also check if float value is positive
+  if (value < 0.0) { return false; }
   return true;
 }
 
@@ -96,7 +94,7 @@ static void applyKeyValue(PromptDataHolder *data, const char *key, const char *v
 
 PromptDataHolder stringTokenization(char *buffer) {
   PromptDataHolder data = {0};
-  if (buffer == NULL) return data;
+  if (!buffer) return data;
 
   char *p = buffer;
   const char *keys[] = {"ID", "NAME", "PROGRAMME", "MARK"}; // define keys as separators
@@ -111,34 +109,38 @@ PromptDataHolder stringTokenization(char *buffer) {
     char *key_end = strchr(p, '=');
     if (!key_end) { break; } // malformed, no '=' found
 
-    *key_end = '\0'; // terminate key
     char *key = p;
+    *key_end = '\0'; // terminate key
     char *val_start = key_end + 1;
-    char *val_end = val_start;
+    char *key_trim_end = key_end - 1;
+    // trim trailing spaces before null termination
+    while (key_trim_end >= key && isspace((unsigned char)*key_trim_end)) {
+      key_trim_end--;
+    }
+    *(key_trim_end + 1) = '\0';
+    char *val_end = val_start + strlen(val_start); // assume value is rest of str
 
-    // find end of value. it's either end of string, or start of next key
+    // find start of next key to correctly terminate current value
     char *next_key_marker = NULL;
     for (int i = 0; i < num_keys; i++) {
-      char temp_marker[32];
-      snprintf(temp_marker, sizeof(temp_marker), " %s=", keys[i]);
-      char *found = util_strcasestr(val_start, temp_marker);
-      if (found && (!next_key_marker || found < next_key_marker)) { next_key_marker = found; }
+      char *found = util_strcasestr(val_start, keys[i]);
+      // check if found key is followed by '='
+      if (found && *(found + strlen(keys[i])) == '=') {
+        // if we find a closer marker, update it
+        if (!next_key_marker || found < next_key_marker) { next_key_marker = found; }
+      }
     }
 
     if (next_key_marker) {
       val_end = next_key_marker;
-      *val_end = '\0'; // terminate current value string
-      p = val_end + 1; // move main pointer to start of next key
-    } else {
-      val_end = val_start + strlen(val_start);
-      p = val_end; // move to end of string
+      // trim trailing spaces from value before null-terminating
+      while (val_end > val_start && isspace((unsigned char)*(val_end - 1))) {
+        val_end--;
+      }
+      *val_end = '\0';
     }
 
-    // trim whitespace from key before comparing
-    char *key_trim_end = key + strlen(key) - 1;
-    while (key_trim_end > key && isspace((unsigned char)*key_trim_end)) {
-      *key_trim_end-- = '\0';
-    }
+    p = val_end; // move main ptr to end of current value
     applyKeyValue(&data, key, val_start);
   }
   return data;

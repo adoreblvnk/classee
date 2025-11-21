@@ -27,6 +27,7 @@ int main() {
       int c;
       while ((c = fgetc(stdin)) != '\n' && c != EOF) {} // discard extra chars
       printf("CMS: Input exceeded 255 characters and was truncated.\n");
+      continue;
     }
 
     // exit condition (rmb to add \n)
