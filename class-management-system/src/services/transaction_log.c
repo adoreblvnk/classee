@@ -44,11 +44,23 @@ void perform_rollback(StudentRecord **root, int target_change_id) {
     return;
   }
   FILE *temp_tlog_file = fopen(TLOG_TMP_FILE, "w");
-  if (!temp_tlog_file) {
+
+  // if target is 0, we clear BST & truncate tlog to just header
+  if (target_change_id == 0) {
     fclose(tlog_file);
-    printf("CMS: Could not create temp file for rollback.\n");
+    freeTree(*root);
+    *root = NULL;
+    FILE *temp_tlog = fopen(TLOG_TMP_FILE, "w");
+    if (temp_tlog) {
+      fprintf(temp_tlog, "%s", TLOG_HEADER);
+      fclose(temp_tlog);
+      remove(TLOG_FILE);
+      rename(TLOG_TMP_FILE, TLOG_FILE);
+      printf("CMS: Database state has been rolled back to its initial empty state.\n");
+    }
     return;
   }
+
   freeTree(*root); // clear current bst
   *root = NULL;
   char line[512];

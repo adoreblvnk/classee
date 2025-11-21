@@ -63,32 +63,34 @@ static bool isKey(char *possibleKey) {
   return false;
 }
 
-// helper for stringTokenization only seen in this class
-static void concatValueWithSpace(char *dest, size_t destSize, const char *value) {
-  if (dest == NULL || destSize == 0 || value == NULL) return;
-
-  size_t current_len = strlen(dest);
-
-  if (current_len > 0) {
-    // if [0] is not empty, we assume it contains a word and we go to the last index and add a
-    // space.
-    snprintf(dest + current_len, destSize - current_len, " %s", value);
-  } else {
-    snprintf(dest, destSize, "%s", value);
-  }
-}
-
 static void applyKeyValue(PromptDataHolder *data, const char *key, const char *value) {
   if (!data || !key || !value) return;
 
+  // trim leading/trailing whitespace from value before applying
+  char trimmed_value[256];
+  const char *start = value;
+  while (*start && isspace((unsigned char)*start)) {
+    start++;
+  }
+  const char *end = start + strlen(start) - 1;
+  while (end > start && isspace((unsigned char)*end)) {
+    end--;
+  }
+  strncpy(trimmed_value, start, end - start + 1);
+  trimmed_value[end - start + 1] = '\0'; // rmb to null terminate
+
   if (util_strcasecmp(key, "ID") == 0) {
-    concatValueWithSpace(data->id, sizeof(data->id), value);
+    strncpy(data->id, trimmed_value, sizeof(data->id) - 1);
+    data->id[sizeof(data->id) - 1] = '\0';
   } else if (util_strcasecmp(key, "PROGRAMME") == 0) {
-    concatValueWithSpace(data->programme, sizeof(data->programme), value);
+    strncpy(data->programme, trimmed_value, sizeof(data->programme) - 1);
+    data->programme[sizeof(data->programme) - 1] = '\0';
   } else if (util_strcasecmp(key, "MARK") == 0) {
-    concatValueWithSpace(data->mark, sizeof(data->mark), value);
+    strncpy(data->mark, trimmed_value, sizeof(data->mark) - 1);
+    data->mark[sizeof(data->mark) - 1] = '\0';
   } else if (util_strcasecmp(key, "NAME") == 0) {
-    concatValueWithSpace(data->name, sizeof(data->name), value);
+    strncpy(data->name, trimmed_value, sizeof(data->name) - 1);
+    data->name[sizeof(data->name) - 1] = '\0';
   }
 }
 
@@ -97,38 +99,47 @@ PromptDataHolder stringTokenization(char *buffer) {
   if (buffer == NULL) return data;
 
   char *p = buffer;
-  // define separators for key-value pairs. The space is important
-  const char *keys[] = {" ID=", " Name=", " Programme=", " Mark="};
+  const char *keys[] = {"ID", "NAME", "PROGRAMME", "MARK"}; // define keys as separators
+  int num_keys = sizeof(keys) / sizeof(keys[0]);
 
   while (*p) {
-    // skip leading spaces
-    while (*p && isspace((unsigned char)*p)) {
+    // skip leading whitespace
+    while (*p && isspace((unsigned char)*p))
       p++;
-    }
-    if (!*p) { break; } // end of string
+    if (!*p) break;
 
+    char *key_end = strchr(p, '=');
+    if (!key_end) { break; } // malformed, no '=' found
+
+    *key_end = '\0'; // terminate key
     char *key = p;
-    char *equals = strchr(p, '=');
-    if (!equals) { break; } // malformed pair (no '=' found)
-    *equals = '\0';         // terminate key
+    char *val_start = key_end + 1;
+    char *val_end = val_start;
 
-    p = equals + 1; // go past '='
-    char *value = p;
-    char *end = NULL;
-
-    // find earliest occurrence of next key to mark the end of curr val
-    for (int i = 0; i < sizeof(keys) / sizeof(keys[0]); i++) {
-      char *marker = util_strcasestr(p, keys[i]);
-      if (marker && (!end || marker < end)) { end = marker; }
+    // find end of value. it's either end of string, or start of next key
+    char *next_key_marker = NULL;
+    for (int i = 0; i < num_keys; i++) {
+      char temp_marker[32];
+      snprintf(temp_marker, sizeof(temp_marker), " %s=", keys[i]);
+      char *found = util_strcasestr(val_start, temp_marker);
+      if (found && (!next_key_marker || found < next_key_marker)) { next_key_marker = found; }
     }
 
-    if (end) {
-      *end = '\0'; // terminate value str
-      p = end + 1; // move p to start of next key
+    if (next_key_marker) {
+      val_end = next_key_marker;
+      *val_end = '\0'; // terminate current value string
+      p = val_end + 1; // move main pointer to start of next key
     } else {
-      p += strlen(p); // no more keys, move to end of string
+      val_end = val_start + strlen(val_start);
+      p = val_end; // move to end of string
     }
-    applyKeyValue(&data, key, value);
+
+    // trim whitespace from key before comparing
+    char *key_trim_end = key + strlen(key) - 1;
+    while (key_trim_end > key && isspace((unsigned char)*key_trim_end)) {
+      *key_trim_end-- = '\0';
+    }
+    applyKeyValue(&data, key, val_start);
   }
   return data;
 }

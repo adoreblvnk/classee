@@ -25,8 +25,8 @@ int main() {
     // eg SHOW SUMMARY [very long course name] (> 255 chars)
     if (strchr(input, '\n') == NULL) { // check if newline is missing
       int c;
-      while ((c = fgetc(stdin)) != '\n' && c != EOF)
-        ; // discard extra chars
+      while ((c = fgetc(stdin)) != '\n' && c != EOF) {} // discard extra chars
+      printf("CMS: Input exceeded 255 characters and was truncated.\n");
     }
 
     // exit condition (rmb to add \n)
