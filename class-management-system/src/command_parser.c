@@ -53,22 +53,19 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     saveDatabase(*root, db_filename);
   } else if (util_strcasecmp(command, "INSERT") == 0) {
     if (args) {
-        PromptDataHolder data = stringTokenization(args);
-        if (strlen(data.id) == 0 || strlen(data.mark) == 0 || strlen(data.programme) == 0 || strlen(data.name) == 0) {
-            printf("CMS: Missing arguments for INSERT. Use: INSERT ID=... Name=... Programme=... Mark=...\n");
-                return;
-        }
-        
-      if (!validStudentIDType(data.id)) {
-        printf("Student ID type should be numbers only. Please retry.\n");
-        return;
-      }
-      if (!validStudentIDLen(data.id)) {
-        printf("Student ID len should be 7. Please retry.\n");
+      PromptDataHolder data = stringTokenization(args);
+      if (strlen(data.id) == 0 || strlen(data.mark) == 0 || strlen(data.programme) == 0 ||
+          strlen(data.name) == 0) {
+        printf("CMS: Missing arguments for INSERT. Use: INSERT ID=... Name=... Programme=... "
+               "Mark=...\n");
         return;
       }
 
-      
+      if (!isValidStudentID(data.id)) {
+        printf("Student ID type should be numbers only. Please retry.\n");
+        return;
+      }
+
       int id = atoi(data.id);
       if (studentExist(*root, id)) {
         printf("CMS: The record with ID=%d already exists\n", id);
@@ -104,12 +101,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       printf("CMS: Missing arguments for QUERY. Use: QUERY ID=...\n");
       return;
     }
-    if (!validStudentIDType(data.id)) {
+    if (!isValidStudentID(data.id)) {
       printf("Student ID type should be numbers only. Please retry.\n");
-      return;
-    }
-    if (!validStudentIDLen(data.id)) {
-      printf("Student ID len should be 7. Please retry.\n");
       return;
     }
     queryStudent(*root, atoi(data.id));
@@ -118,16 +111,12 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   else if (util_strcasecmp(command, "UPDATE") == 0) {
     if (args) {
 
-        PromptDataHolder data = stringTokenization(args);
-      if (!validStudentIDType(data.id)) {
+      PromptDataHolder data = stringTokenization(args);
+      if (!isValidStudentID(data.id)) {
         printf("Student ID type should be numbers only. Please retry.\n");
         return;
       }
-      if (!validStudentIDLen(data.id)) {
-        printf("Student ID len should be 7. Please retry.\n");
-        return;
-      }
-
+     
       int id = atoi(data.id);
       StudentRecord *studentRecord = studentExist(*root, id);
       if (!studentRecord) {
@@ -135,13 +124,12 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
       }
 
-      if (strlen(data.name) > 0 &&!validLettersAndSpace(data.name)) {
+      if (strlen(data.name) > 0 && !validLettersAndSpace(data.name)) {
         printf("Ensure name consists of letters and spaces.\n");
         return;
       }
 
       if (!validLen(data.name)) strcpy(data.name, studentRecord->name);
-
 
       if (strlen(data.programme) > 0 && !validLettersAndSpace(data.programme)) {
         printf("Ensure programme name consists of letters and spaces\n");
@@ -170,14 +158,10 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
   else if (util_strcasecmp(command, "DELETE") == 0) {
     if (args) {
-        PromptDataHolder data = stringTokenization(args);
+      PromptDataHolder data = stringTokenization(args);
 
-      if (!validStudentIDType(data.id)) {
+      if (!isValidStudentID(data.id)) {
         printf("Student ID type should be numbers only. Please retry.\n");
-        return;
-      }
-      if (!validStudentIDLen(data.id)) {
-        printf("Student ID len should be 7. Please retry.\n");
         return;
       }
 
@@ -190,10 +174,17 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       char confirmationBuffer[6];
       int cmfBufferSize = sizeof(confirmationBuffer);
 
-      printf("CMS: Are you sure you want to delete record with ID=%d? Type \"Y\" to confirm or type \"N\" to cancel.\nP3_7:", id);
+      printf("CMS: Are you sure you want to delete record with ID=%d? Type \"Y\" to confirm or "
+             "type \"N\" to cancel.\nP3_7:",
+             id);
       inputParser(confirmationBuffer, cmfBufferSize);
 
-      if(util_strcasecmp("N", confirmationBuffer) == 0) {
+      if (util_strcasecmp("Y", confirmationBuffer) != 0) { // only proceed if input is "Y" or "y"
+        printf("The deletion is cancelled.\n");
+        return;
+      }
+      deleteRecord(root, id);
+      if (util_strcasecmp("N", confirmationBuffer) == 0) {
         printf("The deletion is cancelled.\n");
         return;
       }

@@ -2,13 +2,10 @@
 #define GENERAL_UTILS_H
 
 #include <stdbool.h>
-#include "./types.h"
+#include "../types.h"
 
-// helper func for checking studentID len
-bool validStudentIDLen(char *studentID);
-
-// helper func for checking student id data type
-bool validStudentIDType(char *studentID);
+// helper func for checking student id
+bool isValidStudentID(const char *studentID);
 
 // input parser to handle eof
 void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer);
