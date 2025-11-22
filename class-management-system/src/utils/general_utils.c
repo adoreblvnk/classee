@@ -94,54 +94,45 @@ static void applyKeyValue(PromptDataHolder *data, const char *key, const char *v
 
 PromptDataHolder stringTokenization(char *buffer) {
   PromptDataHolder data = {0};
-  if (!buffer) return data;
+  if (!buffer) { return data; }
 
   char *p = buffer;
-  const char *keys[] = {"ID", "NAME", "PROGRAMME", "MARK"}; // define keys as separators
-  int num_keys = sizeof(keys) / sizeof(keys[0]);
+  const char *known_keys[] = {"ID", "NAME", "PROGRAMME", "MARK"};
 
   while (*p) {
-    // skip leading whitespace
-    while (*p && isspace((unsigned char)*p))
-      p++;
-    if (!*p) break;
+    char *equals = strchr(p, '=');
+    if (!equals) { break; }
 
-    char *key_end = strchr(p, '=');
-    if (!key_end) { break; } // malformed, no '=' found
+    char *value_start = equals + 1;
+    char *value_end = value_start + strlen(value_start); // assume value goes to end of str (\0)
 
+    // find start of next key, which is the end of curr val
+    for (int i = 0; i < 4; i++) {
+      char *next_key = util_strcasestr(value_start, known_keys[i]);
+      // if key is found & followed by '=' & is before current value_end
+      // NOTE: value_end is updated to earliest next_key found
+      if (next_key && strchr(next_key, '=') && next_key < value_end) { value_end = next_key; }
+    }
+
+    // terminate val for processing, value_start holds the val
+    *equals = '\0';
+    char end_char = *value_end;
+    *value_end = '\0';
     char *key = p;
-    *key_end = '\0'; // terminate key
-    char *val_start = key_end + 1;
-    char *key_trim_end = key_end - 1;
-    // trim trailing spaces before null termination
-    while (key_trim_end >= key && isspace((unsigned char)*key_trim_end)) {
-      key_trim_end--;
-    }
-    *(key_trim_end + 1) = '\0';
-    char *val_end = val_start + strlen(val_start); // assume value is rest of str
-
-    // find start of next key to correctly terminate current value
-    char *next_key_marker = NULL;
-    for (int i = 0; i < num_keys; i++) {
-      char *found = util_strcasestr(val_start, keys[i]);
-      // check if found key is followed by '='
-      if (found && *(found + strlen(keys[i])) == '=') {
-        // if we find a closer marker, update it
-        if (!next_key_marker || found < next_key_marker) { next_key_marker = found; }
-      }
+    util_trim(key);
+    if (isKey(key)) {
+      applyKeyValue(&data, key, value_start); // value_start is value
+    } else {
+      printf("CMS: Invalid field '%s'. Use ID, NAME, PROGRAMME, or MARK.\n", key);
+      *equals = '=';
+      *value_end = end_char; // restores buffer that was changed to '\0'
+      return (PromptDataHolder){0};
     }
 
-    if (next_key_marker) {
-      val_end = next_key_marker;
-      // trim trailing spaces from value before null-terminating
-      while (val_end > val_start && isspace((unsigned char)*(val_end - 1))) {
-        val_end--;
-      }
-      *val_end = '\0';
-    }
-
-    p = val_end; // move main ptr to end of current value
-    applyKeyValue(&data, key, val_start);
+    // restore buffer to original state
+    *equals = '=';
+    *value_end = end_char;
+    p = value_end; // move p to value_end which is the start of next potential key value pair
   }
   return data;
 }
