@@ -15,9 +15,9 @@ set(CLASSEE_SOURCES
   src/services/log.c
   src/services/transaction_log.c
   src/utils/file_utils.c
-  src/utils/str_utils.c
-  src/utils/print_util.c
   src/utils/general_utils.c
+  src/utils/print_util.c
+  src/utils/str_utils.c
 )
 
 # build `cms` executable
@@ -36,15 +36,15 @@ if(BUILD_TESTING)
     Unity
     GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
     GIT_TAG        v2.5.2
-    # NOTE: Removed SOURCE_DIR for better practice, letting CMake manage the download location.
+    SOURCE_DIR     ${CMAKE_CURRENT_SOURCE_DIR}/tests/unity
   )
   FetchContent_MakeAvailable(Unity)
 
   # build `run_tests` executable
   add_executable(run_tests
     tests/test_runner.c # test runner w main func
-    tests/test_str_utils.c
     tests/test_file_utils.c
+    tests/test_str_utils.c
     ${CLASSEE_SOURCES}
   )
 
