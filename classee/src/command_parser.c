@@ -24,7 +24,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     openDatabase(root, db_filename);
   } else if (util_strcasecmp(command, "SHOW") == 0) {
     if (!args || *args == '\0') {
-      printf("CMS: Missing argument for SHOW command (ALL, SUMMARY, LOG, JOURNAL).\n");
+      printf("classee: Missing argument for SHOW command (ALL, SUMMARY, LOG, JOURNAL).\n");
       return;
     }
 
@@ -48,7 +48,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     if (!(arg1 && util_strcasecmp(arg1, "SORT") == 0 &&
           arg2 && util_strcasecmp(arg2, "BY") == 0 &&
           arg3 && (util_strcasecmp(arg3, "MARK") == 0 || util_strcasecmp(arg3, "ID") == 0))) {
-        printf("CMS: Invalid SORT BY usage. Use: SHOW ALL SORT BY [MARK|ID] [ASC|DESC].\n");
+        printf("classee: Invalid SORT BY usage. Use: SHOW ALL SORT BY [MARK|ID] [ASC|DESC].\n");
         return;
     }
 
@@ -93,7 +93,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     } else if (util_strcasecmp(show_arg, "TLOG") == 0) {
       show_tlog();
     } else {
-      printf("CMS: Invalid argument for SHOW command.\n");
+      printf("classee: Invalid argument for SHOW command.\n");
       return;
     }
   } else if (util_strcasecmp(command, "SAVE") == 0) {
@@ -103,7 +103,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       PromptDataHolder data = stringTokenization(args);
       if (strlen(data.id) == 0 || strlen(data.mark) == 0 || strlen(data.programme) == 0 ||
           strlen(data.name) == 0) {
-        printf("CMS: Missing arguments for INSERT. Use: INSERT ID=... Name=... Programme=... "
+        printf("classee: Missing arguments for INSERT. Use: INSERT ID=... Name=... Programme=... "
                "Mark=...\n");
         return;
       }
@@ -115,7 +115,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
       int id = atoi(data.id);
       if (studentExist(*root, id)) {
-        printf("CMS: The record with ID=%d already exists\n", id);
+        printf("classee: The record with ID=%d already exists\n", id);
         return;
       }
 
@@ -136,7 +136,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
       float mark = strtof(data.mark, NULL);
       insertRecord(root, id, data.name, data.programme, mark);
-      printf("CMS: A new record with ID=%d is successfully inserted.\n", id);
+      printf("classee: A new record with ID=%d is successfully inserted.\n", id);
 
       log_transaction("insert", id, data.name, data.programme, mark);
       log_flag = 1; // changes state
@@ -145,7 +145,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
     PromptDataHolder data = stringTokenization(args);
     if (!args || *args == '\0') {
-      printf("CMS: Missing arguments for QUERY. Use: QUERY ID=...\n");
+      printf("classee: Missing arguments for QUERY. Use: QUERY ID=...\n");
       return;
     }
     if (!isValidStudentID(data.id)) {
@@ -167,7 +167,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       int id = atoi(data.id);
       StudentRecord *studentRecord = studentExist(*root, id);
       if (!studentRecord) {
-        printf("CMS: The record with ID=%d does not exist.\n", id);
+        printf("classee: The record with ID=%d does not exist.\n", id);
         return;
       }
 
@@ -196,7 +196,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         mark = strtof(data.mark, NULL);
 
       updateRecord(studentRecord, data.name, data.programme, mark);
-      printf("CMS: The record with ID=%d is successfully updated.\n", id);
+      printf("classee: The record with ID=%d is successfully updated.\n", id);
 
       log_transaction("update", id, data.name, data.programme, mark);
       log_flag = 1; // changes state
@@ -214,14 +214,14 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
       int id = atoi(data.id);
       if (!studentExist(*root, id)) {
-        printf("CMS: The record with ID=%d does not exist.\n", id);
+        printf("classee: The record with ID=%d does not exist.\n", id);
         return;
       }
 
       char confirmationBuffer[6];
       int cmfBufferSize = sizeof(confirmationBuffer);
 
-      printf("CMS: Are you sure you want to delete record with ID=%d? Type \"Y\" to confirm or "
+      printf("classee: Are you sure you want to delete record with ID=%d? Type \"Y\" to confirm or "
              "type \"N\" to cancel.\nP3_7:",
              id);
       inputParser(confirmationBuffer, cmfBufferSize);
@@ -229,11 +229,11 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
       if (util_strcasecmp("Y", confirmationBuffer) == 0) {
         deleteRecord(root, id);
-        printf("CMS: The record with ID=%d is successfully deleted.\n", id);
+        printf("classee: The record with ID=%d is successfully deleted.\n", id);
         log_transaction("delete", id, "", "", 0.0);
         log_flag = 1; // changes state
       } else {
-        printf("CMS: The deletion is cancelled.\n");
+        printf("classee: The deletion is cancelled.\n");
       }
     }
   }
@@ -245,18 +245,18 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       // validate that args is a positive number
       for (int i = 0; args[i] != '\0'; i++) {
         if (!isdigit(args[i])) {
-          printf("CMS: Invalid change ID. Must be a positive number.\n");
+          printf("classee: Invalid change ID. Must be a positive number.\n");
           return; // exit early
         }
       }
       perform_rollback(root, atoi(args));
       log_flag = 1; // changes state
     } else {
-      printf("CMS: Missing change ID for ROLLBACK.\n");
+      printf("classee: Missing change ID for ROLLBACK.\n");
       return;
     }
   } else {
-    printf("CMS: Unknown command \"%s\".\n", command);
+    printf("classee: Unknown command \"%s\".\n", command);
     return;
   }
 

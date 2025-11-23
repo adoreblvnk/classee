@@ -40,7 +40,7 @@ void show_tlog() {
 void perform_rollback(StudentRecord **root, int target_change_id) {
   FILE *tlog_file = fopen(TLOG_FILE, "r");
   if (!tlog_file) {
-    printf("CMS: Transaction log file not found. Cannot rollback.\n");
+    printf("classee: Transaction log file not found. Cannot rollback.\n");
     return;
   }
   FILE *temp_tlog_file = fopen(TLOG_TMP_FILE, "w");
@@ -56,7 +56,7 @@ void perform_rollback(StudentRecord **root, int target_change_id) {
       fclose(temp_tlog);
       remove(TLOG_FILE);
       rename(TLOG_TMP_FILE, TLOG_FILE);
-      printf("CMS: Database state has been rolled back to its initial empty state.\n");
+      printf("classee: Database state has been rolled back to its initial empty state.\n");
     }
     return;
   }
@@ -105,5 +105,5 @@ void perform_rollback(StudentRecord **root, int target_change_id) {
   rename(TLOG_TMP_FILE, TLOG_FILE);
 
   // NOTE: DON'T F***ING RESET THE GLOBAL change_id COUNTER ELSE THERE'LL BE DUPLICATES
-  printf("CMS: Database state has been rollback to change #%d.\n", target_change_id);
+  printf("classee: Database state has been rollback to change #%d.\n", target_change_id);
 }

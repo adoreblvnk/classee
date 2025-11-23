@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(ClassManagementSystem C)
+project(classee C)
 
 # use C99
 set(CMAKE_C_STANDARD 99)
@@ -8,7 +8,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # set all source files (files without a main func)
-set(CMS_SOURCES
+set(CLASSEE_SOURCES
   src/command_parser.c
   src/database.c
   src/summary.c
@@ -21,8 +21,8 @@ set(CMS_SOURCES
 )
 
 # build `cms` executable
-add_executable(cms src/main.c ${CMS_SOURCES})
-target_include_directories(cms PUBLIC include)
+add_executable(classee src/main.c ${CLASSEE_SOURCES})
+target_include_directories(classee PUBLIC include)
 
 # build unit tests
 # option(BUILD_TESTING "Build unit tests" ON)
@@ -45,7 +45,7 @@ if(BUILD_TESTING)
     tests/test_runner.c # test runner w main func
     tests/test_str_utils.c
     tests/test_file_utils.c
-    ${CMS_SOURCES}
+    ${CLASSEE_SOURCES}
   )
 
   # Define the TESTING macro only for the run_tests target

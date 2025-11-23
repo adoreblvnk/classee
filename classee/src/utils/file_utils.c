@@ -19,7 +19,7 @@ void display_data_file(const char *filename, const char *title_for_error,
                        const char *formatted_header, int is_log_format) {
   FILE *file = fopen(filename, "r");
   if (!file) {
-    printf("CMS: %s file not found.\n", title_for_error);
+    printf("classee: %s file not found.\n", title_for_error);
     return;
   }
   char line[512];

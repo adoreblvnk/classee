@@ -10,12 +10,12 @@
 // student ID validator
 bool isValidStudentID(const char *studentID) {
   if (strlen(studentID) != 7) {
-    printf("CMS: Student ID length must be 7 digits. Please retry.\n");
+    printf("classee: Student ID length must be 7 digits. Please retry.\n");
     return false;
   }
   for (int i = 0; studentID[i] != '\0'; i++) {
     if (!isdigit(studentID[i])) {
-      printf("CMS: Student ID must contain only numbers. Please retry.\n");
+      printf("classee: Student ID must contain only numbers. Please retry.\n");
       return false;
     }
   }
@@ -123,7 +123,7 @@ PromptDataHolder stringTokenization(char *buffer) {
     if (isKey(key)) {
       applyKeyValue(&data, key, value_start); // value_start is value
     } else {
-      printf("CMS: Invalid field '%s'. Use ID, NAME, PROGRAMME, or MARK.\n", key);
+      printf("classee: Invalid field '%s'. Use ID, NAME, PROGRAM, or MARK.\n", key);
       *equals = '=';
       *value_end = end_char; // restores buffer that was changed to '\0'
       return (PromptDataHolder){0};

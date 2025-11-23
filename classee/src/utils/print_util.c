@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 void printMenu() {
-  printf("Class Management System (CMS) Initialized.\n");
-  printf("CMS Commands:\n");
+  printf("classee Initialized.\n");
+  printf("classee Commands:\n");
   printf("  OPEN                - Open the database file.\n");
   printf("  SHOW ALL            - Display all student records.\n");
   printf("  SHOW SUMMARY ALL    - Display summary statistics for all courses.\n");

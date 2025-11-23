@@ -69,15 +69,15 @@ void openDatabase(StudentRecord **root, const char *filename) {
     // if file doesn't exist, create it with a default header
     FILE *new_file = fopen(filename, "w");
     if (new_file) {
-      fprintf(new_file, "Database Name: INF1002-CMS\n");
+      fprintf(new_file, "Database Name: classee\n");
       fprintf(new_file, "Authors: \n\n");
       fprintf(new_file, "Table Name: StudentRecords\n");
       fprintf(new_file, "ID\tName\tProgramme\tMark\n");
       fclose(new_file);
-      printf("CMS: The database file \"%s\" was not found. A new one has been created.\n",
+      printf("classee: The database file \"%s\" was not found. A new one has been created.\n",
              filename);
     } else {
-      perror("CMS: Error creating database file");
+      perror("classee: Error creating database file");
     }
     return;
   }
@@ -90,7 +90,7 @@ void openDatabase(StudentRecord **root, const char *filename) {
   // skip the 5 header lines & check for read errors
   for (int i = 0; i < 5; i++) {
     if (fgets(line, sizeof(line), file) == NULL) {
-      printf("CMS: Error reading header from database file or file is malformed.\n");
+      printf("classee: Error reading header from database file or file is malformed.\n");
       fclose(file);
       return;
     }
@@ -105,7 +105,7 @@ void openDatabase(StudentRecord **root, const char *filename) {
 
   if (record_count == 0) {
     fclose(file);
-    printf("CMS: The database file \"%s\" is open, but contains no records.\n", filename);
+    printf("classee: The database file \"%s\" is open, but contains no records.\n", filename);
     return;
   }
 
@@ -140,13 +140,13 @@ void openDatabase(StudentRecord **root, const char *filename) {
   }
 
   free(records); // free temp arr
-  printf("CMS: The database file \"%s\" is successfully opened.\n", filename);
+  printf("classee: The database file \"%s\" is successfully opened.\n", filename);
 }
 
 // display all records in bst (in-order traversal)
 // O(n). must visit every node once for traversal
 void showAll(const StudentRecord *root) {
-  printf("CMS: Here are all the records found in the table \"StudentRecords\".\n");
+  printf("classee: Here are all the records found in the table \"StudentRecords\".\n");
   printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
   if (!root) {
     printf("No records to display.\n");
@@ -158,12 +158,12 @@ void showAll(const StudentRecord *root) {
 void queryStudent(const StudentRecord *root, int id) {
   const StudentRecord *student = studentExist(root, id);
   if (student) {
-    printf("CMS: The record with ID=%d is found in the data table.\n", id);
+    printf("classee: The record with ID=%d is found in the data table.\n", id);
     printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
     printRecord(student);
     return;
   }
-  printf("CMS: The record with ID=%d does not exist.\n", id);
+  printf("classee: The record with ID=%d does not exist.\n", id);
 }
 
 StudentRecord *studentExist(const StudentRecord *root, int id) {
@@ -284,14 +284,14 @@ void saveDatabase(const StudentRecord *root, const char *filename) {
   }
   // if header lines is not 5 then exit with error
   if (header_line_no != 5) {
-    printf("CMS: The database file \"%s\" is not a valid database file.\n", filename);
+    printf("classee: The database file \"%s\" is not a valid database file.\n", filename);
     return;
   }
 
   // NOTE: write mode erases curr file contents!
   file = fopen(filename, "w");
   if (!file) {
-    perror("CMS: Error opening file for saving");
+    perror("classee: Error opening file for saving");
     return;
   }
 
@@ -303,7 +303,7 @@ void saveDatabase(const StudentRecord *root, const char *filename) {
   saveInOrder(root, file);
 
   fclose(file);
-  printf("CMS: The database file \"%s\" is successfully saved.\n", filename);
+  printf("classee: The database file \"%s\" is successfully saved.\n", filename);
 }
 // Sorting Implementation
 
@@ -335,7 +335,7 @@ StudentRecord *flattenTreeToArray(const StudentRecord *root, int *size) {
 
   StudentRecord *arr = (StudentRecord *)malloc(count * sizeof(StudentRecord));
   if (!arr) {
-    perror("CMS: Failed to allocate memory for sorting");
+    perror("classee: Failed to allocate memory for sorting");
     *size = 0;
     return NULL;
   }
@@ -383,7 +383,7 @@ void sortRecords(StudentRecord *arr, int size, SortField field, SortOrder order)
 }
 
 void printSortedRecords(const StudentRecord *arr, int size) {
-  printf("CMS: Here are all the records found in the table \"StudentRecords\" (sorted).\n");
+  printf("classee: Here are all the records found in the table \"StudentRecords\" (sorted).\n");
   printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
 
   if (!arr || size <= 0) {

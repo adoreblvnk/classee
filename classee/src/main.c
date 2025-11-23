@@ -26,7 +26,7 @@ int main() {
     if (strchr(input, '\n') == NULL) { // check if newline is missing
       int c;
       while ((c = fgetc(stdin)) != '\n' && c != EOF) {} // discard extra chars
-      printf("CMS: Input exceeded 255 characters and was truncated.\n");
+      printf("classee: Input exceeded 255 characters and was truncated.\n");
       continue;
     }
 
@@ -38,6 +38,6 @@ int main() {
   }
 
   freeTree(root); // free mem before exit
-  printf("CMS: Shutting down. All data has been cleared from memory.\n");
+  printf("classee: Shutting down. All data has been cleared from memory.\n");
   return 0;
 }
