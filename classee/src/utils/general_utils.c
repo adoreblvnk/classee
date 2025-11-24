@@ -66,16 +66,16 @@ bool validFloat(char *buffer) {
   float value = strtof(buffer, &p_bufferEnd);
   // if endptr is at the start with buffer e.g. buffer = 'ab1' = 'a' , p_buffer = 'a'
   if (p_bufferEnd == buffer) { 
-    printf("classee: Ensure a valid integer is entered.\n");
+    printf("classee: Ensure a valid float is entered for marks.\n");
     return false; }
   // if at the end of the pointer does not equals to '\0', means invalid number too e.g. buffer =
   // '12a' = 'a', p_buffer = 'a'
   if (*p_bufferEnd != '\0') { 
-    printf("classee: Ensure a valid integer is entered.\n");
+    printf("classee: Ensure a valid float is entered for marks.\n");
     return false; }
   // also check if float value is positive
   if (value < 0.0) { 
-    printf("classee: Ensure positive float number.\n");
+    printf("classee: Ensure positive float number for marks.\n");
     return false; }
   return true;
 }
