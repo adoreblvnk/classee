@@ -46,11 +46,11 @@ void printDeclaration() {
   printf("        - project to others or upload to any other places for public access.\n");
   printf("        - We agree that we did not copy any code directly from AI generated sources\n\n");
 
-  printf("               Declared by: Group Name (please insert your group name)\n");
-  printf("                               Team members:\n");
+  printf("                              Declared by: P3-7\n");
+  printf("                                Team members:\n");
   printf("                                   1. Joseph Poon\n");
   printf("                                   2. Vincent Foo\n");
   printf("                                   3. Joel Tse\n");
   printf("                                   4. Yeow Heng\n");
-  printf("               Date: 25th November 2025.\n\n\n");
+  printf("                              Date: 25th November 2025.\n\n\n");
 }
