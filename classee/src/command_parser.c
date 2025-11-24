@@ -129,6 +129,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   } else if (util_strcasecmp(command, "QUERY") == 0) {
 
     PromptDataHolder data = stringTokenization(args);
+    if (data.hasMissingField) return;
     if (!args || *args == '\0') {
       printf("classee: Missing arguments for QUERY. Use: QUERY ID=...\n");
       return;
@@ -139,8 +140,9 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
 
   else if (util_strcasecmp(command, "UPDATE") == 0) {
     if (args) {
-
+        
       PromptDataHolder data = stringTokenization(args);
+      if (data.hasMissingField) return;
       if (!validStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
@@ -175,7 +177,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   else if (util_strcasecmp(command, "DELETE") == 0) {
     if (args) {
       PromptDataHolder data = stringTokenization(args);
-
+      if (data.hasMissingField) return;
       if (!validStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
