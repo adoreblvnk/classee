@@ -4,17 +4,16 @@
 #include <stdbool.h>
 #include "../types.h"
 
-// helper func for checking student id
-bool isValidStudentID(const char *studentID);
 
 // input parser to handle eof
 void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer);
 
 // validators
+bool validStudentID(const char *studentID);
 bool validLettersAndSpace(char *buffer);
 bool validFloat(char *buffer);
 bool validLen(char *buffer);
-bool validArgument(char *command, PromptDataHolder *data);
+bool validNameProgrammeField(const char *input, const char *fieldName, bool isUpdateMode);
 
 // for arguments
 PromptDataHolder stringTokenization(char *buffer);

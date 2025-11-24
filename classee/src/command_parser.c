@@ -98,6 +98,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   } else if (util_strcasecmp(command, "INSERT") == 0) {
     if (args) {
       PromptDataHolder data = stringTokenization(args);
+      if (data.hasMissingField) return;
       if (strlen(data.id) == 0 || strlen(data.mark) == 0 || strlen(data.programme) == 0 ||
           strlen(data.name) == 0) {
         printf("classee: Missing arguments for INSERT. Use: INSERT ID=... Name=... Programme=... "
@@ -105,7 +106,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
       }
 
-      if (!isValidStudentID(data.id)) { return; }
+      if (!validStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
       if (studentExist(*root, id)) {
@@ -113,20 +114,10 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
       }
 
-      if (!validLettersAndSpace(data.name) || !validLen(data.name)) {
-        printf("Ensure name only consist of letters and spaces.\n");
-        return;
-      }
+      if(!validNameProgrammeField(data.name, "name", false)) return;
+      if(!validNameProgrammeField(data.programme, "programme", false)) return;
 
-      if (!validLettersAndSpace(data.programme) || !validLen(data.programme)) {
-        printf("Ensure programme name consist of letters and spaces\n");
-        return;
-      }
-
-      if (!validFloat(data.mark)) {
-        printf("Ensure positive float number.\n");
-        return;
-      }
+      if (!validFloat(data.mark)) return;
 
       float mark = strtof(data.mark, NULL);
       insertRecord(root, id, data.name, data.programme, mark);
@@ -142,7 +133,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       printf("classee: Missing arguments for QUERY. Use: QUERY ID=...\n");
       return;
     }
-    if (!isValidStudentID(data.id)) { return; }
+    if (!validStudentID(data.id)) { return; }
     queryStudent(*root, atoi(data.id));
   }
 
@@ -150,7 +141,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     if (args) {
 
       PromptDataHolder data = stringTokenization(args);
-      if (!isValidStudentID(data.id)) { return; }
+      if (!validStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
       StudentRecord *studentRecord = studentExist(*root, id);
@@ -159,28 +150,18 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
       }
 
-      if (strlen(data.name) > 0 && !validLettersAndSpace(data.name)) {
-        printf("Ensure name consists of letters and spaces.\n");
-        return;
-      }
+      if (!validNameProgrammeField(data.name, "name", true)) return;
+      if (!validNameProgrammeField(data.programme, "programme", true)) return;
 
       if (!validLen(data.name)) strcpy(data.name, studentRecord->name);
-
-      if (strlen(data.programme) > 0 && !validLettersAndSpace(data.programme)) {
-        printf("Ensure programme name consists of letters and spaces\n");
-        return;
-      }
-
       if (!validLen(data.programme)) strcpy(data.programme, studentRecord->programme);
 
       float mark;
 
       if (!validLen(data.mark))
         mark = studentRecord->mark;
-      else if (!validFloat(data.mark)) {
-        printf("Ensure positive float number.\n");
-        return;
-      } else
+      else if (!validFloat(data.mark)) return;
+      else
         mark = strtof(data.mark, NULL);
 
       updateRecord(studentRecord, data.name, data.programme, mark);
@@ -195,7 +176,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     if (args) {
       PromptDataHolder data = stringTokenization(args);
 
-      if (!isValidStudentID(data.id)) { return; }
+      if (!validStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
       if (!studentExist(*root, id)) {

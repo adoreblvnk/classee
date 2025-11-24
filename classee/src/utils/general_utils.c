@@ -8,7 +8,7 @@
 #include <string.h>
 
 // student ID validator
-bool isValidStudentID(const char *studentID) {
+bool validStudentID(const char *studentID) {
   for (int i = 0; studentID[i] != '\0'; i++) {
     if (!isdigit(studentID[i])) {
       printf("classee: Student ID must contain only numbers. Please retry.\n");
@@ -37,16 +37,46 @@ bool validLettersAndSpace(char *buffer) {
   return true;
 }
 
+bool validNameProgrammeField(const char *input, const char *fieldName, bool isUpdateMode) {
+
+    if (isUpdateMode && strlen(input) == 0) {
+        return true;
+    }
+
+    if (!isUpdateMode && strlen(input) == 0) {
+        printf("classee: %s cannot be empty.\n", fieldName);
+        return false;
+    }
+
+    if (!validLettersAndSpace(input)) {
+        printf("classee: Ensure %s consists only of letters and spaces.\n", fieldName);
+        return false;
+    }
+
+    if (!validLen(input)) {
+        printf("classee: %s must have at least 1 character.\n", fieldName);
+        return false;
+    }
+
+    return true;
+}
+
 bool validFloat(char *buffer) {
   char *p_bufferEnd;
   float value = strtof(buffer, &p_bufferEnd);
   // if endptr is at the start with buffer e.g. buffer = 'ab1' = 'a' , p_buffer = 'a'
-  if (p_bufferEnd == buffer) { return false; }
+  if (p_bufferEnd == buffer) { 
+    printf("classee: Ensure a valid integer is entered.\n");
+    return false; }
   // if at the end of the pointer does not equals to '\0', means invalid number too e.g. buffer =
   // '12a' = 'a', p_buffer = 'a'
-  if (*p_bufferEnd != '\0') { return false; }
+  if (*p_bufferEnd != '\0') { 
+    printf("classee: Ensure a valid integer is entered.\n");
+    return false; }
   // also check if float value is positive
-  if (value < 0.0) { return false; }
+  if (value < 0.0) { 
+    printf("classee: Ensure positive float number.\n");
+    return false; }
   return true;
 }
 
@@ -126,7 +156,7 @@ PromptDataHolder stringTokenization(char *buffer) {
       printf("classee: Invalid field '%s'. Use ID, NAME, PROGRAMME, or MARK.\n", key);
       *equals = '=';
       *value_end = end_char; // restores buffer that was changed to '\0'
-      return (PromptDataHolder){0};
+      return (PromptDataHolder){.hasMissingField = true };
     }
 
     // restore buffer to original state

@@ -7,6 +7,8 @@
 #define MAX_ID_LEN 32
 #define MAX_CHAR_LEN 32
 
+#include <stdbool.h>
+
 // student record BST
 typedef struct StudentRecord {
   int id;
@@ -23,6 +25,7 @@ typedef struct PromptDataHolder  {
     char name[MAX_NAME_LEN];
     char programme[MAX_PROG_LEN];
     char mark[MAX_CHAR_LEN];
+    bool hasMissingField;
 } PromptDataHolder;
 
 #endif // TYPES_H
