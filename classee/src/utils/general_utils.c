@@ -9,15 +9,15 @@
 
 // student ID validator
 bool isValidStudentID(const char *studentID) {
-  if (strlen(studentID) != 7) {
-    printf("classee: Student ID length must be 7 digits. Please retry.\n");
-    return false;
-  }
   for (int i = 0; studentID[i] != '\0'; i++) {
     if (!isdigit(studentID[i])) {
       printf("classee: Student ID must contain only numbers. Please retry.\n");
       return false;
     }
+  }
+  if (strlen(studentID) != 7) {
+    printf("classee: Student ID length must be 7 digits. Please retry.\n");
+    return false;
   }
   return true;
 }
