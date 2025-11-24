@@ -31,7 +31,7 @@ void log_transaction(const char *command, int id, const char *name, const char *
 // display the mutable command transaction log (7-columns)
 void show_tlog() {
   char header_buffer[256];
-  sprintf(header_buffer, "%-10s %-15s %-8s %-20s %-25s %-5s %-20s", "Change ID", "Command", "ID",
+  sprintf(header_buffer, "%-10s %-15s %-8s %-20s %-25s %-5s %-18s", "Change ID", "Command", "ID",
           "Name", "Programme", "Mark", "Timestamp");
   display_data_file(TLOG_FILE, "Tlog", header_buffer, 0); // 0 for tlog
 }
@@ -67,9 +67,12 @@ void perform_rollback(StudentRecord **root, int target_change_id) {
   // copy header to temp log
   if (fgets(line, sizeof(line), tlog_file)) { fputs(line, temp_tlog_file); }
 
+  int last_processed_id = 0;
   while (fgets(line, sizeof(line), tlog_file)) {
+    int current_id = atoi(line);
     // exit early (break) if we've passed our target change id
-    if (atoi(line) > target_change_id) { break; }
+    if (current_id > target_change_id) { break; }
+    last_processed_id = current_id;
     fputs(line, temp_tlog_file); // write back line to temp log
 
     // now, process the line to rebuild the in-memory state
@@ -105,5 +108,5 @@ void perform_rollback(StudentRecord **root, int target_change_id) {
   rename(TLOG_TMP_FILE, TLOG_FILE);
 
   // NOTE: DON'T F***ING RESET THE GLOBAL change_id COUNTER ELSE THERE'LL BE DUPLICATES
-  printf("classee: Database state has been rollback to change #%d.\n", target_change_id);
+  printf("classee: Database state has been rollback to change #%d.\n", last_processed_id);
 }

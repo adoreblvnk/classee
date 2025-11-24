@@ -123,7 +123,7 @@ PromptDataHolder stringTokenization(char *buffer) {
     if (isKey(key)) {
       applyKeyValue(&data, key, value_start); // value_start is value
     } else {
-      printf("classee: Invalid field '%s'. Use ID, NAME, PROGRAM, or MARK.\n", key);
+      printf("classee: Invalid field '%s'. Use ID, NAME, PROGRAMME, or MARK.\n", key);
       *equals = '=';
       *value_end = end_char; // restores buffer that was changed to '\0'
       return (PromptDataHolder){0};

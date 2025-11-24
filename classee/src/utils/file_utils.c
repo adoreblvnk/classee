@@ -52,8 +52,8 @@ void print_log_or_journal_entry(char *line, int is_log) {
   time_t raw_time = atol(cols[time_col_idx]);
   strftime(formatted_time, sizeof(formatted_time), "%d %m %y %H:%M:%S", localtime(&raw_time));
   if (is_log) {
-    printf("%-10s %-35s %-20s %-s\n", cols[0], cols[1], formatted_time, (atoi(cols[3]) == 1 ? "Yes" : "No"));
+    printf("%-10s %-80s %-18s %-s\n", cols[0], cols[1], formatted_time, (atoi(cols[3]) == 1 ? "Yes" : "No"));
   } else { // is transaction log
-    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-20s\n", cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], formatted_time);
+    printf("%-10s %-15s %-8s %-20s %-25s %-5s %-18s\n", cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], formatted_time);
   }
 }

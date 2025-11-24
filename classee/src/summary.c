@@ -132,12 +132,12 @@ void displaysummary(const StudentRecord *root, const char *filter) {
         }
         // Display results
         printf("Displaying summary for course: %s\n", results.course_name);
-        printf("Program topper: %s (ID: %d) with Mark: %.2f\n", 
+        printf("Course topper: %s (ID: %d) with Mark: %.2f\n", 
             results.topper->name, results.topper->id, results.topper->mark);
-        printf("Lowest performer in the program: %s (ID: %d) with Mark: %.2f\n", 
+        printf("Lowest performer in the course: %s (ID: %d) with Mark: %.2f\n", 
             results.lower->name, results.lower->id, results.lower->mark);
-        printf("Program average: %.2f marks\n", results.average);
-        printf("Total students in program: %d\n", results.count);
+        printf("Course average: %.2f marks\n", results.average);
+        printf("Total students in course: %d\n", results.count);
     }
 }
 

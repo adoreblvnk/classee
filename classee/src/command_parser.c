@@ -36,50 +36,47 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       if (!args || *args == '\0') {
         showAll(*root);
         return;
-    }
+      }
 
-    // Try to parse: SHOW ALL SORT BY MARK [ASC|DESC]
-    char *arg1 = util_strsep(&args, " \n");  // SORT
-    char *arg2 = util_strsep(&args, " \n");  // BY
-    char *arg3 = util_strsep(&args, " \n");  // MARK
-    char *arg4 = util_strsep(&args, " \n");  // optional ASC/DESC
+      // Try to parse: SHOW ALL SORT BY MARK [ASC|DESC]
+      char *arg1 = util_strsep(&args, " \n"); // SORT
+      char *arg2 = util_strsep(&args, " \n"); // BY
+      char *arg3 = util_strsep(&args, " \n"); // MARK
+      char *arg4 = util_strsep(&args, " \n"); // optional ASC/DESC
 
-    // We only handle MARK in this enhancement
-    if (!(arg1 && util_strcasecmp(arg1, "SORT") == 0 &&
-          arg2 && util_strcasecmp(arg2, "BY") == 0 &&
-          arg3 && (util_strcasecmp(arg3, "MARK") == 0 || util_strcasecmp(arg3, "ID") == 0))) {
+      // We only handle MARK in this enhancement
+      if (!(arg1 && util_strcasecmp(arg1, "SORT") == 0 && arg2 &&
+            util_strcasecmp(arg2, "BY") == 0 && arg3 &&
+            (util_strcasecmp(arg3, "MARK") == 0 || util_strcasecmp(arg3, "ID") == 0))) {
         printf("classee: Invalid SORT BY usage. Use: SHOW ALL SORT BY [MARK|ID] [ASC|DESC].\n");
         return;
-    }
+      }
 
-    SortOrder order = ORDER_ASC;
-    if (arg4 && util_strcasecmp(arg4, "DESC") == 0) {
-        order = ORDER_DESC;
-    }
+      SortOrder order = ORDER_ASC;
+      if (arg4 && util_strcasecmp(arg4, "DESC") == 0) { order = ORDER_DESC; }
 
-    int size = 0;
-    StudentRecord *arr = flattenTreeToArray(*root, &size);
+      int size = 0;
+      StudentRecord *arr = flattenTreeToArray(*root, &size);
 
-    if (!arr || size == 0) {
+      if (!arr || size == 0) {
         printf("No records to display.\n");
-        freeRecordArray(arr);   // safe even if arr == NULL
+        freeRecordArray(arr); // safe even if arr == NULL
         return;
-    }
+      }
 
-    SortField sort_field;
-    if (util_strcasecmp(arg3, "MARK") == 0) {
+      SortField sort_field;
+      if (util_strcasecmp(arg3, "MARK") == 0) {
         sort_field = SORT_BY_MARK;
-    } else {
+      } else {
         sort_field = SORT_BY_ID;
+      }
+
+      sortRecords(arr, size, sort_field, order);
+      printSortedRecords(arr, size);
+      freeRecordArray(arr);
+      return; // IMPORTANT: don't fall through
     }
 
-    sortRecords(arr, size, sort_field, order);
-    printSortedRecords(arr, size);
-    freeRecordArray(arr);
-    return;   // IMPORTANT: don't fall through
-}
-    
-      
     else if (util_strcasecmp(show_arg, "SUMMARY") == 0) {
       // show all if args is null, empty, or "ALL"
       if (!args || *args == '\0' || util_strcasecmp(args, "ALL") == 0) {
@@ -108,10 +105,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
       }
 
-      if (!isValidStudentID(data.id)) {
-        printf("Student ID type should be numbers only. Please retry.\n");
-        return;
-      }
+      if (!isValidStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
       if (studentExist(*root, id)) {
@@ -148,10 +142,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
       printf("classee: Missing arguments for QUERY. Use: QUERY ID=...\n");
       return;
     }
-    if (!isValidStudentID(data.id)) {
-      printf("Student ID type should be numbers only. Please retry.\n");
-      return;
-    }
+    if (!isValidStudentID(data.id)) { return; }
     queryStudent(*root, atoi(data.id));
   }
 
@@ -159,10 +150,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     if (args) {
 
       PromptDataHolder data = stringTokenization(args);
-      if (!isValidStudentID(data.id)) {
-        printf("Student ID type should be numbers only. Please retry.\n");
-        return;
-      }
+      if (!isValidStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
       StudentRecord *studentRecord = studentExist(*root, id);
@@ -207,10 +195,7 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     if (args) {
       PromptDataHolder data = stringTokenization(args);
 
-      if (!isValidStudentID(data.id)) {
-        printf("Student ID type should be numbers only. Please retry.\n");
-        return;
-      }
+      if (!isValidStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
       if (!studentExist(*root, id)) {

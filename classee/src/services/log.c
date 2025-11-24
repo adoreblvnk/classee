@@ -49,6 +49,6 @@ void log_command(const char *command, int is_change) {
 // display the immutable log entries (4-columns)
 void showLog() {
   char header_buffer[256];
-  sprintf(header_buffer, "%-10s %-35s %-20s %-s", "Change ID", "Command", "Timestamp", "Change");
+  sprintf(header_buffer, "%-10s %-80s %-18s %-s", "Change ID", "Command", "Timestamp", "Change");
   display_data_file(LOG_FILE, "Log", header_buffer, 1); // 1 for log
 }

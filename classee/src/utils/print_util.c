@@ -36,7 +36,7 @@ void printDeclaration() {
   printf("        assessments involved will receive ZERO mark.\n\n");
 
   printf("                               We hereby declare that:\n");
-  printf("        - We fully understand and agree to the abovementioned plagiarism policy.\n");
+  printf("        - We fully understand and agree to the above mentioned plagiarism policy.\n");
   printf("        - We did not copy any code from others or from other places.\n");
   printf("        - We did not share our codes with others or upload to any other places for\n");
   printf("        - public access and will not do that in the future.\n");
@@ -48,10 +48,9 @@ void printDeclaration() {
 
   printf("               Declared by: Group Name (please insert your group name)\n");
   printf("                               Team members:\n");
-  printf("                                   1. XXX\n");
-  printf("                                   2. XXX\n");
-  printf("                                   3. XXX\n");
-  printf("                                   4. XXX\n");
-  printf("                                   5. XXX\n\n");
-  printf("               Date: (please insert the date when you submit your group project).\n\n\n");
+  printf("                                   1. Joseph Poon\n");
+  printf("                                   2. Vincent Foo\n");
+  printf("                                   3. Joel Tse\n");
+  printf("                                   4. Yeow Heng\n");
+  printf("               Date: 25th November 2025.\n\n\n");
 }
