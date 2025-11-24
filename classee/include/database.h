@@ -8,39 +8,36 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Public Type Definitions
+
+// sorting enums
+typedef enum { SORT_BY_ID, SORT_BY_MARK } SortField;
+
+typedef enum { ORDER_ASC, ORDER_DESC } SortOrder;
+
 // func prototypes
 
-// core ops
+// core database ops
 void openDatabase(StudentRecord **root, const char *filename);
-void showAll(const StudentRecord *root);
-void insertRecord(StudentRecord **root, int id, const char *name, const char *programme,
-                  float mark);
-void saveDatabase(const StudentRecord *root, const char *filename);
-void updateRecord(StudentRecord *root, const char *name, const char *programme, float mark);
-void deleteRecord(StudentRecord **root, int id);
-void queryStudent(const StudentRecord *root, int id);
-
 // bst helpers
 void freeTree(StudentRecord *root);
+void saveDatabase(const StudentRecord *root, const char *filename);
+
+// CRUD operations
+void insertRecord(StudentRecord **root, int id, const char *name, const char *programme,
+                  float mark);
+void queryStudent(const StudentRecord *root, int id);
+void showAll(const StudentRecord *root);
+void updateRecord(StudentRecord *root, const char *name, const char *programme, float mark);
+void deleteRecord(StudentRecord **root, int id);
 
 // db helper to find students
 StudentRecord *studentExist(const StudentRecord *root, int id);
 
-//sorting enums
-typedef enum {
-    SORT_BY_ID,
-    SORT_BY_MARK
-} SortField;
-
-typedef enum {
-    ORDER_ASC,
-    ORDER_DESC
-} SortOrder;
-
-//Sorting Functions
+// Sorting Functions
 StudentRecord *flattenTreeToArray(const StudentRecord *root, int *size);
-void freeRecordArray(StudentRecord *arr);
 void sortRecords(StudentRecord *arr, int size, SortField field, SortOrder order);
 void printSortedRecords(const StudentRecord *arr, int size);
+void freeRecordArray(StudentRecord *arr);
 
 #endif // DATABASE_H

@@ -3,10 +3,18 @@
 #include <stdbool.h>
 #include <time.h>
 
-// forward declarations for recursive helpers (only used in this file)
-static void showInOrder(const StudentRecord *root);
-static void saveInOrder(const StudentRecord *root, FILE *file);
-static void printRecord(const StudentRecord *record);
+// file scope globals for sorting
+static SortField g_sortField;
+static SortOrder g_sortOrder;
+
+// Helper Funcs
+
+// print single student record, formatted
+static void printRecord(const StudentRecord *record) {
+  if (record) {
+    printf("%-8d %-20s %-25s %-5.1f\n", record->id, record->name, record->programme, record->mark);
+  }
+}
 
 // helper for showall
 static void showInOrder(const StudentRecord *root) {
@@ -23,13 +31,6 @@ static void saveInOrder(const StudentRecord *root, FILE *file) {
     saveInOrder(root->left, file);
     fprintf(file, "%d\t%s\t%s\t%.1f\n", root->id, root->name, root->programme, root->mark);
     saveInOrder(root->right, file);
-  }
-}
-
-// print single student record, formatted
-static void printRecord(const StudentRecord *record) {
-  if (record) {
-    printf("%-8d %-20s %-25s %-5.1f\n", record->id, record->name, record->programme, record->mark);
   }
 }
 
@@ -52,6 +53,135 @@ StudentRecord *findMin(StudentRecord *root) {
   return root;
 }
 
+// Public CRUD Core Logic
+
+StudentRecord *studentExist(const StudentRecord *root, int id) {
+  const StudentRecord *current = root;
+  while (current != NULL) {
+    if (id == current->id) {
+      return (StudentRecord *)current; // found
+    } else if (id < current->id) {
+      current = current->left; // go left
+    } else {
+      current = current->right; // go right
+    }
+  }
+  return NULL; // not found
+}
+
+// insert new record to bst (sorted by id)
+// O(log n) avg case. O(n) worst case if bst degenerates to a linked list (eg every new id is lower
+// than root id)
+void insertRecord(StudentRecord **root, int id, const char *name, const char *programme,
+                  float mark) {
+  // NOTE: check if record already exists
+  if (*root == NULL) {
+    StudentRecord *newNode = (StudentRecord *)malloc(sizeof(StudentRecord));
+    // if malloc returns NULL, then malloc failed
+    if (!newNode) {
+      perror("Failed to allocate memory for new record");
+      return;
+    }
+    newNode->id = id;
+    // safe copy, if we don't add \0, then it's not a valid string & will keep copying forever!
+    strncpy(newNode->name, name, MAX_NAME_LEN - 1);
+    newNode->name[MAX_NAME_LEN - 1] = '\0';
+    strncpy(newNode->programme, programme, MAX_PROG_LEN - 1);
+    newNode->programme[MAX_PROG_LEN - 1] = '\0';
+    newNode->mark = mark;
+    newNode->left = newNode->right = NULL;
+    *root = newNode;
+    return;
+  }
+
+  // insert left if id < root->id, right if id > root->id
+  if (id < (*root)->id) {
+    insertRecord(&(*root)->left, id, name, programme, mark);
+  } else if (id > (*root)->id) {
+    insertRecord(&(*root)->right, id, name, programme, mark);
+  }
+  // else, id already exists, do nothing
+}
+
+void queryStudent(const StudentRecord *root, int id) {
+  const StudentRecord *student = studentExist(root, id);
+  if (student) {
+    printf("classee: The record with ID=%d is found in the data table.\n", id);
+    printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
+    printRecord(student);
+    return;
+  }
+  printf("classee: The record with ID=%d does not exist.\n", id);
+}
+
+// display all records in bst (in-order traversal)
+// O(n). must visit every node once for traversal
+void showAll(const StudentRecord *root) {
+  printf("classee: Here are all the records found in the table \"StudentRecords\".\n");
+  printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
+  if (!root) {
+    printf("No records to display.\n");
+  } else {
+    showInOrder(root);
+  }
+}
+
+void updateRecord(StudentRecord *root, const char *name, const char *programme, const float mark) {
+  strncpy(root->name, name, sizeof(root->name) - 1);
+  root->name[sizeof(root->name) - 1] = '\0';
+
+  strncpy(root->programme, programme, sizeof(root->programme) - 1);
+  root->programme[sizeof(root->programme) - 1] = '\0';
+
+  root->mark = mark;
+  return;
+}
+
+void deleteRecord(StudentRecord **root, int id) {
+  if (*root == NULL)
+    return;                    // first validation
+  else if (id < (*root)->id) { // recursively find left tree until found
+    deleteRecord(&((*root)->left), id);
+  } else if (id > (*root)->id) { // recursively find right tree until found
+    deleteRecord(&((*root)->right), id);
+  } else { // found
+    // 3 cases
+    // case 1: no child node
+    if ((*root)->left == NULL && (*root)->right == NULL) {
+      free((*root));
+      (*root) = NULL;
+    }
+
+    // case 2: if only one child node
+    else if ((*root)->left == NULL) {
+      StudentRecord *p_temp = (*root); // the target node
+      (*root) = (*root)->right;        // right child will be the right child of the tree
+      free(p_temp);
+    } else if ((*root)->right == NULL) {
+      StudentRecord *p_temp = (*root); // the target node
+      (*root) = (*root)->left;         // left child will be the left child of the tree
+      free(p_temp);
+    }
+
+    // case 3: if node has 2 child.
+    // find smallest in RIGHT node
+    else {
+      StudentRecord *p_temp = findMin((*root)->right);
+      // copy all data from successor
+      (*root)->id = p_temp->id;
+      strcpy((*root)->name, p_temp->name);
+      strcpy((*root)->programme, p_temp->programme);
+      (*root)->mark = p_temp->mark;
+
+      // recursively deletes the duplicated id node
+      deleteRecord(&((*root)->right), p_temp->id);
+    }
+  }
+  return;
+}
+
+// Public Database File I/O & Memory Management
+
 // free all mem used by bst
 void freeTree(StudentRecord *root) {
   if (root == NULL) { return; }
@@ -59,8 +189,6 @@ void freeTree(StudentRecord *root) {
   freeTree(root->right);
   free(root);
 }
-
-// core logic
 
 // open db file & load records to bst
 void openDatabase(StudentRecord **root, const char *filename) {
@@ -143,131 +271,6 @@ void openDatabase(StudentRecord **root, const char *filename) {
   printf("classee: The database file \"%s\" is successfully opened.\n", filename);
 }
 
-// display all records in bst (in-order traversal)
-// O(n). must visit every node once for traversal
-void showAll(const StudentRecord *root) {
-  printf("classee: Here are all the records found in the table \"StudentRecords\".\n");
-  printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
-  if (!root) {
-    printf("No records to display.\n");
-  } else {
-    showInOrder(root);
-  }
-}
-
-void queryStudent(const StudentRecord *root, int id) {
-  const StudentRecord *student = studentExist(root, id);
-  if (student) {
-    printf("classee: The record with ID=%d is found in the data table.\n", id);
-    printf("%-8s %-20s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
-    printRecord(student);
-    return;
-  }
-  printf("classee: The record with ID=%d does not exist.\n", id);
-}
-
-StudentRecord *studentExist(const StudentRecord *root, int id) {
-  const StudentRecord *current = root;
-  while (current != NULL) {
-    if (id == current->id) {
-      return (StudentRecord *)current; // found
-    } else if (id < current->id) {
-      current = current->left; // go left
-    } else {
-      current = current->right; // go right
-    }
-  }
-  return NULL; // not found
-}
-
-void updateRecord(StudentRecord *root, const char *name, const char *programme, const float mark) {
-  strncpy(root->name, name, sizeof(root->name) - 1);
-  root->name[sizeof(root->name) - 1] = '\0';
-
-  strncpy(root->programme, programme, sizeof(root->programme) - 1);
-  root->programme[sizeof(root->programme) - 1] = '\0';
-
-  root->mark = mark;
-  return;
-}
-
-void deleteRecord(StudentRecord **root, int id) {
-  if (*root == NULL)
-    return;                    // first validation
-  else if (id < (*root)->id) { // recursively find left tree until found
-    deleteRecord(&((*root)->left), id);
-  } else if (id > (*root)->id) { // recursively find right tree until found
-    deleteRecord(&((*root)->right), id);
-  } else { // found
-    // 3 cases
-    // case 1: no child node
-    if ((*root)->left == NULL && (*root)->right == NULL) {
-      free((*root));
-      (*root) = NULL;
-    }
-
-    // case 2: if only one child node
-    else if ((*root)->left == NULL) {
-      StudentRecord *p_temp = (*root); // the target node
-      (*root) = (*root)->right;        // right child will be the right child of the tree
-      free(p_temp);
-    } else if ((*root)->right == NULL) {
-      StudentRecord *p_temp = (*root); // the target node
-      (*root) = (*root)->left;         // left child will be the left child of the tree
-      free(p_temp);
-    }
-
-    // case 3: if node has 2 child.
-    // find smallest in RIGHT node
-    else {
-      StudentRecord *p_temp = findMin((*root)->right);
-      // copy all data from successor
-      (*root)->id = p_temp->id;
-      strcpy((*root)->name, p_temp->name);
-      strcpy((*root)->programme, p_temp->programme);
-      (*root)->mark = p_temp->mark;
-
-      // recursively deletes the duplicated id node
-      deleteRecord(&((*root)->right), p_temp->id);
-    }
-  }
-  return;
-}
-
-// insert new record to bst (sorted by id)
-// O(log n) avg case. O(n) worst case if bst degenerates to a linked list (eg every new id is lower
-// than root id)
-void insertRecord(StudentRecord **root, int id, const char *name, const char *programme,
-                  float mark) {
-  // NOTE: check if record already exists
-  if (*root == NULL) {
-    StudentRecord *newNode = (StudentRecord *)malloc(sizeof(StudentRecord));
-    // if malloc returns NULL, then malloc failed
-    if (!newNode) {
-      perror("Failed to allocate memory for new record");
-      return;
-    }
-    newNode->id = id;
-    // safe copy, if we don't add \0, then it's not a valid string & will keep copying forever!
-    strncpy(newNode->name, name, MAX_NAME_LEN - 1);
-    newNode->name[MAX_NAME_LEN - 1] = '\0';
-    strncpy(newNode->programme, programme, MAX_PROG_LEN - 1);
-    newNode->programme[MAX_PROG_LEN - 1] = '\0';
-    newNode->mark = mark;
-    newNode->left = newNode->right = NULL;
-    *root = newNode;
-    return;
-  }
-
-  // insert left if id < root->id, right if id > root->id
-  if (id < (*root)->id) {
-    insertRecord(&(*root)->left, id, name, programme, mark);
-  } else if (id > (*root)->id) {
-    insertRecord(&(*root)->right, id, name, programme, mark);
-  }
-  // else, id already exists, do nothing
-}
-
 // save all records from bst to db
 // O(n). must visit every node once to write to file
 void saveDatabase(const StudentRecord *root, const char *filename) {
@@ -305,7 +308,8 @@ void saveDatabase(const StudentRecord *root, const char *filename) {
   fclose(file);
   printf("classee: The database file \"%s\" is successfully saved.\n", filename);
 }
-// Sorting Implementation
+
+// Public Sorting Implementation
 
 // Count total nodes in BST
 static int countNodes(const StudentRecord *node) {
@@ -345,13 +349,7 @@ StudentRecord *flattenTreeToArray(const StudentRecord *root, int *size) {
   return arr;
 }
 
-void freeRecordArray(StudentRecord *arr) {
-  free(arr);
-}
-
-//global config for qsort compare
-static SortField g_sortField;
-static SortOrder g_sortOrder;
+void freeRecordArray(StudentRecord *arr) { free(arr); }
 
 static int compareRecords(const void *a, const void *b) {
   const StudentRecord *x = (const StudentRecord *)a;
@@ -359,18 +357,22 @@ static int compareRecords(const void *a, const void *b) {
   int cmp = 0;
 
   if (g_sortField == SORT_BY_ID) {
-    if (x->id < y->id) cmp = -1;
-    else if (x->id > y->id) cmp = 1;
-    else cmp = 0;
-  }
-  else if (g_sortField == SORT_BY_MARK) {
-    if (x->mark < y->mark) cmp = -1;
-    else if (x->mark > y->mark) cmp = 1;
-    else cmp = 0;
+    if (x->id < y->id)
+      cmp = -1;
+    else if (x->id > y->id)
+      cmp = 1;
+    else
+      cmp = 0;
+  } else if (g_sortField == SORT_BY_MARK) {
+    if (x->mark < y->mark)
+      cmp = -1;
+    else if (x->mark > y->mark)
+      cmp = 1;
+    else
+      cmp = 0;
   }
 
-  if (g_sortOrder == ORDER_DESC)
-  cmp = -cmp;
+  if (g_sortOrder == ORDER_DESC) cmp = -cmp;
 
   return cmp;
 }
@@ -392,10 +394,6 @@ void printSortedRecords(const StudentRecord *arr, int size) {
   }
 
   for (int i = 0; i < size; i++) {
-    printf("%-8d %-20s %-25s %-5.1f\n",
-           arr[i].id,
-           arr[i].name,
-           arr[i].programme,
-           arr[i].mark);
+    printf("%-8d %-20s %-25s %-5.1f\n", arr[i].id, arr[i].name, arr[i].programme, arr[i].mark);
   }
 }
