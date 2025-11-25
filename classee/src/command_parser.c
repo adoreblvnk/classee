@@ -98,6 +98,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   } else if (util_strcasecmp(command, "INSERT") == 0) {
     if (args) {
       PromptDataHolder data = stringTokenization(args);
+
+      // validations for early return
       if (data.hasMissingField) return;
       if (strlen(data.id) == 0 || strlen(data.mark) == 0 || strlen(data.programme) == 0 ||
           strlen(data.name) == 0) {
@@ -105,7 +107,6 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
                "Mark=...\n");
         return;
       }
-
       if (!validStudentID(data.id)) { return; }
 
       int id = atoi(data.id);
@@ -114,9 +115,9 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
       }
 
+      // validation if user input is not correctly formatted
       if(!validNameProgrammeField(data.name, "name", false)) return;
       if(!validNameProgrammeField(data.programme, "programme", false)) return;
-
       if (!validFloat(data.mark)) return;
 
       float mark = strtof(data.mark, NULL);
@@ -129,6 +130,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   } else if (util_strcasecmp(command, "QUERY") == 0) {
 
     PromptDataHolder data = stringTokenization(args);
+
+    // validation for early returns
     if (data.hasMissingField) return;
     if (!args || *args == '\0') {
       printf("classee: Missing arguments for QUERY. Use: QUERY ID=...\n");
@@ -142,6 +145,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
     if (args) {
         
       PromptDataHolder data = stringTokenization(args);
+
+      // validation for early returns
       if (data.hasMissingField) return;
       if (!validStudentID(data.id)) { return; }
 
@@ -152,9 +157,11 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
         return;
       }
 
+      // validation if user input is not in the correct format
       if (!validNameProgrammeField(data.name, "name", true)) return;
       if (!validNameProgrammeField(data.programme, "programme", true)) return;
 
+      // uses old values if the optional fields are blank
       if (!validLen(data.name)) strcpy(data.name, studentRecord->name);
       if (!validLen(data.programme)) strcpy(data.programme, studentRecord->programme);
 
@@ -177,6 +184,8 @@ void processCommand(StudentRecord **root, char *input, const char *db_filename) 
   else if (util_strcasecmp(command, "DELETE") == 0) {
     if (args) {
       PromptDataHolder data = stringTokenization(args);
+
+      // validation for early returns
       if (data.hasMissingField) return;
       if (!validStudentID(data.id)) { return; }
 

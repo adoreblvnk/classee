@@ -22,6 +22,7 @@ bool validStudentID(const char *studentID) {
   return true;
 }
 
+// parses input and puts \n at the last index
 void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer) {
   if (!fgets(dataInputBuffer, sizeOfDataInputBuffer, stdin)) { return; }
 
@@ -30,12 +31,25 @@ void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer) {
 
 bool validLen(const char *buffer) { return strlen(buffer) >= 1; }
 
+// checks if the strings are letters and spaces only
 bool validLettersAndSpace(const char *buffer) {
   for (int i = 0; buffer[i] != '\0'; i++) {
     if (!isalpha(buffer[i]) && buffer[i] != ' ') return false;
   }
   return true;
 }
+
+/**
+ * Validates NAME and PROGRAMME field during insert and update operations.
+ * 
+ * Rules:
+ *    - in update mode, empty string is allowed (optional field)
+ *    - in insert mode, empty string is not allowed
+ *    - field must only contain letters and spaces
+ *    - fields must meet minimum requirements based on validLen function
+ * 
+ * Prints descriptive errors on validation features.
+ */
 
 bool validNameProgrammeField(const char *input, const char *fieldName, bool isUpdateMode) {
 
@@ -61,6 +75,7 @@ bool validNameProgrammeField(const char *input, const char *fieldName, bool isUp
     return true;
 }
 
+// checks for a valid digit to convert to float
 bool validFloat(const char *buffer) {
   char *p_bufferEnd;
   float value = strtof(buffer, &p_bufferEnd);
@@ -80,6 +95,7 @@ bool validFloat(const char *buffer) {
   return true;
 }
 
+// helper function to check if the arguments provided is either a KEY or VALUE
 static bool isKey(char *possibleKey) {
   char knownKey[4][10] = {"id", "programme", "mark", "name"};
   int keyLength = sizeof(knownKey) / sizeof(knownKey[0]);
@@ -90,6 +106,17 @@ static bool isKey(char *possibleKey) {
 
   return false;
 }
+
+/**
+ * Performs whitespace trimming of values and case-insensitive key matching and applies value to key
+ * 
+ * Expected keys: ID, NAME, PROGRAMME, MARK
+ * 
+ * @param *data - an object of PromptDataHolder parsed in for the function to write into
+ * @param *key - Field name in the struct (case-insensitive)
+ * @param *value - Field value to store
+ * 
+ */
 
 static void applyKeyValue(PromptDataHolder *data, const char *key, const char *value) {
   if (!data || !key || !value) return;
@@ -122,6 +149,22 @@ static void applyKeyValue(PromptDataHolder *data, const char *key, const char *v
   }
 }
 
+/**
+ * Parses a buffer of key=value pairs into a PromptDataHolder struct.
+ * 
+ * Expected keys which are not case sensitive are: ID, NAME, PROGRAMME, MARK
+ * Values are recognized after a '=' up till the next recognized key, or end of the buffer
+ * 
+ * Valid pairs are then applied in applyKeyValue()
+ * 
+ * Sets hasMissingField to true if an error has occured.
+ * 
+ * @param *buffer Input strings that consists of key=value pairs
+ * 
+ * @return A PromptDataHolder struct of filled values from parsed data.
+ * 
+ */
+// tokenizes the input buffer to known key and also append values to in the struct declared, based on the key.
 PromptDataHolder stringTokenization(char *buffer) {
   PromptDataHolder data = {0};
   if (!buffer) { return data; }

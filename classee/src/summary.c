@@ -141,6 +141,14 @@ void displaysummary(const StudentRecord *root, const char *filter) {
     }
 }
 
+/**
+ * Recursively traverses the entire BST and summarizes the statistics of:
+ *    - topper: highest mark
+ *    - lower: lowest mark
+ *    - totalMarks: sum of all student
+ *    - count: total amount of student
+ */
+
 void traverseForSummary(const StudentRecord *node, const StudentRecord **topper,
                         const StudentRecord **lower, float *totalMarks, int *count) {
     if (node == NULL) return;
@@ -161,6 +169,7 @@ void traverseForSummary(const StudentRecord *node, const StudentRecord **topper,
     traverseForSummary(node->right, topper, lower, totalMarks, count);
 }
 
+// Performs a full BST traversal via traverseForSummary function.
 struct SummaryResults getSummaryResults(const StudentRecord *root) {
     struct SummaryResults results;
     //preset values

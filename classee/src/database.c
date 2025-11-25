@@ -326,6 +326,18 @@ static void flattenHelper(const StudentRecord *node, StudentRecord *arr, int *in
   flattenHelper(node->right, arr, index);
 }
 
+/** 
+ * converts the bst into a linear array.  
+ * 
+ * performs an in-order traversal to flatten all nodes of the tree
+ * into a dynamically allocated array.
+ * 
+ * @param *root Pointer to root of the StudentRecord bst
+ * @param *size Output parameter to store the amount of nodes
+ * 
+ * @return Pointer to a newly allocated array containing all records, or NULL
+ * if the tree is empty or malloc fails.
+*/
 StudentRecord *flattenTreeToArray(const StudentRecord *root, int *size) {
   if (!size) return NULL;
 
@@ -349,8 +361,27 @@ StudentRecord *flattenTreeToArray(const StudentRecord *root, int *size) {
   return arr;
 }
 
+// freeing of array due to allocated via malloc
 void freeRecordArray(StudentRecord *arr) { free(arr); }
 
+
+/**
+ * Comparison function used by qSort to sort StudentRecord entries.
+ * 
+ * Sorting behavior is determined by 2 field:
+ *    g_sortField: SORT_BY_ID or SORT_BY_MARK
+ *    g_sortOrder: ORDER_ASC or OREDER_DESC
+ * 
+ * Compares two StudentRecord structs by the selected field and returns:
+ *    negative value if a < b
+ *    zero if equal
+ *    positive value if a > b
+ * 
+ * @param *a Pointer to first element (StudentRecord*) for comparison
+ * @param *b Pointer to second element (StudentRecord*) for compariosn
+ * 
+ * @return Comparison result
+ */
 static int compareRecords(const void *a, const void *b) {
   const StudentRecord *x = (const StudentRecord *)a;
   const StudentRecord *y = (const StudentRecord *)b;
@@ -377,6 +408,7 @@ static int compareRecords(const void *a, const void *b) {
   return cmp;
 }
 
+//sorts an array of StudentRecord struct using qSort
 void sortRecords(StudentRecord *arr, int size, SortField field, SortOrder order) {
   if (!arr || size <= 1) return;
   g_sortField = field;
