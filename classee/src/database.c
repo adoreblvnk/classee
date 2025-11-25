@@ -327,7 +327,8 @@ static void flattenHelper(const StudentRecord *node, StudentRecord *arr, int *in
 }
 
 /** 
- * converts the bst into a linear array.  
+ * converts the bst into a linear array. This is done since qsort requires
+ * a linear array for sorting.
  * 
  * performs an in-order traversal to flatten all nodes of the tree
  * into a dynamically allocated array.

@@ -50,7 +50,6 @@ bool validLettersAndSpace(const char *buffer) {
  * 
  * Prints descriptive errors on validation features.
  */
-
 bool validNameProgrammeField(const char *input, const char *fieldName, bool isUpdateMode) {
 
     if (isUpdateMode && strlen(input) == 0) {
@@ -117,7 +116,6 @@ static bool isKey(char *possibleKey) {
  * @param *value - Field value to store
  * 
  */
-
 static void applyKeyValue(PromptDataHolder *data, const char *key, const char *value) {
   if (!data || !key || !value) return;
 
@@ -150,7 +148,7 @@ static void applyKeyValue(PromptDataHolder *data, const char *key, const char *v
 }
 
 /**
- * Parses a buffer of key=value pairs into a PromptDataHolder struct.
+ * Parses a buffer of key=value pairs into a PromptDataHolder struct. tokenizes the input buffer to known key and also append values to in the struct declared, based on the key.
  * 
  * Expected keys which are not case sensitive are: ID, NAME, PROGRAMME, MARK
  * Values are recognized after a '=' up till the next recognized key, or end of the buffer
@@ -164,7 +162,6 @@ static void applyKeyValue(PromptDataHolder *data, const char *key, const char *v
  * @return A PromptDataHolder struct of filled values from parsed data.
  * 
  */
-// tokenizes the input buffer to known key and also append values to in the struct declared, based on the key.
 PromptDataHolder stringTokenization(char *buffer) {
   PromptDataHolder data = {0};
   if (!buffer) { return data; }

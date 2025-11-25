@@ -148,7 +148,6 @@ void displaysummary(const StudentRecord *root, const char *filter) {
  *    - totalMarks: sum of all student
  *    - count: total amount of student
  */
-
 void traverseForSummary(const StudentRecord *node, const StudentRecord **topper,
                         const StudentRecord **lower, float *totalMarks, int *count) {
     if (node == NULL) return;
