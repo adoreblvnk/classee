@@ -178,10 +178,28 @@ PromptDataHolder stringTokenization(char *buffer) {
 
     // find start of next key, which is the end of curr val
     for (int i = 0; i < 4; i++) {
-      char *next_key = util_strcasestr(value_start, known_keys[i]);
-      // if key is found & followed by '=' & is before current value_end
-      // NOTE: value_end is updated to earliest next_key found
-      if (next_key && strchr(next_key, '=') && next_key < value_end) { value_end = next_key; }
+      char *search_pos = value_start;
+      while ((search_pos = util_strcasestr(search_pos, known_keys[i])) != NULL) {
+        // check if this is a valid key (preceded by whitespace or at start, and followed by '=')
+        int is_at_boundary = (search_pos == value_start || isspace((unsigned char)*(search_pos - 1)));
+        char *potential_equals = search_pos + strlen(known_keys[i]);
+        // skip whitespace between key and '='
+        while (*potential_equals && isspace((unsigned char)*potential_equals)) {
+          potential_equals++;
+        }
+        int has_equals = (*potential_equals == '=');
+        
+        if (is_at_boundary && has_equals && search_pos < value_end) {
+          // trim any trailing whitespace before the key
+          char *trimmed_pos = search_pos;
+          while (trimmed_pos > value_start && isspace((unsigned char)*(trimmed_pos - 1))) {
+            trimmed_pos--;
+          }
+          value_end = trimmed_pos;
+          break; // found valid next key, stop searching for this key
+        }
+        search_pos++; // move forward to continue searching
+      }
     }
 
     // terminate val for processing, value_start holds the val
