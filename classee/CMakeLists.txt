@@ -25,7 +25,7 @@ add_executable(classee src/main.c ${CLASSEE_SOURCES})
 target_include_directories(classee PUBLIC include)
 
 # build unit tests
-# option(BUILD_TESTING "Build unit tests" ON)
+# option(BUILD_TESTING "Build unit tests" ON) # off for windows
 if(BUILD_TESTING)
   # enable `ctest` for unit testing
   enable_testing()

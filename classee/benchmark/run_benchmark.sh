@@ -16,7 +16,7 @@ set -e
 # CORRECTED: Paths are now relative to the project root, where the script is executed from.
 CONFIG_FILE="include/config.h"
 BUILD_DIR="build"
-EXECUTABLE="${BUILD_DIR}/bin/cms"
+EXECUTABLE="${BUILD_DIR}/bin/classee"
 INPUT_CMDS="benchmark/cmds.txt"
 
 # --- Colors for better output ---
@@ -44,7 +44,7 @@ trap cleanup EXIT
 
 # --- Step 1: Benchmark the Optimized Version (SHUFFLE = 1) ---
 
-echo -e "${BLUE}--- Benchmarking OPTIMIZED Version (Shuffle Enabled) ---${NC}"
+echo -e "${BLUE}--- Benchmarking OPTIMIZED Version (BST with Shuffle) ---${NC}"
 echo "Ensuring SHUFFLE is set to 1 in config.h..."
 # This command ensures we are in the correct state, even if run multiple times
 sed -i.bak 's/#define SHUFFLE 0/#define SHUFFLE 1/' "$CONFIG_FILE"
@@ -53,11 +53,11 @@ echo "Building the OPTIMIZED version..."
 cmake --build ${BUILD_DIR} > /dev/null # Hide build output for cleaner demo
 
 echo -e "\n${GREEN}Running benchmark on the OPTIMIZED executable...${NC}"
-hyperfine --warmup 3 --command-name "Optimized (Shuffle=1)" "${EXECUTABLE} < ${INPUT_CMDS}"
+hyperfine --warmup 3 --command-name "Optimized (BST with Shuffle)" "${EXECUTABLE} < ${INPUT_CMDS}"
 
 # --- Step 2: Benchmark the Unoptimized Version (SHUFFLE = 0) ---
 
-echo -e "\n${BLUE}--- Benchmarking UNOPTIMIZED Version (Shuffle Disabled) ---${NC}"
+echo -e "\n${BLUE}--- Benchmarking UNOPTIMIZED Version (Simulated Linked List) ---${NC}"
 echo "Modifying config.h to set SHUFFLE to 0..."
 sed -i.bak 's/#define SHUFFLE 1/#define SHUFFLE 0/' "$CONFIG_FILE"
 
@@ -65,7 +65,7 @@ echo "Rebuilding the UNOPTIMIZED version..."
 cmake --build ${BUILD_DIR} > /dev/null # Hide build output
 
 echo -e "\n${GREEN}Running benchmark on the UNOPTIMIZED executable...${NC}"
-hyperfine --warmup 3 --command-name "Unoptimized (Shuffle=0)" "${EXECUTABLE} < ${INPUT_CMDS}"
+hyperfine --warmup 3 --command-name "Unoptimized (Simulated Linked List)" "${EXECUTABLE} < ${INPUT_CMDS}"
 
 echo -e "\n${GREEN}--- Benchmark Complete ---${NC}"
 # The cleanup trap will automatically run now

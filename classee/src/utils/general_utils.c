@@ -28,9 +28,9 @@ void inputParser(char *dataInputBuffer, int sizeOfDataInputBuffer) {
   dataInputBuffer[strcspn(dataInputBuffer, "\n")] = 0; // rm \n
 }
 
-bool validLen(char *buffer) { return strlen(buffer) >= 1; }
+bool validLen(const char *buffer) { return strlen(buffer) >= 1; }
 
-bool validLettersAndSpace(char *buffer) {
+bool validLettersAndSpace(const char *buffer) {
   for (int i = 0; buffer[i] != '\0'; i++) {
     if (!isalpha(buffer[i]) && buffer[i] != ' ') return false;
   }
@@ -61,7 +61,7 @@ bool validNameProgrammeField(const char *input, const char *fieldName, bool isUp
     return true;
 }
 
-bool validFloat(char *buffer) {
+bool validFloat(const char *buffer) {
   char *p_bufferEnd;
   float value = strtof(buffer, &p_bufferEnd);
   // if endptr is at the start with buffer e.g. buffer = 'ab1' = 'a' , p_buffer = 'a'
