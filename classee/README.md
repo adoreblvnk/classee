@@ -13,13 +13,13 @@ cmake --build build
 run
 
 ```
-./build/src/main
+./build/src/classee
 ```
 
 or
 
 ```
-.\build\bin\cms.exe
+.\build\bin\classee.exe
 ```
 
 clean
@@ -43,7 +43,7 @@ rm -rf build && cmake -S . -B build
 build and run
 
 ```
-cmake --build build && ./build/bin/cms
+cmake --build build && ./build/bin/classee
 ```
 
 benchmarking:
@@ -60,7 +60,7 @@ benchmarking:
 
 3. build and benchmark the sequential run
 	```bash
-	cmake --build build && hyperfine --warmup 3 "./build/bin/cms < benchmark/cmds.txt"
+	cmake --build build && hyperfine --warmup 3 "./build/bin/classee < benchmark/cmds.txt"
 	```
 
 4. repeat for the random dataset
